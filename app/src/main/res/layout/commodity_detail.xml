@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
+        <com.example.graduationproject.ui.SquareImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/avatar"
+            android:src="@mipmap/ic_launcher"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nick_name"
+            android:text="昵称"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="20sp"
+            android:layout_toRightOf="@+id/avatar"
+            android:layout_marginBottom="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/post_time"
+            android:text="商品发布时间"
+            android:layout_below="@+id/nick_name"
+            android:layout_toRightOf="@+id/avatar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/price"
+            android:text="商品价格"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/holo_red_light"
+            android:layout_below="@+id/avatar"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"
+            android:text="商品名称"
+            android:layout_below="@+id/price"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/content"
+            android:text="商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍
+商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍
+商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍
+商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="15dp" />
+
+        <com.example.graduationproject.ui.SquareImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/image"
+        android:src="@mipmap/icon_2"
+        android:layout_below="@+id/content"
+        android:layout_marginTop="15dp" />
+
+    </RelativeLayout>
+
+</ScrollView>
