@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/down_menu"
-        android:orientation="horizontal"
         />
 
     <LinearLayout
@@ -25,32 +24,35 @@
         <Button
             android:id="@+id/page_home"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_weight="1"
             android:background="#DCDCDC"
-            android:drawableTop="@drawable/button_home"
             android:padding="5dp"
+            android:drawablePadding="-5dp"
+            android:drawableTop="@drawable/button_home"
             android:text="主页" />
 
         <Button
             android:id="@+id/page_msg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:layout_weight="1"
             android:background="#FFFFFF"
-            android:drawableTop="@drawable/button_message"
             android:padding="5dp"
+            android:drawablePadding="-5dp"
+            android:drawableTop="@drawable/button_message"
             android:text="消息"
             />
 
         <Button
             android:id="@+id/page_mine"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:layout_weight="1"
             android:background="#FFFFFF"
-            android:drawableTop="@drawable/button_mine"
             android:padding="5dp"
+            android:drawablePadding="-5dp"
+            android:drawableTop="@drawable/button_mine"
             android:text="我的"
             />
 

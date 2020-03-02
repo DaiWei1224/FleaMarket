@@ -14,8 +14,5 @@ public class CommodityActivity extends AppCompatActivity {
         setContentView(R.layout.commodity_detail);
         Bundle bundle = getIntent().getExtras();
 
-//        SquareImageView imageView = findViewById(R.id.image);
-//        imageView.setImageResource(R.mipmap.ic_launcher);
-
     }
 }

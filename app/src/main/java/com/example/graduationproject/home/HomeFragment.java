@@ -9,6 +9,7 @@ import com.example.graduationproject.R;
 import com.example.graduationproject.home.recyclerview.Commodity;
 import com.example.graduationproject.home.recyclerview.CommodityAdapter;
 import com.example.graduationproject.home.recyclerview.SpaceItemDecoration;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class HomeFragment extends Fragment {
+    private final String TAG = "Homefragment";
     private List<Commodity> mCommodityList = new ArrayList<>();
 
     @Nullable
@@ -35,6 +37,15 @@ public class HomeFragment extends Fragment {
         recyclerView.addItemDecoration(new SpaceItemDecoration(25));
         CommodityAdapter adapter = new CommodityAdapter(mCommodityList, recyclerView);
         recyclerView.setAdapter(adapter);
+
+        FloatingActionButton postButton = layout.findViewById(R.id.post_button);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         return layout;
     }
 

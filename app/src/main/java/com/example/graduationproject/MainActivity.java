@@ -1,19 +1,20 @@
 package com.example.graduationproject;
 
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
+
+import com.example.graduationproject.home.HomeFragment;
+import com.example.graduationproject.message.MsgFragment;
+import com.example.graduationproject.mine.MineFragment;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
-import com.example.graduationproject.home.HomeFragment;
-import com.example.graduationproject.mine.MineFragment;
-import com.example.graduationproject.message.MsgFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -98,4 +99,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (fMsg != null) ft.hide(fMsg);
         if (fMine != null) ft.hide(fMine);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if (isTaskRoot()) {
+                // 程序退到后台但不销毁
+                moveTaskToBack(false);
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }
