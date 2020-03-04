@@ -19,7 +19,9 @@
         android:id="@+id/post_button"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:layout_alignParentEnd="true"
+        android:layout_margin="30dp"
+        android:src="@drawable/button_add"
+        app:fabSize="mini" />
 
 </RelativeLayout>

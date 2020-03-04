@@ -1,5 +1,6 @@
 package com.example.graduationproject.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,8 @@ public class HomeFragment extends Fragment {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getContext(), PostActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -52,11 +54,13 @@ public class HomeFragment extends Fragment {
     private void initCommodity(){
         for(int i = 0 ;i < 10; i++){
             Commodity commodity = new Commodity(R.mipmap.icon_2,
-                    "求德玛得只要998！！只要998！！！求德玛得只要998！！只要998！！！求德玛得只要998！！只要998！！！",
+                    "蔡徐坤同款篮球",
+                    "蔡徐坤同款篮球只要998！！只要998！！！蔡徐坤同款篮球只要998！！只要998！！！只要998！！！",
                     "¥998");
             mCommodityList.add(commodity);
             commodity = new Commodity(R.mipmap.icon_2,
-                    "蔡徐坤靓仔表情只要一分钱！！！！！！！！！！！！！",
+                    "蔡徐坤靓仔表情",
+                    "蔡徐坤靓仔表情只要一分钱~",
                     "¥0.01");
             mCommodityList.add(commodity);
         }

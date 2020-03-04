@@ -23,6 +23,7 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
 
         View mCommodityView;
         ImageView mImage;
+        TextView mName;
         TextView mContent;
         TextView mPrice;
 
@@ -30,6 +31,7 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
             super(view);
             mCommodityView = view;
             mImage = view.findViewById(R.id.image);
+            mName = view.findViewById(R.id.commodity_name);
             mContent = view.findViewById(R.id.content);
             mPrice = view.findViewById(R.id.price);
         }
@@ -53,6 +55,7 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
                 Intent intent = new Intent(mRecyclerView.getContext(), CommodityActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("image", commodity.getImage());
+                bundle.putString("name", commodity.getName());
                 bundle.putString("content", commodity.getContent());
                 bundle.putString("price", commodity.getPrice());
                 intent.putExtras(bundle);
@@ -67,6 +70,7 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Commodity commodity = (Commodity)mCommodityList.get(position);
         holder.mImage.setImageResource(commodity.getImage());
+        holder.mName.setText(commodity.getName());
         holder.mContent.setText(commodity.getContent());
         holder.mPrice.setText(commodity.getPrice());
     }

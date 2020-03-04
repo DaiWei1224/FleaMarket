@@ -9,8 +9,15 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/down_menu"
+        android:layout_above="@+id/line"
         />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/line"
+        android:background="@android:color/darker_gray"
+        android:layout_above="@+id/down_menu" />
 
     <LinearLayout
         android:id="@+id/down_menu"
