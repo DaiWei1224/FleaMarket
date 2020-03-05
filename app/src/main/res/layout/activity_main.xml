@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:id="@+id/line"
-        android:background="@android:color/darker_gray"
+        android:background="@color/colorPrimaryDark"
         android:layout_above="@+id/down_menu" />
 
     <LinearLayout

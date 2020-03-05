@@ -18,6 +18,17 @@
             android:layout_alignParentLeft="true"
             android:layout_marginRight="15dp" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chat_button"
+            android:text="联系卖家"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:backgroundTint="@android:color/holo_green_light"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,6 +48,13 @@
             android:layout_below="@+id/nick_name"
             android:layout_toRightOf="@+id/avatar" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black"
+            android:layout_below="@+id/avatar"
+            android:layout_marginTop="10dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +64,7 @@
             android:textColor="@android:color/holo_red_light"
             android:layout_below="@+id/avatar"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="5dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -65,7 +83,7 @@
 商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍
 商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍商品内容介绍"
             android:layout_below="@+id/title"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="5dp" />
 
         <com.example.graduationproject.ui.SquareImageView
         android:layout_width="match_parent"

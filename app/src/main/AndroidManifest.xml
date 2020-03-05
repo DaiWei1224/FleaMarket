@@ -21,11 +21,11 @@
         <activity
             android:name=".home.CommodityActivity"
             android:launchMode="singleTask"
-            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".home.PostActivity"
             android:launchMode="singleTask"
+            android:label="发布商品"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
     </application>
