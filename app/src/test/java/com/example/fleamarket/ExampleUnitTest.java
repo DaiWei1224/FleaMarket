@@ -1,4 +1,4 @@
-package com.example.graduationproject;
+package com.example.fleamarket;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.graduationproject.home.recyclerview;
+package com.example.fleamarket.home.recyclerview;
 
 import android.graphics.Rect;
 import android.view.View;

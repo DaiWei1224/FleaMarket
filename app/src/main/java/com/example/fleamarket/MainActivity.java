@@ -1,4 +1,4 @@
-package com.example.graduationproject;
+package com.example.fleamarket;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -6,9 +6,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.graduationproject.home.HomeFragment;
-import com.example.graduationproject.message.MsgFragment;
-import com.example.graduationproject.mine.MineFragment;
+import com.example.fleamarket.home.HomeFragment;
+import com.example.fleamarket.login.LoginFragment;
+import com.example.fleamarket.message.MsgFragment;
+import com.example.fleamarket.mine.MineFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     HomeFragment fHome = new HomeFragment();
     MsgFragment fMsg = new MsgFragment();
     MineFragment fMine = new MineFragment();
+    LoginFragment fLogin = new LoginFragment();
 
     Button btnHome;
     Button btnMsg;
@@ -55,7 +57,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 loadFragment(fMsg);
                 break;
             case R.id.page_mine:
-                loadFragment(fMine);
+                if(User.isLogin()){
+                    loadFragment(fMine);
+                }else{
+                    loadFragment(fLogin);
+                }
                 break;
             default:
                 break;
@@ -79,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 向FragmentTransaction中添加所有的Fragment
     public void initialFragmentTransaction(){
         ft = fm.beginTransaction();
+        ft.add(R.id.fragment_container, fLogin);
         ft.add(R.id.fragment_container, fMine);
         ft.add(R.id.fragment_container, fMsg);
         ft.add(R.id.fragment_container, fHome);
@@ -98,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (fHome != null) ft.hide(fHome);
         if (fMsg != null) ft.hide(fMsg);
         if (fMine != null) ft.hide(fMine);
+        if (fLogin != null) ft.hide(fLogin);
     }
 
     @Override

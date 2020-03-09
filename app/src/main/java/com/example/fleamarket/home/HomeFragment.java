@@ -1,4 +1,4 @@
-package com.example.graduationproject.home;
+package com.example.fleamarket.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.graduationproject.R;
-import com.example.graduationproject.home.recyclerview.Commodity;
-import com.example.graduationproject.home.recyclerview.CommodityAdapter;
-import com.example.graduationproject.home.recyclerview.SpaceItemDecoration;
+import com.example.fleamarket.R;
+import com.example.fleamarket.home.recyclerview.Commodity;
+import com.example.fleamarket.home.recyclerview.CommodityAdapter;
+import com.example.fleamarket.home.recyclerview.SpaceItemDecoration;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ public class HomeFragment extends Fragment {
     private final String TAG = "Homefragment";
     private List<Commodity> mCommodityList = new ArrayList<>();
 
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         super.onCreateView(inflater, container, savedInstanceState);

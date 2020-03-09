@@ -1,8 +1,8 @@
-package com.example.graduationproject.home;
+package com.example.fleamarket.home;
 
 import android.os.Bundle;
 
-import com.example.graduationproject.R;
+import com.example.fleamarket.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

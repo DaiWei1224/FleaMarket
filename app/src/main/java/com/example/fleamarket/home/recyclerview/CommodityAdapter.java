@@ -1,4 +1,4 @@
-package com.example.graduationproject.home.recyclerview;
+package com.example.fleamarket.home.recyclerview;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.graduationproject.R;
-import com.example.graduationproject.home.CommodityActivity;
+import com.example.fleamarket.R;
+import com.example.fleamarket.home.CommodityActivity;
 
 import java.util.List;
 

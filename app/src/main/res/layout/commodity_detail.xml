@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:padding="15dp">
 
-        <com.example.graduationproject.ui.SquareImageView
+        <com.example.fleamarket.ui.SquareImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/avatar"
@@ -85,7 +85,7 @@
             android:layout_below="@+id/title"
             android:layout_marginTop="5dp" />
 
-        <com.example.graduationproject.ui.SquareImageView
+        <com.example.fleamarket.ui.SquareImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/image"

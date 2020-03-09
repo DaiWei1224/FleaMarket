@@ -1,4 +1,4 @@
-package com.example.graduationproject.home.recyclerview;
+package com.example.fleamarket.home.recyclerview;
 
 public class Commodity {
     private int mImage;
