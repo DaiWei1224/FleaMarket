@@ -1,5 +1,7 @@
 package com.example.fleamarket;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initialClickListener();
         initialFragmentTransaction();
+        initialUserInfo();
     }
 
     @Override
@@ -118,6 +121,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public Fragment getFragmentByName(String f){
+        switch (f){
+            case "HomeFragment":
+                return fHome;
+            case "MsgFragment":
+                return fMsg;
+            case "MineFragment":
+                return fMine;
+            case "LoginFragment":
+                return fLogin;
+            default:
+                return null;
+        }
+    }
+
+    public void initialUserInfo(){
+        SharedPreferences sp = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        boolean login = sp.getBoolean("login", false);
+        String id = sp.getString("id", null);
+        String pw = sp.getString("pw", null);
+        User.setLogin(login);
+        User.setId(id);
+        User.setPassword(pw);
     }
 
 }

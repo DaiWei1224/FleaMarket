@@ -5,20 +5,48 @@
     android:gravity="center"
     android:padding="10dp">
 
-    <EditText
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/id"
-        android:hint="请输入账号"
-        android:maxLines="1" />
+        android:layout_height="wrap_content">
 
-    <EditText
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/id"
+            android:hint="请输入账号"
+            android:maxLines="1" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/delete_id"
+            android:layout_margin="10dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/button_delete" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/password"
-        android:hint="请输入密码"
-        android:maxLines="1"
-        android:inputType="textPassword" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/password"
+            android:hint="请输入密码"
+            android:maxLines="1"
+            android:inputType="textPassword" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/delete_pw"
+            android:layout_margin="10dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/button_delete" />
+
+    </RelativeLayout>
 
     <Button
         android:layout_width="match_parent"
