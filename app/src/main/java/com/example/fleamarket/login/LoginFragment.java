@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.fleamarket.MainActivity;
-import com.example.fleamarket.MyUtil;
+import com.example.fleamarket.utils.MyUtil;
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
 import com.example.fleamarket.net.ILoginListener;

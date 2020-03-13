@@ -1,4 +1,4 @@
-package com.example.fleamarket;
+package com.example.fleamarket.utils;
 
 import android.app.Activity;
 import android.content.Context;
