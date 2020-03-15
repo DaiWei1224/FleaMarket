@@ -56,7 +56,7 @@
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:backgroundTint="@android:color/holo_green_light"
+        android:backgroundTint="@color/colorAccent"
         android:layout_alignParentBottom="true" />
 
 </LinearLayout>

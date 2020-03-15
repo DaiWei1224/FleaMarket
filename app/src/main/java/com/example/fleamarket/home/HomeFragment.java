@@ -52,12 +52,12 @@ public class HomeFragment extends Fragment {
 
     private void initCommodity(){
         for(int i = 0 ;i < 10; i++){
-            Commodity commodity = new Commodity(R.mipmap.icon_2,
+            Commodity commodity = new Commodity(R.mipmap.icon,
                     "蔡徐坤同款篮球",
                     "蔡徐坤同款篮球只要998！！只要998！！！蔡徐坤同款篮球只要998！！只要998！！！只要998！！！",
                     "¥998");
             mCommodityList.add(commodity);
-            commodity = new Commodity(R.mipmap.icon_2,
+            commodity = new Commodity(R.mipmap.icon,
                     "蔡徐坤靓仔表情",
                     "蔡徐坤靓仔表情只要一分钱~",
                     "¥0.01");

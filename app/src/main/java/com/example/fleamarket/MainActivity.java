@@ -3,6 +3,7 @@ package com.example.fleamarket;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -33,6 +34,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnMsg;
     Button btnMine;
 
+    Drawable btnHomeSelect;
+    Drawable btnHomeNormal;
+    Drawable btnMsgSelect;
+    Drawable btnMsgNormal;
+    Drawable btnMineSelect;
+    Drawable btnMineNormal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +52,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initialClickListener();
         initialFragmentTransaction();
+        initialButtonDrawable();
         initialUserInfo();
     }
 
     @Override
     public void onClick(View v) {
         int buttonID = v.getId();
-        resetButtonColor();
-        v.setBackgroundColor(Color.parseColor("#DCDCDC"));
+        updateButtonStyle(buttonID);
         switch (buttonID) {
             case R.id.page_home:
                 loadFragment(fHome);
@@ -67,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             default:
-                break;
         }
     }
 
@@ -78,13 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnMine.setOnClickListener(this);
     }
 
-    // 重置按钮颜色
-    public void resetButtonColor(){
-        btnHome.setBackgroundColor(Color.parseColor("#FFFFFF"));
-        btnMsg.setBackgroundColor(Color.parseColor("#FFFFFF"));
-        btnMine.setBackgroundColor(Color.parseColor("#FFFFFF"));
-    }
-
     // 向FragmentTransaction中添加所有的Fragment
     public void initialFragmentTransaction(){
         ft = fm.beginTransaction();
@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ft.add(R.id.fragment_container, fMsg);
         ft.add(R.id.fragment_container, fHome);
         ft.commit();
+        hideFragments(ft);
+        ft.show(fHome);
     }
 
     // 载入Fragment
@@ -146,6 +148,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         User.setLogin(login);
         User.setId(id);
         User.setPassword(pw);
+    }
+
+    // 初始化按钮图片资源
+    public void initialButtonDrawable(){
+        btnHomeSelect = getResources().getDrawable(R.drawable.button_home_selected);
+        btnHomeSelect.setBounds(0, 0, btnHomeSelect.getMinimumWidth(), btnHomeSelect.getMinimumHeight());
+        btnHomeNormal = getResources().getDrawable(R.drawable.button_home);
+        btnHomeNormal.setBounds(0, 0, btnHomeSelect.getMinimumWidth(), btnHomeSelect.getMinimumHeight());
+        btnMsgSelect = getResources().getDrawable(R.drawable.button_message_selected);
+        btnMsgSelect.setBounds(0, 0, btnHomeSelect.getMinimumWidth(), btnHomeSelect.getMinimumHeight());
+        btnMsgNormal = getResources().getDrawable(R.drawable.button_message);
+        btnMsgNormal.setBounds(0, 0, btnHomeSelect.getMinimumWidth(), btnHomeSelect.getMinimumHeight());
+        btnMineSelect = getResources().getDrawable(R.drawable.button_mine_selected);
+        btnMineSelect.setBounds(0, 0, btnHomeSelect.getMinimumWidth(), btnHomeSelect.getMinimumHeight());
+        btnMineNormal = getResources().getDrawable(R.drawable.button_mine);
+        btnMineNormal.setBounds(0, 0, btnHomeSelect.getMinimumWidth(), btnHomeSelect.getMinimumHeight());
+    }
+
+    // 更新按钮样式
+    public void updateButtonStyle(int buttonID){
+        switch (buttonID) {
+            case R.id.page_home:
+                btnHome.setCompoundDrawables(null, btnHomeSelect, null, null);
+                btnHome.setTextColor(Color.WHITE);
+                btnHome.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                btnMsg.setCompoundDrawables(null, btnMsgNormal, null, null);
+                btnMsg.setTextColor(getResources().getColor(R.color.colorPrimary));
+                btnMsg.setBackgroundColor(Color.WHITE);
+
+                btnMine.setCompoundDrawables(null, btnMineNormal, null, null);
+                btnMine.setTextColor(getResources().getColor(R.color.colorPrimary));
+                btnMine.setBackgroundColor(Color.WHITE);
+                break;
+            case R.id.page_msg:
+                btnMsg.setCompoundDrawables(null, btnMsgSelect, null, null);
+                btnMsg.setTextColor(Color.WHITE);
+                btnMsg.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                btnHome.setCompoundDrawables(null, btnHomeNormal, null, null);
+                btnHome.setTextColor(getResources().getColor(R.color.colorPrimary));
+                btnHome.setBackgroundColor(Color.WHITE);
+
+                btnMine.setCompoundDrawables(null, btnMineNormal, null, null);
+                btnMine.setTextColor(getResources().getColor(R.color.colorPrimary));
+                btnMine.setBackgroundColor(Color.WHITE);
+                break;
+            case R.id.page_mine:
+                btnMine.setCompoundDrawables(null, btnMineSelect, null, null);
+                btnMine.setTextColor(Color.WHITE);
+                btnMine.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                btnHome.setCompoundDrawables(null, btnHomeNormal, null, null);
+                btnHome.setTextColor(getResources().getColor(R.color.colorPrimary));
+                btnHome.setBackgroundColor(Color.WHITE);
+
+                btnMsg.setCompoundDrawables(null, btnMsgNormal, null, null);
+                btnMsg.setTextColor(getResources().getColor(R.color.colorPrimary));
+                btnMsg.setBackgroundColor(Color.WHITE);
+                break;
+            default:
+        }
     }
 
 }
