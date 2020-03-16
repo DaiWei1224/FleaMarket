@@ -1,6 +1,7 @@
 package com.example.fleamarket.login;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
@@ -11,11 +12,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.fleamarket.MainActivity;
-import com.example.fleamarket.utils.MyUtil;
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
-import com.example.fleamarket.net.ILoginListener;
-import com.example.fleamarket.net.SocketLogin;
+import com.example.fleamarket.net.IServerListener;
+import com.example.fleamarket.net.MySocket;
+import com.example.fleamarket.utils.MyUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class LoginFragment extends Fragment implements View.OnClickListener, ILoginListener {
+public class LoginFragment extends Fragment implements View.OnClickListener, IServerListener {
     EditText idText;
     EditText pwText;
     @Override
@@ -34,6 +35,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ILo
         view.findViewById(R.id.login_button).setOnClickListener(this);
         view.findViewById(R.id.delete_id).setOnClickListener(this);
         view.findViewById(R.id.delete_pw).setOnClickListener(this);
+        view.findViewById(R.id.register).setOnClickListener(this);
         return view;
     }
 
@@ -45,6 +47,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ILo
                 break;
             case R.id.delete_pw:
                 pwText.setText("");
+                break;
+            case R.id.register:
+                Intent intent = new Intent(getContext(), RegisterActivity.class);
+                startActivity(intent);
                 break;
             case R.id.login_button:{
                 final String id = idText.getText().toString();
@@ -81,7 +87,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ILo
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                SocketLogin.doLogin(LoginFragment.this, id, pw);
+                                MySocket.requestLogin(LoginFragment.this, id, pw);
                             }
                         }).start();
                     }else{
@@ -95,7 +101,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ILo
     }
 
     @Override
-    public void onLoginSuccess() {
+    public void onSuccess(String info) {
         Looper.prepare();
         Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();
         User.setLogin(true);
@@ -121,7 +127,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ILo
     }
 
     @Override
-    public void onLoginFailure() {
+    public void onFailure(String info) {
         Looper.prepare();
         Toast.makeText(getContext(), "账号或密码错误", Toast.LENGTH_SHORT).show();
         Looper.loop();

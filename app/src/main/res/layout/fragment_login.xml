@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="center_vertical"
     android:padding="10dp">
 
     <RelativeLayout
@@ -20,7 +20,8 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:id="@+id/delete_id"
-            android:layout_margin="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="5dp"
             android:layout_alignParentRight="true"
             android:src="@drawable/button_delete" />
 
@@ -42,7 +43,8 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:id="@+id/delete_pw"
-            android:layout_margin="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="5dp"
             android:layout_alignParentRight="true"
             android:src="@drawable/button_delete" />
 
@@ -58,5 +60,14 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:backgroundTint="@color/colorAccent"
         android:layout_alignParentBottom="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/register"
+        android:text="@string/register"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/textview_color"
+        android:layout_margin="5dp" />
 
 </LinearLayout>

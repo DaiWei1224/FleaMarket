@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/image"
-            android:src="@mipmap/icon" />
+            android:src="@drawable/ic_launcher_background" />
 
         <TextView
             android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/price"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/holo_orange_dark"
+            android:textColor="@color/colorAccent"
             android:textStyle="bold" />
 
     </LinearLayout>

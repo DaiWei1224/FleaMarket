@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.fleamarket">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/icon"
@@ -11,9 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.fleamarket.MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:screenOrientation="portrait">
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,19 +23,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.fleamarket.home.CommodityActivity"
+            android:name=".home.CommodityActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.example.fleamarket.home.PostActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:launchMode="singleTask"
+            android:name=".home.PostActivity"
             android:label="发布商品"
-            android:parentActivityName="com.example.fleamarket.MainActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".login.RegisterActivity"
+            android:label="注册账号"
+            android:parentActivityName=".MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <provider
-            android:authorities="com.example.fleamarket.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.fleamarket.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
