@@ -142,12 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void initialUserInfo(){
         SharedPreferences sp = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        boolean login = sp.getBoolean("login", false);
-        String id = sp.getString("id", null);
-        String pw = sp.getString("pw", null);
-        User.setLogin(login);
-        User.setId(id);
-        User.setPassword(pw);
+        User.setLogin(sp.getBoolean("login", false));
+        User.setId(sp.getString("id", null));
+        User.setNickname(sp.getString("nickname", null));
     }
 
     // 初始化按钮图片资源

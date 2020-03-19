@@ -1,8 +1,6 @@
 package com.example.fleamarket;
 
 public class User {
-    public static String server_ip = "192.168.0.104";
-    public static int server_port = 1224;
     private static String id;               // 账号
     private static String password;         // 密码
     private static String nickname;         // 昵称

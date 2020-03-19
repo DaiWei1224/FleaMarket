@@ -8,11 +8,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@android:color/white" >
+        android:background="@android:color/white"
+        android:layout_marginBottom="10dp" >
 
         <com.example.fleamarket.ui.SquareImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:id="@+id/avatar"
             android:src="@mipmap/ic_launcher"
             android:layout_margin="15dp" />
@@ -21,17 +22,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/nick_name"
-            android:text="用户"
             android:layout_toRightOf="@+id/avatar"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="13dp"
             android:textColor="@android:color/black"
-            android:textSize="25dp" />
+            android:textStyle="bold"
+            android:textSize="23dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/id"
-            android:text="ID:"
             android:layout_toRightOf="@+id/avatar"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
@@ -39,35 +39,73 @@
 
     </RelativeLayout>
 
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:text="个人资料"
-        android:textColor="@android:color/black"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="10dp"
-        android:layout_marginTop="10dp" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:text="商品管理"
-        android:textColor="@android:color/black"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="10dp"
-        android:layout_marginTop="1dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:text="个人资料"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:padding="10dp" />
 
-    <TextView
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/enter"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="5dp" />
+
+    </FrameLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:text="清除缓存"
-        android:textColor="@android:color/black"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="10dp"
-        android:layout_marginTop="1dp" />
+        android:layout_marginTop="1dp" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:text="商品管理"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:padding="10dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/enter"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="5dp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:text="清除缓存"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:padding="10dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/enter"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="5dp" />
+
+    </FrameLayout>
 
     <Button
         android:layout_width="match_parent"
@@ -78,6 +116,6 @@
         android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:background="@android:color/holo_red_light"
-        android:layout_margin="10dp" />
+        android:layout_margin="15dp" />
 
 </LinearLayout>

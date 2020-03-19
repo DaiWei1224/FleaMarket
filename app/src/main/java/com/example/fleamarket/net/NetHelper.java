@@ -1,20 +1,17 @@
 package com.example.fleamarket.net;
 
-import com.example.fleamarket.User;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Reader;
 import java.net.Socket;
 
-public class MySocket {
+public class NetHelper {
+    public static String server_ip = "192.168.0.104";
+    public static int server_port = 1224;
 
     // 请求登录
     public static void requestLogin(IServerListener listener, String id, String pw){
         try {
-            Socket socket = new Socket(User.server_ip, User.server_port);
+            Socket socket = new Socket(server_ip, server_port);
             // 发送账号和密码信息
             ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
             NetMessage message = new NetMessage();
@@ -23,17 +20,16 @@ public class MySocket {
             message.setPw(pw);
             oos.writeObject(message);
             // 处理服务器的返回信息
-            Reader reader = new InputStreamReader(socket.getInputStream()/*, Charset.forName("utf-8")*/);
-            BufferedReader br = new BufferedReader(reader);
-            String line = br.readLine();
-            if(line.equals("login success")) {
-                listener.onSuccess(null);
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            NetMessage returnMessage = (NetMessage) ois.readObject();
+            MessageType type = returnMessage.getType();
+            if(type == MessageType.SUCCESS) {
+                listener.onSuccess(returnMessage);
             } else{
-                listener.onFailure(null);
+                listener.onFailure();
             }
-            // 关闭socket连接
             socket.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -41,7 +37,7 @@ public class MySocket {
     // 请求注册
     public static void requestRegister(IServerListener listener, String ivCode, String pw){
         try {
-            Socket socket = new Socket(User.server_ip, User.server_port);
+            Socket socket = new Socket(server_ip, server_port);
             // 发送邀请码和密码信息
             ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
             NetMessage message = new NetMessage();
@@ -50,17 +46,16 @@ public class MySocket {
             message.setPw(pw);
             oos.writeObject(message);
             // 处理服务器的返回信息
-            Reader reader = new InputStreamReader(socket.getInputStream()/*, Charset.forName("utf-8")*/);
-            BufferedReader br = new BufferedReader(reader);
-            String line = br.readLine();
-            if(line.equals("register failure")) {
-                listener.onFailure(null);
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            NetMessage returnMessage = (NetMessage) ois.readObject();
+            MessageType type = returnMessage.getType();
+            if(type == MessageType.SUCCESS) {
+                listener.onSuccess(returnMessage);
             } else{
-                listener.onSuccess(line);
+                listener.onFailure();
             }
-            // 关闭socket连接
             socket.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

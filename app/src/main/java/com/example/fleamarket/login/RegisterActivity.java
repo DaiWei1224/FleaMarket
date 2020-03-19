@@ -13,7 +13,8 @@ import android.widget.Toast;
 
 import com.example.fleamarket.R;
 import com.example.fleamarket.net.IServerListener;
-import com.example.fleamarket.net.MySocket;
+import com.example.fleamarket.net.NetHelper;
+import com.example.fleamarket.net.NetMessage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -101,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                MySocket.requestRegister(RegisterActivity.this, invitationCode, pw);
+                                NetHelper.requestRegister(RegisterActivity.this, invitationCode, pw);
                             }
                         }).start();
                     }
@@ -112,11 +113,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void onSuccess(final String info) {
+    public void onSuccess(final NetMessage info) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                String s = "注册成功！\n您的账号为" + info;
+                String s = "注册成功！\n您的账号为" + info.getId();
                 SpannableString ss = new SpannableString(s);
                 //将获取的账号设置为蓝色
                 ss.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)),
@@ -131,7 +132,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void onFailure(String info) {
+    public void onFailure() {
         Looper.prepare();
         Toast.makeText(this, "邀请码不存在或已被使用", Toast.LENGTH_SHORT).show();
         Looper.loop();

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fleamarket.MainActivity;
@@ -40,9 +41,12 @@ public class MineFragment extends Fragment {
     public static final int CHOOSE_PHOTO = 2;
     public static final int CROP_PHOTO = 3;
     private ImageView avatar;
+    private TextView nickname;
+    private TextView id;
     private Uri imageUri;
     private Activity currentActivity;
     private Fragment currentFragment;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View view =  inflater.inflate(R.layout.fragment_mine, container, false);
@@ -80,6 +84,8 @@ public class MineFragment extends Fragment {
                         }).create().show();
             }
         });
+        nickname = view.findViewById(R.id.nick_name);
+        id = view.findViewById(R.id.id);
         avatar = view.findViewById(R.id.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,14 +93,23 @@ public class MineFragment extends Fragment {
                 showOptionListDialog();
             }
         });
+        updateUserInfo();
+        return view;
+    }
+
+    public void updateUserInfo(){
+        nickname.setText(User.getNickname());
+        id.setText("ID:" + User.getId());
         // 加载图片
         File outputImage = new File(currentActivity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
         imageUri = Uri.fromFile(outputImage);
         if (outputImage.exists()) {
             PictureUtils.updatePictureView(avatar, outputImage, currentActivity);
+        } else {
+            avatar.setImageResource(R.mipmap.ic_launcher);
         }
-        return view;
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -14,8 +14,10 @@ import android.widget.Toast;
 import com.example.fleamarket.MainActivity;
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
+import com.example.fleamarket.mine.MineFragment;
 import com.example.fleamarket.net.IServerListener;
-import com.example.fleamarket.net.MySocket;
+import com.example.fleamarket.net.NetHelper;
+import com.example.fleamarket.net.NetMessage;
 import com.example.fleamarket.utils.MyUtil;
 
 import androidx.annotation.NonNull;
@@ -87,7 +89,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                MySocket.requestLogin(LoginFragment.this, id, pw);
+                                NetHelper.requestLogin(LoginFragment.this, id, pw);
                             }
                         }).start();
                     }else{
@@ -101,18 +103,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
     }
 
     @Override
-    public void onSuccess(String info) {
+    public void onSuccess(NetMessage info) {
         Looper.prepare();
         Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();
         User.setLogin(true);
-        User.setId(idText.getText().toString());
-        User.setPassword(pwText.getText().toString());
+        User.setId(info.getId());
+        User.setNickname(info.getNickname());
         // 从“登录”页面切换到“我的”页面
         MainActivity mainActivity = (MainActivity)getActivity();
         FragmentManager fm = mainActivity.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.hide(this);
-        ft.show(mainActivity.getFragmentByName("MineFragment"));
+        MineFragment mineFragment = (MineFragment)mainActivity.getFragmentByName("MineFragment");
+        mineFragment.updateUserInfo();
+        ft.show(mineFragment);
         ft.commit();
         // 隐藏软键盘
         MyUtil.hideKeyboard(mainActivity);
@@ -121,13 +125,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("login", true);
         editor.putString("id", User.getId());
-        editor.putString("pw", User.getPassword());
+        editor.putString("nickname", User.getNickname());
         editor.apply();
         Looper.loop();
     }
 
     @Override
-    public void onFailure(String info) {
+    public void onFailure() {
         Looper.prepare();
         Toast.makeText(getContext(), "账号或密码错误", Toast.LENGTH_SHORT).show();
         Looper.loop();
