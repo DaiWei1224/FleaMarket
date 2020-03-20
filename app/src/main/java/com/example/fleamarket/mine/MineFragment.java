@@ -1,6 +1,7 @@
 package com.example.fleamarket.mine;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,10 +12,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +25,11 @@ import android.widget.Toast;
 import com.example.fleamarket.MainActivity;
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
+import com.example.fleamarket.net.IServerListener;
+import com.example.fleamarket.net.MessageType;
+import com.example.fleamarket.net.NetHelper;
+import com.example.fleamarket.net.NetMessage;
+import com.example.fleamarket.utils.MyUtil;
 import com.example.fleamarket.utils.PictureUtils;
 
 import java.io.File;
@@ -36,13 +44,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MineFragment extends Fragment {
+public class MineFragment extends Fragment implements View.OnClickListener, IServerListener {
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
     public static final int CROP_PHOTO = 3;
     private ImageView avatar;
     private TextView nickname;
     private TextView id;
+    private ImageView change_nickname;
+    private ImageView check_nickname;
+    private EditText edit_nickname;
     private Uri imageUri;
     private Activity currentActivity;
     private Fragment currentFragment;
@@ -52,49 +63,64 @@ public class MineFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_mine, container, false);
         currentActivity = getActivity();
         currentFragment = this;
-        view.findViewById(R.id.logout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(getContext())
-                        .setMessage("确定退出当前账号？")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getContext(), "退出登录", Toast.LENGTH_SHORT).show();
-                                User.setLogin(false);
-                                MainActivity mainActivity = (MainActivity)getActivity();
-                                // 删除本地的SharedPreferences
-                                SharedPreferences sp = mainActivity.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sp.edit();
-                                editor.clear();
-                                editor.apply();
-                                // 将“我的”页面切换为“登录”页面
-                                FragmentManager fm = mainActivity.getSupportFragmentManager();
-                                FragmentTransaction ft = fm.beginTransaction();
-                                ft.hide(mainActivity.getFragmentByName("MineFragment"));
-                                ft.show(mainActivity.getFragmentByName("LoginFragment"));
-                                ft.commit();
-                                // 清除消息页面……
-                            }
-                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).create().show();
-            }
-        });
         nickname = view.findViewById(R.id.nick_name);
         id = view.findViewById(R.id.id);
         avatar = view.findViewById(R.id.avatar);
-        avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showOptionListDialog();
-            }
-        });
+        avatar.setOnClickListener(this);
         updateUserInfo();
+        change_nickname = view.findViewById(R.id.change_nickname);
+        check_nickname = view.findViewById(R.id.check_nickname);
+        edit_nickname = view.findViewById(R.id.edit_nickname);
+        change_nickname.setOnClickListener(this);
+        check_nickname.setOnClickListener(this);
+        view.findViewById(R.id.manage_commidy).setOnClickListener(this);
+        view.findViewById(R.id.personal_data).setOnClickListener(this);
+        view.findViewById(R.id.change_password).setOnClickListener(this);
+        view.findViewById(R.id.clear_cache).setOnClickListener(this);
+        view.findViewById(R.id.logout).setOnClickListener(this);
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.avatar:
+                showAvatarOptionDialog();
+                break;
+            case R.id.change_nickname: {
+                nickname.setVisibility(View.INVISIBLE);
+                v.setVisibility(View.INVISIBLE);
+                showEditNickname();
+                // 显示软键盘
+                MyUtil.showKeyboard(getActivity(), edit_nickname);
+            } break;
+            case R.id.check_nickname: {
+                if (User.getNickname().equals(edit_nickname.getText().toString())) {
+                    Toast.makeText(getContext(), "昵称未修改", Toast.LENGTH_SHORT).show();
+                    showNickname();
+                } else {
+                    checkNicknameDialog(this, edit_nickname.getText().toString());
+                }
+                // 隐藏软键盘
+                MyUtil.hideKeyboard(getActivity());
+            } break;
+            case R.id.manage_commidy:
+                Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.personal_data:
+                Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.change_password:
+                showChangePasswordDialog(this);
+                break;
+            case R.id.clear_cache:
+                Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.logout:
+                showLogoutDialog();
+                break;
+                default:
+        }
     }
 
     public void updateUserInfo(){
@@ -157,7 +183,7 @@ public class MineFragment extends Fragment {
         }
     }
 
-    private void showOptionListDialog() {
+    private void showAvatarOptionDialog() {
         final String[] items = {"拍照", "从相册选取", "查看大图", "取消"};
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(currentActivity)
                 .setItems(items, new DialogInterface.OnClickListener() {
@@ -209,6 +235,171 @@ public class MineFragment extends Fragment {
                     }
                 });
         builder.create().show();
+    }
+
+    private void checkNicknameDialog(final IServerListener listener, final String nickname) {
+        new AlertDialog.Builder(getContext())
+                .setMessage("确认修改昵称？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                NetHelper.changeNickname(listener, nickname);
+                            }
+                        }).start();
+                        showNickname();
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        MyUtil.showKeyboard(getActivity(), edit_nickname);
+                    }
+        }).create().show();
+    }
+
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(getContext())
+                .setMessage("确定退出当前账号？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getContext(), "退出登录", Toast.LENGTH_SHORT).show();
+                        User.setLogin(false);
+                        MainActivity mainActivity = (MainActivity)getActivity();
+                        // 删除本地的SharedPreferences
+                        SharedPreferences sp = mainActivity.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.clear();
+                        editor.apply();
+                        // 将“我的”页面切换为“登录”页面
+                        FragmentManager fm = mainActivity.getSupportFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        ft.hide(mainActivity.getFragmentByName("MineFragment"));
+                        ft.show(mainActivity.getFragmentByName("LoginFragment"));
+                        ft.commit();
+                        // 清除消息页面……
+
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+        }).create().show();
+    }
+
+    private void showNickname() {
+        edit_nickname.setVisibility(View.INVISIBLE);
+        check_nickname.setVisibility(View.INVISIBLE);
+        nickname.setVisibility(View.VISIBLE);
+        change_nickname.setVisibility(View.VISIBLE);
+    }
+
+    private void showEditNickname() {
+        edit_nickname.setVisibility(View.VISIBLE);
+        check_nickname.setVisibility(View.VISIBLE);
+        edit_nickname.setText(User.getNickname());
+        edit_nickname.setHint(User.getNickname());
+    }
+
+    private void showChangePasswordDialog(final IServerListener listener){
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.change_password, null);
+        final EditText oldPw = view.findViewById(R.id.old_password);
+        final EditText newPw = view.findViewById(R.id.new_password);
+        final EditText confirmPw = view.findViewById(R.id.confirm_password);
+        final TextView tips = view.findViewById(R.id.tips);
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).setView(view).setTitle("修改密码")
+                .setPositiveButton("确认修改", null)
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        // 使用getButton方法设计“确认”按钮的逻辑可以防止点击一次对话框就关闭
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String oldPassword = oldPw.getText().toString();
+                        String newPassword = newPw.getText().toString();
+                        final String confirmPassword = confirmPw.getText().toString();
+                        if (oldPassword.length() == 0 || newPassword.length() == 0 || confirmPassword.length() == 0) {
+                            tips.setText("密码不能为空");
+                        } else if (!oldPassword.equals(User.getPassword())) {
+                            tips.setText("原密码错误");
+                        } else if (!newPassword.equals(confirmPassword)) {
+                            tips.setText("两次输入密码不一致");
+                        } else if (newPassword.equals(oldPassword)) {
+                            tips.setText("新密码与原密码相同");
+                        } else {
+                            boolean valid = true;
+                            for(int i = 0; i < newPassword.length(); i++){
+                                if(!((newPassword.charAt(i) >= '0' && newPassword.charAt(i) <= '9')||
+                                        (newPassword.charAt(i) >= 'a' && newPassword.charAt(i) <= 'z')||
+                                        (newPassword.charAt(i) >= 'A' && newPassword.charAt(i) <= 'Z'))){
+                                    valid = false;
+                                    tips.setText("密码只能由数字和大小写字母组成");
+                                    break;
+                                }
+                            }
+                            if (valid) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        NetHelper.changePassword(listener, confirmPassword);
+                                    }
+                                }).start();
+                                alertDialog.dismiss();
+                            }
+                        }
+                        tips.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+        alertDialog.show();
+    }
+
+    @Override
+    public void onSuccess(final NetMessage info) {
+        if (info.getType() == MessageType.CHANGE_NICKNAME) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), "昵称修改成功", Toast.LENGTH_SHORT).show();
+                    User.setNickname(info.getNickname());
+                    nickname.setText(User.getNickname());
+                    // 修改本地的SharedPreferences
+                    SharedPreferences sp = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("nickname", User.getNickname());
+                    editor.apply();
+                }
+            });
+        } else if (info.getType() == MessageType.CHANGE_PASSWORD) {
+            Looper.prepare();
+            Toast.makeText(getContext(), "密码修改成功", Toast.LENGTH_SHORT).show();
+            User.setPassword(info.getPw());
+            SharedPreferences sp = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("password", User.getPassword());
+            editor.apply();
+            Looper.loop();
+        }
+
+    }
+
+    @Override
+    public void onFailure(String info) {
+        Looper.prepare();
+        Toast.makeText(getContext(), info, Toast.LENGTH_SHORT).show();
+        Looper.loop();
     }
 
 //    @TargetApi(19)

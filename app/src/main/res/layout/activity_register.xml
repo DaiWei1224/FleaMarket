@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/invitation_code"
                 android:hint="请输入邀请码"
+                android:maxLength="6"
                 android:maxLines="1" />
 
             <ImageView
@@ -53,6 +54,7 @@
                 android:id="@+id/password"
                 android:hint="输入新密码"
                 android:maxLines="1"
+                android:maxLength="20"
                 android:inputType="textPassword" />
 
             <ImageView
@@ -76,6 +78,7 @@
                 android:id="@+id/confirm_password"
                 android:hint="确认密码"
                 android:maxLines="1"
+                android:maxLength="20"
                 android:inputType="textPassword" />
 
             <ImageView

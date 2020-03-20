@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences sp = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         User.setLogin(sp.getBoolean("login", false));
         User.setId(sp.getString("id", null));
+        User.setPassword(sp.getString("password", null));
         User.setNickname(sp.getString("nickname", null));
     }
 

@@ -28,6 +28,34 @@
             android:textStyle="bold"
             android:textSize="23dp" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/change_nickname"
+            android:layout_toRightOf="@id/nick_name"
+            android:layout_marginTop="17dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/button_pen" />
+
+        <EditText
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_nickname"
+            android:layout_toRightOf="@+id/avatar"
+            android:visibility="invisible"
+            android:layout_marginTop="6dp"
+            android:maxLength="8" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/check_nickname"
+            android:layout_toRightOf="@id/edit_nickname"
+            android:layout_marginTop="17dp"
+            android:layout_marginLeft="10dp"
+            android:visibility="invisible"
+            android:src="@drawable/button_check" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,29 +74,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:text="个人资料"
-            android:textColor="@android:color/black"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:padding="10dp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/enter"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="5dp" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp" >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/manage_commidy"
             android:background="@android:color/white"
             android:text="商品管理"
             android:textColor="@android:color/black"
@@ -92,6 +98,55 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/personal_data"
+            android:background="@android:color/white"
+            android:text="个人资料"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:padding="10dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/enter"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="5dp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/change_password"
+            android:background="@android:color/white"
+            android:text="更改密码"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:padding="10dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/enter"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="5dp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/clear_cache"
             android:background="@android:color/white"
             android:text="清除缓存"
             android:textColor="@android:color/black"

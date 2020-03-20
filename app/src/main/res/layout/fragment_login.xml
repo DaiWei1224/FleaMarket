@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/id"
             android:hint="请输入账号"
+            android:maxLength="5"
             android:maxLines="1" />
 
         <ImageView
@@ -36,6 +37,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/password"
             android:hint="请输入密码"
+            android:maxLength="20"
             android:maxLines="1"
             android:inputType="textPassword" />
 

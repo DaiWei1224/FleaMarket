@@ -105,12 +105,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
     @Override
     public void onSuccess(NetMessage info) {
         Looper.prepare();
+        MainActivity mainActivity = (MainActivity)getActivity();
+        // 隐藏软键盘
+        MyUtil.hideKeyboard(mainActivity);
         Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();
         User.setLogin(true);
         User.setId(info.getId());
+        User.setPassword(info.getPw());
         User.setNickname(info.getNickname());
         // 从“登录”页面切换到“我的”页面
-        MainActivity mainActivity = (MainActivity)getActivity();
         FragmentManager fm = mainActivity.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.hide(this);
@@ -118,20 +121,19 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
         mineFragment.updateUserInfo();
         ft.show(mineFragment);
         ft.commit();
-        // 隐藏软键盘
-        MyUtil.hideKeyboard(mainActivity);
         // 使用SharedPreferences将用户信息存储在本地
         SharedPreferences sp= mainActivity.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("login", true);
         editor.putString("id", User.getId());
+        editor.putString("password", User.getPassword());
         editor.putString("nickname", User.getNickname());
         editor.apply();
         Looper.loop();
     }
 
     @Override
-    public void onFailure() {
+    public void onFailure(String info) {
         Looper.prepare();
         Toast.makeText(getContext(), "账号或密码错误", Toast.LENGTH_SHORT).show();
         Looper.loop();
