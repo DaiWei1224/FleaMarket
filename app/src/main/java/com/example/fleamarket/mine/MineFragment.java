@@ -163,6 +163,13 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
             case CROP_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
                     PictureUtils.displayImage(avatar, imageUri, currentActivity);
+                    // 将头像存储到服务器
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            NetHelper.saveAvatar((IServerListener)currentFragment, currentActivity);
+                        }
+                    }).start();
                 }
                 break;
             default:
@@ -390,6 +397,10 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
             SharedPreferences.Editor editor = sp.edit();
             editor.putString("password", User.getPassword());
             editor.apply();
+            Looper.loop();
+        } else if (info.getType() == MessageType.SAVE_AVATAR) {
+            Looper.prepare();
+            Toast.makeText(getContext(), "头像设置成功", Toast.LENGTH_SHORT).show();
             Looper.loop();
         }
 

@@ -19,6 +19,7 @@ import com.example.fleamarket.net.IServerListener;
 import com.example.fleamarket.net.NetHelper;
 import com.example.fleamarket.net.NetMessage;
 import com.example.fleamarket.utils.MyUtil;
+import com.example.fleamarket.utils.PictureUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -113,6 +114,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
         User.setId(info.getId());
         User.setPassword(info.getPw());
         User.setNickname(info.getNickname());
+        // 将头像保存到本地
+        if (info.getAvatar() != null) {
+            PictureUtils.saveImageFromByte(getActivity(), info.getAvatar().getData());
+        }
         // 从“登录”页面切换到“我的”页面
         FragmentManager fm = mainActivity.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

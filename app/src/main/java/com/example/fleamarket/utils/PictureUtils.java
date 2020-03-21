@@ -14,8 +14,12 @@ import android.widget.ImageView;
 import com.example.fleamarket.User;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import androidx.fragment.app.Fragment;
 
@@ -167,6 +171,34 @@ public class PictureUtils {
                     openInputStream(uri));
             view.setImageBitmap(bitmap);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static byte[] loadImageFromFile(File image) {
+        try {
+            InputStream is = new FileInputStream(image);
+            byte[] data = new byte[(int)image.length()];
+            is.read(data);
+            is.close();
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void saveImageFromByte(Activity activity, byte[] data) {
+        try {
+            File image = new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+            if (image.exists()){
+                image.delete();
+            }
+            image.createNewFile();
+            OutputStream os = new FileOutputStream(image);
+            os.write(data);
+            os.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

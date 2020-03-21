@@ -1,7 +1,11 @@
 package com.example.fleamarket.net;
 
-import com.example.fleamarket.User;
+import android.app.Activity;
 
+import com.example.fleamarket.User;
+import com.example.fleamarket.utils.PictureUtils;
+
+import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -103,6 +107,34 @@ public class NetHelper {
             MessageType type = returnMessage.getType();
             if(type == MessageType.FAILURE) {
                 listener.onFailure("密码修改失败");
+            } else{
+                listener.onSuccess(returnMessage);
+            }
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 将头像存储到服务器
+    public static void saveAvatar(IServerListener listener, Activity activity){
+        try {
+            Socket socket = new Socket(server_ip, server_port);
+            ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
+            NetMessage message = new NetMessage();
+            message.setType(MessageType.SAVE_AVATAR);
+            message.setId(User.getId());
+            NetImage netImage = new NetImage();
+            netImage.setData(PictureUtils.loadImageFromFile(
+                    new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg")));
+            message.setAvatar(netImage);
+            oos.writeObject(message);
+            // 处理服务器的返回信息
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            NetMessage returnMessage = (NetMessage) ois.readObject();
+            MessageType type = returnMessage.getType();
+            if(type == MessageType.FAILURE) {
+                listener.onFailure("头像设置失败");
             } else{
                 listener.onSuccess(returnMessage);
             }
