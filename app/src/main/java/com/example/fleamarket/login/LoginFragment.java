@@ -21,6 +21,8 @@ import com.example.fleamarket.net.NetMessage;
 import com.example.fleamarket.utils.MyUtil;
 import com.example.fleamarket.utils.PictureUtils;
 
+import java.io.File;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -109,7 +111,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
         MainActivity mainActivity = (MainActivity)getActivity();
         // 隐藏软键盘
         MyUtil.hideKeyboard(mainActivity);
-        Toast.makeText(getContext(), "登录成功", Toast.LENGTH_SHORT).show();
         User.setLogin(true);
         User.setId(info.getId());
         User.setPassword(info.getPw());
@@ -134,6 +135,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
         editor.putString("password", User.getPassword());
         editor.putString("nickname", User.getNickname());
         editor.apply();
+        // 创建存储用户头像的文件夹
+        File file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/avatar");
+        if (!file.exists()) {
+            file.mkdir();
+        }
         Looper.loop();
     }
 

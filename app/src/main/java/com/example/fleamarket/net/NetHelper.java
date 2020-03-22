@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class NetHelper {
-    public static String server_ip = "192.168.0.103";
+    public static String server_ip = "192.168.0.104";
     public static int server_port = 1224;
 
     // 请求登录
@@ -125,8 +125,11 @@ public class NetHelper {
             message.setType(MessageType.SAVE_AVATAR);
             message.setId(User.getId());
             NetImage netImage = new NetImage();
+//            netImage.setData(PictureUtils.loadImageFromFile(
+//                    new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg")));
             netImage.setData(PictureUtils.loadImageFromFile(
-                    new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg")));
+                    new File(activity.getExternalCacheDir().getAbsolutePath() +
+                            "/avatar/avatar_" + User.getId() + ".jpg")));
             message.setAvatar(netImage);
             oos.writeObject(message);
             // 处理服务器的返回信息

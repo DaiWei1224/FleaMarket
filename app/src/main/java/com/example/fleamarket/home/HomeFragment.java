@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.fleamarket.R;
+import com.example.fleamarket.User;
 import com.example.fleamarket.home.recyclerview.Commodity;
 import com.example.fleamarket.home.recyclerview.CommodityAdapter;
 import com.example.fleamarket.home.recyclerview.SpaceItemDecoration;
@@ -42,8 +44,12 @@ public class HomeFragment extends Fragment {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), PostActivity.class);
-                startActivity(intent);
+                if (User.isLogin()) {
+                    Intent intent = new Intent(getContext(), PostActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

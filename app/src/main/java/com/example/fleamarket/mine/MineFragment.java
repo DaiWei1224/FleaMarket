@@ -127,7 +127,9 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
         nickname.setText(User.getNickname());
         id.setText("ID:" + User.getId());
         // 加载图片
-        File outputImage = new File(currentActivity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+//        File outputImage = new File(currentActivity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+        File outputImage = new File(currentActivity.getExternalCacheDir().getAbsolutePath() +
+                "/avatar/avatar_" + User.getId() + ".jpg");
         imageUri = Uri.fromFile(outputImage);
         if (outputImage.exists()) {
             PictureUtils.updatePictureView(avatar, outputImage, currentActivity);
@@ -199,7 +201,9 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                         switch (i){
                             case 0: { // 使用相机拍照
                                 // 创建File对象，用于存储拍照后的图片
-                                File outputImage = new File(currentActivity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+//                                File outputImage = new File(currentActivity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+                                File outputImage = new File(currentActivity.getExternalCacheDir().getAbsolutePath() +
+                                        "/avatar/avatar_" + User.getId() + ".jpg");
                                 try {
                                     if (outputImage.exists()){
                                         outputImage.delete();
@@ -231,7 +235,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                             }
                             break;
                             case 2: { // 查看大图
-
+                                Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
                             }
                             break;
                             case 3: { // 取消
@@ -273,7 +277,6 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(), "退出登录", Toast.LENGTH_SHORT).show();
                         User.setLogin(false);
                         MainActivity mainActivity = (MainActivity)getActivity();
                         // 删除本地的SharedPreferences

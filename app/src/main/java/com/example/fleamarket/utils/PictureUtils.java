@@ -80,7 +80,9 @@ public class PictureUtils {
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString()); // 图片输出格式
         Uri outputUri = uri;
         if(from == 2) { // 从相册选取
-            File outputImage = new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+//            File outputImage = new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+            File outputImage = new File(activity.getExternalCacheDir().getAbsolutePath() +
+                    "/avatar/avatar_" + User.getId() + ".jpg");
             try {
                 if (outputImage.exists()){
                     outputImage.delete();
@@ -115,7 +117,9 @@ public class PictureUtils {
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString()); // 图片输出格式
         Uri outputUri = uri;
         if(from == 2) { // 从相册选取
-            File outputImage = new File(fragment.getActivity().getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+//            File outputImage = new File(fragment.getActivity().getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+            File outputImage = new File(fragment.getActivity().getExternalCacheDir().getAbsolutePath() +
+                    "/avatar/avatar_" + User.getId() + ".jpg");
             try {
                 if (outputImage.exists()){
                     outputImage.delete();
@@ -190,7 +194,9 @@ public class PictureUtils {
 
     public static void saveImageFromByte(Activity activity, byte[] data) {
         try {
-            File image = new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+//            File image = new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
+            File image = new File(activity.getExternalCacheDir().getAbsolutePath() +
+                    "/avatar/avatar_" + User.getId() + ".jpg");
             if (image.exists()){
                 image.delete();
             }
