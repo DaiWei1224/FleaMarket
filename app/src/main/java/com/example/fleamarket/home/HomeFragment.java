@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
-import com.example.fleamarket.home.recyclerview.Commodity;
+import com.example.fleamarket.net.Commodity;
 import com.example.fleamarket.home.recyclerview.CommodityAdapter;
 import com.example.fleamarket.home.recyclerview.SpaceItemDecoration;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -58,15 +58,31 @@ public class HomeFragment extends Fragment {
 
     private void initCommodity(){
         for(int i = 0 ;i < 10; i++){
-            Commodity commodity = new Commodity(R.drawable.ic_launcher_background,
+            Commodity commodity = new Commodity(
+                    null,
                     "蔡徐坤同款篮球",
                     "蔡徐坤同款篮球只要998！！只要998！！！蔡徐坤同款篮球只要998！！只要998！！！只要998！！！",
-                    "¥998");
+                    "¥998",
+                    null,
+                    null,
+                    null,
+                    null,
+                    true,
+                    null
+            );
             mCommodityList.add(commodity);
-            commodity = new Commodity(R.drawable.ic_launcher_background,
+            commodity = new Commodity(
+                    null,
                     "蔡徐坤靓仔表情",
                     "蔡徐坤靓仔表情只要一分钱~",
-                    "¥0.01");
+                    "¥0.01",
+                    null,
+                    null,
+                    null,
+                    null,
+                    true,
+                    null
+            );
             mCommodityList.add(commodity);
         }
     }

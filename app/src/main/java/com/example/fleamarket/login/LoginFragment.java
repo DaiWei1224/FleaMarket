@@ -108,7 +108,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
     @Override
     public void onSuccess(NetMessage info) {
         Looper.prepare();
-        MainActivity mainActivity = (MainActivity)getActivity();
+        final MainActivity mainActivity = (MainActivity)getActivity();
         // 隐藏软键盘
         MyUtil.hideKeyboard(mainActivity);
         User.setLogin(true);
@@ -127,6 +127,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
         mineFragment.updateUserInfo();
         ft.show(mineFragment);
         ft.commit();
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mainActivity.title.setText("个人中心");
+            }
+        });
         // 使用SharedPreferences将用户信息存储在本地
         SharedPreferences sp= mainActivity.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -137,6 +143,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
         editor.apply();
         // 创建存储用户头像的文件夹
         File file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/avatar");
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        // 创建存储商品图片的文件夹
+        file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/commodity");
         if (!file.exists()) {
             file.mkdir();
         }

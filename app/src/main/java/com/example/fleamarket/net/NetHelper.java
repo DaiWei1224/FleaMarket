@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class NetHelper {
-    public static String server_ip = "192.168.0.104";
+    public static String server_ip = "192.168.0.103";
     public static int server_port = 1224;
 
     // 请求登录
@@ -136,10 +136,10 @@ public class NetHelper {
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             NetMessage returnMessage = (NetMessage) ois.readObject();
             MessageType type = returnMessage.getType();
-            if(type == MessageType.FAILURE) {
-                listener.onFailure("头像设置失败");
-            } else{
+            if(type == MessageType.SAVE_AVATAR) {
                 listener.onSuccess(returnMessage);
+            } else{
+                listener.onFailure("头像设置失败");
             }
             socket.close();
         } catch (Exception e) {

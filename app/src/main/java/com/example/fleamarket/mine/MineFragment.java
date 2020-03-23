@@ -290,6 +290,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                         ft.hide(mainActivity.getFragmentByName("MineFragment"));
                         ft.show(mainActivity.getFragmentByName("LoginFragment"));
                         ft.commit();
+                        mainActivity.title.setText("登录");
                         // 清除消息页面……
 
                     }

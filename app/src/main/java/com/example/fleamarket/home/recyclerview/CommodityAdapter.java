@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.fleamarket.R;
 import com.example.fleamarket.home.CommodityActivity;
+import com.example.fleamarket.net.Commodity;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
             mCommodityView = view;
             mImage = view.findViewById(R.id.image);
             mName = view.findViewById(R.id.commodity_name);
-            mContent = view.findViewById(R.id.content);
+            mContent = view.findViewById(R.id.commodity_detail);
             mPrice = view.findViewById(R.id.price);
         }
     }
@@ -54,9 +55,8 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
                 Commodity commodity = mCommodityList.get(position);
                 Intent intent = new Intent(mRecyclerView.getContext(), CommodityActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("image", commodity.getImage());
-                bundle.putString("name", commodity.getName());
-                bundle.putString("content", commodity.getContent());
+                bundle.putString("name", commodity.getCommodityName());
+                bundle.putString("content", commodity.getCommodityDetail());
                 bundle.putString("price", commodity.getPrice());
                 intent.putExtras(bundle);
                 mRecyclerView.getContext().startActivity(intent);
@@ -69,9 +69,9 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Commodity commodity = (Commodity)mCommodityList.get(position);
-        holder.mImage.setImageResource(commodity.getImage());
-        holder.mName.setText(commodity.getName());
-        holder.mContent.setText(commodity.getContent());
+        holder.mImage.setImageResource(R.drawable.ic_launcher_background);
+        holder.mName.setText(commodity.getCommodityName());
+        holder.mContent.setText(commodity.getCommodityDetail());
         holder.mPrice.setText(commodity.getPrice());
     }
 

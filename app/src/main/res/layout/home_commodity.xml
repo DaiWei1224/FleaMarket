@@ -32,7 +32,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/content"
+            android:id="@+id/commodity_detail"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:maxLines="2" />
 

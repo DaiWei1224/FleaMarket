@@ -24,16 +24,16 @@
         <activity
             android:name=".home.CommodityActivity"
             android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".home.PostActivity"
-            android:label="发布商品"
             android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".login.RegisterActivity"
-            android:label="注册账号"
+        <activity
+            android:name=".login.RegisterActivity"
             android:parentActivityName=".MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

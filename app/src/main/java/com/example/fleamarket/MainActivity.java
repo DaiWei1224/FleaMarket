@@ -1,26 +1,37 @@
 package com.example.fleamarket;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.fleamarket.home.HomeFragment;
 import com.example.fleamarket.login.LoginFragment;
 import com.example.fleamarket.message.MsgFragment;
 import com.example.fleamarket.mine.MineFragment;
+import com.example.fleamarket.net.NetHelper;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    public TextView title;
 
     FragmentManager fm = getSupportFragmentManager();
     FragmentTransaction ft;
@@ -46,6 +57,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        title = findViewById(R.id.title);
+
         btnHome = findViewById(R.id.page_home);
         btnMsg = findViewById(R.id.page_msg);
         btnMine = findViewById(R.id.page_mine);
@@ -54,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initialFragmentTransaction();
         initialButtonDrawable();
         initialUserInfo();
+        initialServerSettings();
     }
 
     @Override
@@ -63,15 +80,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (buttonID) {
             case R.id.page_home:
                 loadFragment(fHome);
+                title.setText("在售商品");
                 break;
             case R.id.page_msg:
                 loadFragment(fMsg);
+                title.setText("消息箱");
                 break;
             case R.id.page_mine:
                 if(User.isLogin()){
                     loadFragment(fMine);
+                    title.setText("个人中心");
                 }else{
                     loadFragment(fLogin);
+                    title.setText("登录");
                 }
                 break;
             default:
@@ -148,6 +169,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         User.setNickname(sp.getString("nickname", null));
     }
 
+    public void initialServerSettings(){
+        SharedPreferences sp = getSharedPreferences("ServerSettings", Context.MODE_PRIVATE);
+        NetHelper.server_ip = sp.getString("ip", "192.168.0.103");
+        NetHelper.server_port = sp.getInt("port", 1224);
+    }
+
     // 初始化按钮图片资源
     public void initialButtonDrawable(){
         btnHomeSelect = getResources().getDrawable(R.drawable.button_home_selected);
@@ -208,6 +235,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             default:
         }
+    }
+
+    private void showServerSettingDialog(){
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.server_setting, null);
+        final EditText server_ip = view.findViewById(R.id.ip);
+        final EditText server_port = view.findViewById(R.id.port);
+        server_ip.setText(NetHelper.server_ip);
+        server_ip.setHint(NetHelper.server_ip);
+        server_port.setText(NetHelper.server_port + "");
+        server_port.setHint(NetHelper.server_port + "");
+        new AlertDialog.Builder(this).setView(view).setTitle("服务器设置")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences sp = getSharedPreferences("ServerSettings", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putString("ip", server_ip.getText().toString());
+                        editor.putInt("port", Integer.parseInt(server_port.getText().toString()));
+                        editor.apply();
+                        NetHelper.server_ip = sp.getString("ip", "192.168.0.103");
+                        NetHelper.server_port = sp.getInt("port", 1224);
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.server_setting:
+                showServerSettingDialog();
+                break;
+                default:
+                    break;
+        }
+        return true;
     }
 
 }
