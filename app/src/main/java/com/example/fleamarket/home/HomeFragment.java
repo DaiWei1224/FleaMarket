@@ -57,32 +57,17 @@ public class HomeFragment extends Fragment {
     }
 
     private void initCommodity(){
+        Commodity commodity;
         for(int i = 0 ;i < 10; i++){
-            Commodity commodity = new Commodity(
-                    null,
-                    "蔡徐坤同款篮球",
-                    "蔡徐坤同款篮球只要998！！只要998！！！蔡徐坤同款篮球只要998！！只要998！！！只要998！！！",
-                    "¥998",
-                    null,
-                    null,
-                    null,
-                    null,
-                    true,
-                    null
-            );
+            commodity = new Commodity();
+            commodity.setCommodityName("蔡徐坤同款篮球");
+            commodity.setPrice("¥998");
+            commodity.setCommodityDetail("蔡徐坤同款篮球只要998！！只要998！！！蔡徐坤同款篮球只要998！！只要998！！！只要998！！！");
             mCommodityList.add(commodity);
-            commodity = new Commodity(
-                    null,
-                    "蔡徐坤靓仔表情",
-                    "蔡徐坤靓仔表情只要一分钱~",
-                    "¥0.01",
-                    null,
-                    null,
-                    null,
-                    null,
-                    true,
-                    null
-            );
+            commodity = new Commodity();
+            commodity.setCommodityName("蔡徐坤靓仔表情");
+            commodity.setPrice("¥0.01");
+            commodity.setCommodityDetail("蔡徐坤靓仔表情只要一分钱~");
             mCommodityList.add(commodity);
         }
     }

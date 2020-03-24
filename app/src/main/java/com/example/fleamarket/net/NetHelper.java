@@ -146,4 +146,28 @@ public class NetHelper {
             e.printStackTrace();
         }
     }
+
+    // 请求发布商品
+    public static void requestPostCommodity(IServerListener listener, Commodity commodity){
+        try {
+            Socket socket = new Socket(server_ip, server_port);
+            ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
+            NetMessage message = new NetMessage();
+            message.setType(MessageType.POST_COMMODITY);
+            message.setCommodity(commodity);
+            oos.writeObject(message);
+            // 处理服务器的返回信息
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            NetMessage returnMessage = (NetMessage) ois.readObject();
+            MessageType type = returnMessage.getType();
+            if(type == MessageType.SUCCESS) {
+                listener.onSuccess(returnMessage);
+            } else{
+                listener.onFailure("商品发布失败");
+            }
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

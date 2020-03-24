@@ -138,7 +138,6 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
         }
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -45,13 +45,38 @@
                 android:maxLength="20"
                 android:maxLines="1" />
 
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/price"
-                android:hint="商品价格"
-                android:maxLength="12"
-                android:maxLines="1" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginRight="-10dp" >
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/price"
+                    android:hint="商品价格"
+                    android:layout_weight="1"
+                    android:maxLength="10"
+                    android:maxLines="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="发布到"
+                    android:gravity="right"
+                    android:textSize="16dp"
+                    android:layout_weight="1" />
+
+                <Spinner
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/choose_area"
+                    android:entries="@array/areas"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
             <EditText
                 android:layout_width="match_parent"
@@ -70,18 +95,18 @@
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:id="@+id/take_photo"
+                android:id="@+id/camera"
                 android:src="@drawable/button_camera"
                 android:layout_marginTop="10dp" />
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/choose_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/commodity_photo"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginTop="10dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </LinearLayout>
 

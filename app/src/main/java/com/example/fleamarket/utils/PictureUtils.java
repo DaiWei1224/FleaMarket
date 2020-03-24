@@ -61,44 +61,6 @@ public class PictureUtils {
         return BitmapFactory.decodeFile(path, options);
     }
 
-    // 裁减图片
-    public static void cropPhoto(Uri uri, Activity activity, int type, int from){
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            // 添加这一句表示对目标应用临时授权该uri所代表的文件
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        }
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("scale", true); // 是否保留比例
-        intent.putExtra("aspectX", 1); // X方向上的比例
-        intent.putExtra("aspectY", 1); // Y方向上的比例
-        intent.putExtra("outputX", 400); // 裁剪区的宽
-        intent.putExtra("outputY", 400); // 裁剪区的高
-        intent.putExtra("noFaceDetection", true); // 无人脸识别
-        intent.putExtra("return-data", false); // 是否将数据保留在Bitmap中返回
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString()); // 图片输出格式
-        Uri outputUri = uri;
-        if(from == 2) { // 从相册选取
-//            File outputImage = new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
-            File outputImage = new File(activity.getExternalCacheDir().getAbsolutePath() +
-                    "/avatar/avatar_" + User.getId() + ".jpg");
-            try {
-                if (outputImage.exists()){
-                    outputImage.delete();
-                }
-                outputImage.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            outputUri = Uri.fromFile(outputImage);
-        }
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri); // 输出图片到指定位置
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri); // 输出图片到指定位置
-//        intent = Intent.createChooser(intent, "裁剪图片");
-        activity.startActivityForResult(intent, type);
-    }
-
     public static void cropPhoto(Uri uri, Fragment fragment, int type, int from){
         Intent intent = new Intent("com.android.camera.action.CROP");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
