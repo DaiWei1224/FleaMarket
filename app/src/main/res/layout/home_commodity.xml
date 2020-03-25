@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/price"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/orange"
             android:textStyle="bold" />
 
     </LinearLayout>

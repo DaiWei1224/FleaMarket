@@ -12,9 +12,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:text="服务器地址：" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="地址：" />
 
         <EditText
             android:layout_width="match_parent"
@@ -32,9 +31,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:text="服务器端口：" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="端口：" />
 
         <EditText
             android:layout_width="match_parent"

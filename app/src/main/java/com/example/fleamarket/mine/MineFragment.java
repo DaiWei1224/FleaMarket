@@ -95,14 +95,17 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                 MyUtil.showKeyboard(getActivity(), edit_nickname);
             } break;
             case R.id.check_nickname: {
-                if (User.getNickname().equals(edit_nickname.getText().toString())) {
+                if (edit_nickname.getText().toString().length() == 0) {
+                    Toast.makeText(getContext(), "昵称不能为空", Toast.LENGTH_SHORT).show();
+                } else if (User.getNickname().equals(edit_nickname.getText().toString())) {
                     Toast.makeText(getContext(), "昵称未修改", Toast.LENGTH_SHORT).show();
                     showNickname();
+                    // 隐藏软键盘
+                    MyUtil.hideKeyboard(getActivity());
                 } else {
                     checkNicknameDialog(this, edit_nickname.getText().toString());
+                    MyUtil.hideKeyboard(getActivity());
                 }
-                // 隐藏软键盘
-                MyUtil.hideKeyboard(getActivity());
             } break;
             case R.id.manage_commidy:
                 Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();

@@ -85,7 +85,7 @@
                 android:id="@+id/price"
                 android:text="商品价格"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/orange"
                 android:layout_below="@+id/avatar"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp" />

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -235,6 +236,25 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
         switch (requestCode) {
             case TAKE_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
+                    // 压缩排完的图片
+                    Point size = new Point();
+                    this.getWindowManager().getDefaultDisplay().getSize(size);
+                    Bitmap bitmap = PictureUtils.getScaledBitmap(
+                            getExternalCacheDir().getAbsolutePath() + "post_image.jpg" , size.x, size.y);
+                    try {
+                        File file = new File(getExternalCacheDir().getAbsolutePath() + "post_image.jpg");
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        file.createNewFile();
+                        FileOutputStream out = new FileOutputStream(file);
+                        // quality为图像压缩率，0-100。0压缩100%，100不压缩
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                        out.flush();
+                        out.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     PictureUtils.updatePictureView(commodityPhoto, new File(getExternalCacheDir().getAbsolutePath() + "post_image.jpg"), this);
                     camera.setVisibility(View.GONE);
                     commodityPhoto.setVisibility(View.VISIBLE);
@@ -256,7 +276,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                         Bitmap bitmap = BitmapFactory.decodeStream(currentActivity.getContentResolver().
                                 openInputStream(uri));
                         // quality为图像压缩率，0-100。0压缩100%，100不压缩
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
                         out.flush();
                         out.close();
                     } catch (IOException e) {

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@android:color/white"
-        android:layout_marginBottom="10dp" >
+        android:layout_marginBottom="15dp" >
 
         <com.example.fleamarket.ui.SquareImageView
             android:layout_width="55dp"
@@ -124,7 +124,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/change_password"
             android:background="@android:color/white"
-            android:text="更改密码"
+            android:text="修改密码"
             android:textColor="@android:color/black"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:padding="10dp" />
@@ -162,15 +162,39 @@
 
     </FrameLayout>
 
-    <Button
+<!--    <Button-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="45dp"-->
+<!--        android:id="@+id/logout"-->
+<!--        android:text="退出登录"-->
+<!--        android:textColor="@android:color/white"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textAppearance="?android:attr/textAppearanceMedium"-->
+<!--        android:background="@android:color/holo_red_light"-->
+<!--        android:layout_marginTop="15dp"/>-->
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/logout"
-        android:text="退出登录"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:background="@android:color/holo_red_light"
-        android:layout_margin="15dp" />
+        android:layout_marginTop="15dp" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/logout"
+            android:background="@android:color/white"
+            android:text="退出登录"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:padding="10dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/enter"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="5dp" />
+
+    </FrameLayout>
 
 </LinearLayout>

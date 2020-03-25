@@ -2,10 +2,10 @@
 <resources>
     <color name="colorPrimary">#108EE9</color>
     <color name="colorPrimaryDark">#108EE9</color>
-    <color name="colorAccent">#FF4060</color>
+    <color name="colorAccent">#108EE9</color>
     <color name="lightGray">#EEEEEE</color>
-    <color name="lightGreen">@android:color/holo_green_light</color>
+    <color name="green">@android:color/holo_green_light</color>
     <color name="pink">#FF4060</color>
-    <color name="orangeDark">#ff8800</color>
-    <color name="orangeLight">#ffbb33</color>
+    <color name="orange">#ff8800</color>
+    <color name="cyan3">#00CDCD</color>
 </resources>
