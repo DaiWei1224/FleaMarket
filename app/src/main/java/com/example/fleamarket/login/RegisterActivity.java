@@ -135,7 +135,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onFailure(String info) {
         Looper.prepare();
-        Toast.makeText(this, "邀请码不存在或已被使用", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
         Looper.loop();
     }
 }

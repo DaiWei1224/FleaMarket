@@ -6,18 +6,35 @@ import com.example.fleamarket.User;
 import com.example.fleamarket.utils.PictureUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class NetHelper {
     public static String server_ip = "192.168.0.103";
     public static int server_port = 1224;
+    private static final int CONNECT_TIMEOUT = 1000; // 连接请求超时时间为1秒
+    private static final int READ_TIMEOUT = 5000; // 读操作超时时间为5秒
+    private static final String CONNECT_SERVER_FAILED = "连接服务器失败";
+
+    private static Socket createConnection() {
+        Socket socket = new Socket();
+        try {
+            socket.connect(new InetSocketAddress(server_ip, server_port), CONNECT_TIMEOUT);
+            socket.setSoTimeout(READ_TIMEOUT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return socket;
+    }
 
     // 请求登录
     public static void requestLogin(IServerListener listener, String id, String pw){
         try {
-            Socket socket = new Socket(server_ip, server_port);
+//            Socket socket = new Socket(server_ip, server_port);
+            Socket socket = createConnection();
             // 发送账号和密码信息
             ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
             NetMessage message = new NetMessage();
@@ -32,18 +49,19 @@ public class NetHelper {
             if(type == MessageType.SUCCESS) {
                 listener.onSuccess(returnMessage);
             } else{
-                listener.onFailure(null);
+                listener.onFailure("账号或密码错误");
             }
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();
+            listener.onFailure(CONNECT_SERVER_FAILED);
         }
     }
 
     // 请求注册
     public static void requestRegister(IServerListener listener, String ivCode, String pw){
         try {
-            Socket socket = new Socket(server_ip, server_port);
+            Socket socket = createConnection();
             // 发送邀请码和密码信息
             ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
             NetMessage message = new NetMessage();
@@ -58,18 +76,19 @@ public class NetHelper {
             if(type == MessageType.SUCCESS) {
                 listener.onSuccess(returnMessage);
             } else{
-                listener.onFailure(null);
+                listener.onFailure("邀请码不存在或已被使用");
             }
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();
+            listener.onFailure(CONNECT_SERVER_FAILED);
         }
     }
 
     // 修改昵称
     public static void changeNickname(IServerListener listener, String nickname){
         try {
-            Socket socket = new Socket(server_ip, server_port);
+            Socket socket = createConnection();
             ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
             NetMessage message = new NetMessage();
             message.setType(MessageType.CHANGE_NICKNAME);
@@ -88,13 +107,14 @@ public class NetHelper {
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();
+            listener.onFailure(CONNECT_SERVER_FAILED);
         }
     }
 
     // 修改密码
     public static void changePassword(IServerListener listener, String password){
         try {
-            Socket socket = new Socket(server_ip, server_port);
+            Socket socket = createConnection();
             ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
             NetMessage message = new NetMessage();
             message.setType(MessageType.CHANGE_PASSWORD);
@@ -113,13 +133,14 @@ public class NetHelper {
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();
+            listener.onFailure(CONNECT_SERVER_FAILED);
         }
     }
 
     // 将头像存储到服务器
     public static void saveAvatar(IServerListener listener, Activity activity){
         try {
-            Socket socket = new Socket(server_ip, server_port);
+            Socket socket = createConnection();
             ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
             NetMessage message = new NetMessage();
             message.setType(MessageType.SAVE_AVATAR);
@@ -144,13 +165,14 @@ public class NetHelper {
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();
+            listener.onFailure(CONNECT_SERVER_FAILED);
         }
     }
 
     // 请求发布商品
     public static void requestPostCommodity(IServerListener listener, Commodity commodity){
         try {
-            Socket socket = new Socket(server_ip, server_port);
+            Socket socket = createConnection();
             ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
             NetMessage message = new NetMessage();
             message.setType(MessageType.POST_COMMODITY);
@@ -168,6 +190,7 @@ public class NetHelper {
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();
+            listener.onFailure(CONNECT_SERVER_FAILED);
         }
     }
 }

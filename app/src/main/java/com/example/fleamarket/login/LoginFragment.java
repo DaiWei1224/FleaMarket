@@ -157,7 +157,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
     @Override
     public void onFailure(String info) {
         Looper.prepare();
-        Toast.makeText(getContext(), "账号或密码错误", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), info, Toast.LENGTH_SHORT).show();
         Looper.loop();
     }
 }

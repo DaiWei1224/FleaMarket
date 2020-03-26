@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import com.example.fleamarket.R;
 import com.example.fleamarket.home.CommodityActivity;
+import com.example.fleamarket.home.HomeFragment;
 import com.example.fleamarket.net.Commodity;
+import com.github.nukc.LoadMoreWrapper.LoadMoreAdapter;
+import com.github.nukc.LoadMoreWrapper.LoadMoreWrapper;
 
 import java.util.List;
 
@@ -19,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.ViewHolder> {
     private List<Commodity> mCommodityList;
     private RecyclerView mRecyclerView;
+    public LoadMoreWrapper mLoadMore;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -41,6 +45,32 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
     public CommodityAdapter(List<Commodity> commodityList, RecyclerView recyclerView) {
         this.mCommodityList = commodityList;
         this.mRecyclerView = recyclerView;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mLoadMore = LoadMoreWrapper.with(this);
+        mLoadMore.setListener(new LoadMoreAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(LoadMoreAdapter.Enabled enabled) {
+                // you can enabled.setLoadMoreEnabled(false) when do not need load more
+                // you can enabled.setLoadFailed(true) when load failed
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                HomeFragment.addCommodities(mCommodityList);
+//                enabled.setLoadMoreEnabled(false);
+//                enabled.setLoadFailed(true);
+                notifyDataSetChanged();
+            }
+        })
+//        .setFooterView(R.layout.load_more)
+        .setNoMoreView(R.layout.no_more)
+        .setShowNoMoreEnabled(true)
+        .into(recyclerView);
     }
 
     @Override

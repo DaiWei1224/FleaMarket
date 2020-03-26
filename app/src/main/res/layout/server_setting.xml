@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ip"
+            android:maxLines="1"
             android:maxLength="20" />
 
     </LinearLayout>
@@ -38,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/port"
+            android:maxLines="1"
             android:maxLength="20" />
 
     </LinearLayout>
