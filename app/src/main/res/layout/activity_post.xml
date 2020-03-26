@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:id="@+id/toolbar"
-        android:background="@color/colorPrimary"
-        app:navigationIcon="@drawable/button_back" >
+        android:background="@color/colorPrimary" >
+<!--        app:navigationIcon="@drawable/button_back" >-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -58,6 +58,7 @@
                     android:id="@+id/price"
                     android:hint="商品价格"
                     android:layout_weight="1"
+                    android:inputType="number"
                     android:maxLength="10"
                     android:maxLines="1" />
 

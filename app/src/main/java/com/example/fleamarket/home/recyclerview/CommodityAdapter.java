@@ -1,5 +1,6 @@
 package com.example.fleamarket.home.recyclerview;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,9 +13,11 @@ import com.example.fleamarket.R;
 import com.example.fleamarket.home.CommodityActivity;
 import com.example.fleamarket.home.HomeFragment;
 import com.example.fleamarket.net.Commodity;
+import com.example.fleamarket.utils.PictureUtils;
 import com.github.nukc.LoadMoreWrapper.LoadMoreAdapter;
 import com.github.nukc.LoadMoreWrapper.LoadMoreWrapper;
 
+import java.io.File;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.ViewHolder> {
     private List<Commodity> mCommodityList;
     private RecyclerView mRecyclerView;
+    private Activity mActivity;
     public LoadMoreWrapper mLoadMore;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -42,9 +46,10 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
         }
     }
 
-    public CommodityAdapter(List<Commodity> commodityList, RecyclerView recyclerView) {
+    public CommodityAdapter(List<Commodity> commodityList, RecyclerView recyclerView, Activity activity) {
         this.mCommodityList = commodityList;
         this.mRecyclerView = recyclerView;
+        mActivity = activity;
     }
 
     @Override
@@ -56,15 +61,12 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
             public void onLoadMore(LoadMoreAdapter.Enabled enabled) {
                 // you can enabled.setLoadMoreEnabled(false) when do not need load more
                 // you can enabled.setLoadFailed(true) when load failed
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                HomeFragment.addCommodities(mCommodityList);
-//                enabled.setLoadMoreEnabled(false);
-//                enabled.setLoadFailed(true);
-                notifyDataSetChanged();
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                HomeFragment.addCommodities();
             }
         })
 //        .setFooterView(R.layout.load_more)
@@ -98,11 +100,22 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Commodity commodity = (Commodity)mCommodityList.get(position);
-        holder.mImage.setImageResource(R.drawable.ic_launcher_background);
+        Commodity commodity = mCommodityList.get(position);
+        if (commodity.isHavePhoto()) {
+//            // 用这种方法展示图片图片没经过压缩，recyclerView滑动重新绘制的时候会卡顿
+//            PictureUtils.displayImage(holder.mImage, mActivity.getExternalCacheDir().getAbsolutePath() +
+//                    "/commodity/" + commodity.getCommodityID() + ".jpg");
+            PictureUtils.showPictureOnRecyclerView(holder.mImage,
+                    new File(mActivity.getExternalCacheDir().getAbsolutePath() +
+                            "/commodity/" + commodity.getCommodityID() + ".jpg"),
+                    mActivity);
+            holder.mImage.setVisibility(View.VISIBLE);
+        } else {
+            holder.mImage.setVisibility(View.GONE);
+        }
         holder.mName.setText(commodity.getCommodityName());
         holder.mContent.setText(commodity.getCommodityDetail());
-        holder.mPrice.setText(commodity.getPrice());
+        holder.mPrice.setText("¥" + commodity.getPrice());
     }
 
     @Override

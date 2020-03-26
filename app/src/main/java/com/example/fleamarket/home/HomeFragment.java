@@ -12,6 +12,10 @@ import com.example.fleamarket.User;
 import com.example.fleamarket.home.recyclerview.CommodityAdapter;
 import com.example.fleamarket.home.recyclerview.SpaceItemDecoration;
 import com.example.fleamarket.net.Commodity;
+import com.example.fleamarket.net.IServerListener;
+import com.example.fleamarket.net.NetHelper;
+import com.example.fleamarket.net.NetMessage;
+import com.example.fleamarket.utils.PictureUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -20,13 +24,14 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class HomeFragment extends Fragment {
-    private final String TAG = "233";
+public class HomeFragment extends Fragment implements IServerListener {
+    private static HomeFragment currentFragment;
     public List<Commodity> mCommodityList = new ArrayList<>();
+    public static int commodityIndex = 0;
     private SwipeRefreshLayout refresh;
     private CommodityAdapter adapter;
 
@@ -34,14 +39,25 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         super.onCreateView(inflater, container, savedInstanceState);
         View layout = inflater.inflate(R.layout.fragment_home, container, false);
+        currentFragment = this;
 
         RecyclerView recyclerView = layout.findViewById(R.id.recycler_view);
-        GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
+//        GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+//        // 解决item跳动
+//        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+//        // 防止item交换位置
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                layoutManager.invalidateSpanAssignments(); // 防止第一行到顶部有空白区域
+//            }
+//        });
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(25));
-        adapter = new CommodityAdapter(mCommodityList, recyclerView);
+        recyclerView.addItemDecoration(new SpaceItemDecoration(10));
+        adapter = new CommodityAdapter(mCommodityList, recyclerView, getActivity());
         recyclerView.setAdapter(adapter);
-//        resetCommodities();
 
         FloatingActionButton postButton = layout.findViewById(R.id.post_button);
         postButton.setOnClickListener(new View.OnClickListener() {
@@ -65,63 +81,96 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
         return layout;
     }
 
+    // 下拉刷新
     private void resetCommodities(){
-        adapter.mLoadMore.setLoadMoreEnabled(true);
+
         mCommodityList.clear();
-        Commodity commodity;
-        for(int i = 0 ;i < 5; i++){
-            commodity = new Commodity();
-            commodity.setCommodityName("蔡徐坤同款篮球");
-            commodity.setPrice("¥998");
-            commodity.setCommodityDetail("蔡徐坤同款篮球只要998！！只要998！！！蔡徐坤同款篮球只要998！！只要998！！！只要998！！！");
-            mCommodityList.add(commodity);
-            commodity = new Commodity();
-            commodity.setCommodityName("蔡徐坤靓仔表情");
-            commodity.setPrice("¥0.01");
-            commodity.setCommodityDetail("蔡徐坤靓仔表情只要一分钱~");
-            mCommodityList.add(commodity);
-        }
+//        adapter.notifyDataSetChanged();
+        commodityIndex = 0;
+        // setLoadMoreEnabled(true)会执行loadmore响应函数，所以不必手动调用
+        adapter.mLoadMore.setLoadMoreEnabled(true);
     }
 
-    public static void addCommodities(List<Commodity> commodityList){
-        Commodity commodity;
-        for(int i = 0 ;i < 5; i++){
-            commodity = new Commodity();
-            commodity.setCommodityName("蔡徐坤同款篮球");
-            commodity.setPrice("¥998");
-            commodity.setCommodityDetail("蔡徐坤同款篮球只要998！！只要998！！！蔡徐坤同款篮球只要998！！只要998！！！只要998！！！");
-            commodityList.add(commodity);
-            commodity = new Commodity();
-            commodity.setCommodityName("蔡徐坤靓仔表情");
-            commodity.setPrice("¥0.01");
-            commodity.setCommodityDetail("蔡徐坤靓仔表情只要一分钱~");
-            commodityList.add(commodity);
-        }
-    }
-
-    private void refreshCommodities() {
+    // 加载更多商品
+    public static void addCommodities(){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        resetCommodities();
-                        adapter.notifyDataSetChanged();
-                        refresh.setRefreshing(false);
-                    }
-                });
+                NetHelper.getCommodity(currentFragment, commodityIndex);
             }
         }).start();
     }
 
+    private void refreshCommodities() {
+        resetCommodities();
+        refresh.setRefreshing(false);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+            }
+        }).start();
+    }
+
+    @Override
+    public void onSuccess(NetMessage info) {
+        if (info.getCommodityNum() == 0) {
+            adapter.mLoadMore.setLoadFailed(false);
+            adapter.mLoadMore.setLoadMoreEnabled(false);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyItemInserted(commodityIndex);
+                }
+            });
+        } else {
+            List<Commodity> serverCommodity = info.getCommodityList();
+            int commodityNum = serverCommodity.size();
+            Commodity commodity;
+            for (int i = 0; i < commodityNum; i++) {
+                commodity = serverCommodity.get(i);
+                mCommodityList.add(commodity);
+                // 将商品照片存到本地
+                if (commodity.isHavePhoto()) {
+                    PictureUtils.saveImageFromByte(getActivity(), commodity.getCommodityPhoto().getData(),
+                            getActivity().getExternalCacheDir().getAbsolutePath() +
+                                    "/commodity/" + commodity.getCommodityID() + ".jpg");
+                }
+                // 保存对应用户头像到本地
+                PictureUtils.saveImageFromByte(getActivity(), commodity.getAvatar().getData(),
+                        getActivity().getExternalCacheDir().getAbsolutePath() +
+                                "/avatar/avatar_" + commodity.getSellerID() + ".jpg");
+            }
+            if (commodityNum < 20) {
+                adapter.mLoadMore.setLoadMoreEnabled(false);
+            }
+            adapter.mLoadMore.setLoadFailed(false);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyItemInserted(commodityIndex);
+                    commodityIndex += 20;
+//                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onFailure(final String info) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), info, Toast.LENGTH_SHORT).show();
+                adapter.mLoadMore.setLoadFailed(true);
+            }
+        });
+    }
 }

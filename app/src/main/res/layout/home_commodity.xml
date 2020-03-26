@@ -16,8 +16,7 @@
         <com.example.fleamarket.ui.SquareImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/image"
-            android:src="@drawable/ic_launcher_background" />
+            android:id="@+id/image" />
 
         <TextView
             android:layout_width="match_parent"
@@ -26,14 +25,13 @@
             android:layout_marginTop="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
             android:maxLines="1" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/commodity_detail"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="10dp"
             android:maxLines="2" />
 
         <TextView

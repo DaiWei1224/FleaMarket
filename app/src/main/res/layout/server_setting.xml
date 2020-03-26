@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ip"
+            android:inputType="number"
             android:maxLines="1"
             android:maxLength="20" />
 
@@ -39,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/port"
+            android:inputType="number"
             android:maxLines="1"
             android:maxLength="20" />
 

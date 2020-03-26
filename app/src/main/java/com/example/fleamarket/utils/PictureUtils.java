@@ -35,6 +35,16 @@ public class PictureUtils {
         }
     }
 
+    // 尽可能地压缩图片，以防recyclerView绘制的时候卡顿
+    public static void showPictureOnRecyclerView(ImageView pictureView, File pictureFile, Activity activity) {
+        if(pictureFile.exists()){
+            Point size = new Point();
+            activity.getWindowManager().getDefaultDisplay().getSize(size);
+            Bitmap bitmap = getScaledBitmap(pictureFile.getPath(), size.x / 10, size.y / 10);
+            pictureView.setImageBitmap(bitmap);
+        }
+    }
+
     // 缩放图片
     public static Bitmap getScaledBitmap(String path , int destWidth, int destHeight) {
         // Read in the dimensions of the image on disk
@@ -154,11 +164,12 @@ public class PictureUtils {
         return null;
     }
 
-    public static void saveImageFromByte(Activity activity, byte[] data) {
+    public static void saveImageFromByte(Activity activity, byte[] data, String path) {
         try {
 //            File image = new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
-            File image = new File(activity.getExternalCacheDir().getAbsolutePath() +
-                    "/avatar/avatar_" + User.getId() + ".jpg");
+//            File image = new File(activity.getExternalCacheDir().getAbsolutePath() +
+//                    "/avatar/avatar_" + User.getId() + ".jpg");
+            File image = new File(path);
             if (image.exists()){
                 image.delete();
             }

@@ -15,8 +15,8 @@ import java.net.Socket;
 public class NetHelper {
     public static String server_ip = "192.168.0.103";
     public static int server_port = 1224;
-    private static final int CONNECT_TIMEOUT = 1000; // 连接请求超时时间为1秒
-    private static final int READ_TIMEOUT = 5000; // 读操作超时时间为5秒
+    private static final int CONNECT_TIMEOUT = 5000; // 连接请求超时时间
+    private static final int READ_TIMEOUT = 5000; // 读操作超时时间
     private static final String CONNECT_SERVER_FAILED = "连接服务器失败";
 
     private static Socket createConnection() {
@@ -186,6 +186,31 @@ public class NetHelper {
                 listener.onSuccess(returnMessage);
             } else{
                 listener.onFailure("商品发布失败");
+            }
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure(CONNECT_SERVER_FAILED);
+        }
+    }
+
+    // 请求服务器下发商品
+    public static void getCommodity(IServerListener listener, int index){
+        try {
+            Socket socket = createConnection();
+            ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
+            NetMessage message = new NetMessage();
+            message.setType(MessageType.GET_COMMODITY);
+            message.setCommodityNum(index);
+            oos.writeObject(message);
+            // 处理服务器的返回信息
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            NetMessage returnMessage = (NetMessage) ois.readObject();
+            MessageType type = returnMessage.getType();
+            if(type == MessageType.SUCCESS) {
+                listener.onSuccess(returnMessage);
+            } else{
+                listener.onFailure("加载商品失败");
             }
             socket.close();
         } catch (Exception e) {

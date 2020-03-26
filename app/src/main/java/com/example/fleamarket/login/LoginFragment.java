@@ -117,7 +117,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
         User.setNickname(info.getNickname());
         // 将头像保存到本地
         if (info.getAvatar() != null) {
-            PictureUtils.saveImageFromByte(getActivity(), info.getAvatar().getData());
+            PictureUtils.saveImageFromByte(getActivity(), info.getAvatar().getData(),
+                    getActivity().getExternalCacheDir().getAbsolutePath() +
+                            "/avatar/avatar_" + User.getId() + ".jpg");
         }
         // 从“登录”页面切换到“我的”页面
         FragmentManager fm = mainActivity.getSupportFragmentManager();
