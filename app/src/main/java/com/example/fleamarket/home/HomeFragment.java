@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment implements IServerListener {
 //            }
 //        });
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(10));
+        recyclerView.addItemDecoration(new SpaceItemDecoration(15));
         adapter = new CommodityAdapter(mCommodityList, recyclerView, getActivity());
         recyclerView.setAdapter(adapter);
 
@@ -148,9 +148,9 @@ public class HomeFragment extends Fragment implements IServerListener {
                         getActivity().getExternalCacheDir().getAbsolutePath() +
                                 "/avatar/avatar_" + commodity.getSellerID() + ".jpg");
             }
-            if (commodityNum < 20) {
-                adapter.mLoadMore.setLoadMoreEnabled(false);
-            }
+//            if (commodityNum < 20) {
+//                adapter.mLoadMore.setLoadMoreEnabled(false);
+//            }
             adapter.mLoadMore.setLoadFailed(false);
             getActivity().runOnUiThread(new Runnable() {
                 @Override

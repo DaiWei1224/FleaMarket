@@ -16,7 +16,9 @@
         <com.example.fleamarket.ui.SquareImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/image" />
+            android:id="@+id/image"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image" />
 
         <TextView
             android:layout_width="match_parent"
@@ -39,7 +41,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/price"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/orange"
+            android:textColor="@color/pink"
             android:textStyle="bold" />
 
     </LinearLayout>

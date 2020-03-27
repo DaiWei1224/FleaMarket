@@ -40,7 +40,7 @@ public class PictureUtils {
         if(pictureFile.exists()){
             Point size = new Point();
             activity.getWindowManager().getDefaultDisplay().getSize(size);
-            Bitmap bitmap = getScaledBitmap(pictureFile.getPath(), size.x / 10, size.y / 10);
+            Bitmap bitmap = getScaledBitmap(pictureFile.getPath(), size.x / 3, size.y / 3);
             pictureView.setImageBitmap(bitmap);
         }
     }

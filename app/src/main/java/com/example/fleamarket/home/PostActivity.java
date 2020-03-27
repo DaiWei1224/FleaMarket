@@ -237,7 +237,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
         switch (requestCode) {
             case TAKE_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
-                    // 压缩排完的图片
+                    // 压缩拍完的图片
                     Point size = new Point();
                     this.getWindowManager().getDefaultDisplay().getSize(size);
                     Bitmap bitmap = PictureUtils.getScaledBitmap(
@@ -283,6 +283,21 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    // 再次压缩图片
+                    Point size = new Point();
+                    this.getWindowManager().getDefaultDisplay().getSize(size);
+                    Bitmap bitmap = PictureUtils.getScaledBitmap(
+                            getExternalCacheDir().getAbsolutePath() + "post_image.jpg" , size.x, size.y);
+                    try {
+                        FileOutputStream out = new FileOutputStream(file);
+                        // quality为图像压缩率，0-100。0压缩100%，100不压缩
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, out);
+                        out.flush();
+                        out.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     PictureUtils.updatePictureView(commodityPhoto, file, this);
                     camera.setVisibility(View.GONE);
                     commodityPhoto.setVisibility(View.VISIBLE);

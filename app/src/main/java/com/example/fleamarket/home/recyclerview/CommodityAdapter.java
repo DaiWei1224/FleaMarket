@@ -85,13 +85,11 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
             public void onClick(View view) {
                 int position = holder.getAdapterPosition();
                 Commodity commodity = mCommodityList.get(position);
-                Intent intent = new Intent(mRecyclerView.getContext(), CommodityActivity.class);
+                Intent intent = new Intent(mActivity, CommodityActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("name", commodity.getCommodityName());
-                bundle.putString("content", commodity.getCommodityDetail());
-                bundle.putString("price", commodity.getPrice());
+                bundle.putSerializable("commodity", commodity);
                 intent.putExtras(bundle);
-                mRecyclerView.getContext().startActivity(intent);
+                mActivity.startActivity(intent);
             }
         });
 
@@ -109,9 +107,10 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
                     new File(mActivity.getExternalCacheDir().getAbsolutePath() +
                             "/commodity/" + commodity.getCommodityID() + ".jpg"),
                     mActivity);
-            holder.mImage.setVisibility(View.VISIBLE);
+//            holder.mImage.setVisibility(View.VISIBLE);
         } else {
-            holder.mImage.setVisibility(View.GONE);
+//            holder.mImage.setVisibility(View.GONE);
+            holder.mImage.setImageResource(R.drawable.image);
         }
         holder.mName.setText(commodity.getCommodityName());
         holder.mContent.setText(commodity.getCommodityDetail());
