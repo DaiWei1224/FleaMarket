@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -25,10 +25,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_below="@+id/toolbar"
-        android:layout_marginBottom="75dp"
+        android:layout_weight="1"
         android:overScrollMode="never" >
 
         <LinearLayout
@@ -45,39 +44,15 @@
                 android:maxLength="20"
                 android:maxLines="1" />
 
-            <LinearLayout
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginRight="-10dp" >
-
-                <EditText
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/price"
-                    android:hint="商品价格"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:maxLength="10"
-                    android:maxLines="1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="发布到"
-                    android:gravity="right"
-                    android:textSize="16dp"
-                    android:layout_weight="1" />
-
-                <Spinner
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/choose_area"
-                    android:entries="@array/areas"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
+                android:id="@+id/price"
+                android:hint="商品价格"
+                android:layout_weight="1"
+                android:inputType="numberDecimal"
+                android:maxLength="10"
+                android:maxLines="1" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -93,12 +68,35 @@
                 android:hint="商品详情"
                 android:maxLength="1000" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="-10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="发布到"
+                    android:textSize="16dp" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/choose_area"
+                    android:entries="@array/areas"/>
+
+            </LinearLayout>
+
             <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:id="@+id/camera"
-                android:src="@drawable/button_camera"
-                android:layout_marginTop="10dp" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dp"
+                android:layout_marginBottom="100dp"
+                android:src="@drawable/button_camera" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -107,6 +105,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:visibility="gone" />
 
         </LinearLayout>
@@ -115,14 +114,12 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:id="@+id/post_button"
         android:text="发布"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:backgroundTint="@color/colorAccent"
-        android:layout_margin="10dp"
-        android:layout_alignParentBottom="true" />
+        android:background="@color/colorAccent" />
 
-</RelativeLayout>
+</LinearLayout>

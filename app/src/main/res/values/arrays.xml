@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="areas">
-        <item>北京理工大学</item>
-        <item>新浪总部大厦</item>
+        <item>北京理工大学中关村校区</item>
+        <item>北京理工大学良乡校区</item>
     </string-array>
 </resources>
