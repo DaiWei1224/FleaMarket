@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment implements IServerListener {
         View layout = inflater.inflate(R.layout.fragment_home, container, false);
         currentFragment = this;
 
-        RecyclerView recyclerView = layout.findViewById(R.id.recycler_view);
+        final RecyclerView recyclerView = layout.findViewById(R.id.recycler_view);
 //        GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 //        // 解决item跳动
@@ -59,6 +59,14 @@ public class HomeFragment extends Fragment implements IServerListener {
         adapter = new HomeCommodityAdapter(mCommodityList, this);
         recyclerView.setAdapter(adapter);
 
+        FloatingActionButton scrollToTop = layout.findViewById(R.id.scroll_to_top);
+        scrollToTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.smoothScrollToPosition(0); // 平滑滚动
+//                recyclerView.scrollToPosition(0); // 非平滑滚动
+            }
+        });
         FloatingActionButton postButton = layout.findViewById(R.id.post_button);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override

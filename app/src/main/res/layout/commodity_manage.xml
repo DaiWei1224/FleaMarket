@@ -35,23 +35,30 @@
             android:layout_height="match_parent"
             android:id="@+id/commodity_detail"
             android:layout_toRightOf="@+id/image"
-            android:layout_toLeftOf="@+id/price"
+            android:layout_toLeftOf="@+id/edit"
             android:layout_below="@+id/commodity_name"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:maxLines="2" />
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/price"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/pink"
+            android:id="@+id/edit"
+            android:src="@drawable/button_pen"
+            android:layout_toLeftOf="@+id/delete"
+            android:layout_marginRight="16dp"
+            android:layout_centerVertical="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/delete"
+            android:src="@drawable/button_delete"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_centerVertical="true"
-            android:textStyle="bold" />
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true" />
 
     </RelativeLayout>
 

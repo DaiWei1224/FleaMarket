@@ -108,9 +108,15 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                     MyUtil.hideKeyboard(getActivity());
                 }
             } break;
-            case R.id.manage_commidy:
-                Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
-                break;
+            case R.id.manage_commidy:{
+                Commodity commodity = new Commodity();
+                commodity.setSellerID(User.getId());
+                Intent intent = new Intent(getActivity(), ManageCommodityActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("commodity", commodity);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } break;
             case R.id.change_password:
                 showChangePasswordDialog(this);
                 break;

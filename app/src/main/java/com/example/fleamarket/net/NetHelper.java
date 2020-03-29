@@ -221,4 +221,29 @@ public class NetHelper {
             listener.onFailure(CONNECT_SERVER_FAILED);
         }
     }
+
+    // 请求删除商品
+    public static void deleteCommodity(IServerListener listener, String commodityID){
+        try {
+            Socket socket = createConnection();
+            ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
+            NetMessage message = new NetMessage();
+            message.setType(MessageType.DELETE_COMMODITY);
+            message.setId(commodityID);
+            oos.writeObject(message);
+            // 处理服务器的返回信息
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            NetMessage returnMessage = (NetMessage) ois.readObject();
+            MessageType type = returnMessage.getType();
+            if(type == MessageType.SUCCESS) {
+                listener.onSuccess(returnMessage);
+            } else{
+                listener.onFailure("删除商品失败");
+            }
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure(CONNECT_SERVER_FAILED);
+        }
+    }
 }

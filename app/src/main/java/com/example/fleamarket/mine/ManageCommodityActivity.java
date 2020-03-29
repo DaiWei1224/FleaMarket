@@ -1,11 +1,9 @@
 package com.example.fleamarket.mine;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fleamarket.R;
@@ -15,8 +13,6 @@ import com.example.fleamarket.net.IServerListener;
 import com.example.fleamarket.net.NetHelper;
 import com.example.fleamarket.net.NetMessage;
 import com.example.fleamarket.utils.PictureUtils;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -28,11 +24,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class PersonalHomepageActivity extends AppCompatActivity implements IServerListener {
+public class ManageCommodityActivity extends AppCompatActivity implements IServerListener {
     public List<Commodity> mCommodityList = new ArrayList<>();
     public int commodityIndex = 0;
     private SwipeRefreshLayout refresh;
-    private PersonalCommodityAdapter adapter;
+    private ManageCommodityAdapter adapter;
     private Activity currentActivity;
     private Commodity commodity;
     private ImageView avatar;
@@ -41,31 +37,18 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_homepage);
+        setContentView(R.layout.activity_manage_commodity);
         currentActivity = this;
         commodity = (Commodity)getIntent().getExtras().getSerializable("commodity");
-        sNickname = commodity.getSellerName();
-        avatar = findViewById(R.id.avatar);
-        PictureUtils.displayImage(avatar, getExternalCacheDir().getAbsolutePath() +
-                "/avatar/avatar_" + commodity.getSellerID() + ".jpg");
-        avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "点击头像查看大图", Toast.LENGTH_SHORT).show();
-            }
-        });
-        TextView nickname = findViewById(R.id.nick_name);
-        nickname.setText(sNickname);
-        TextView id = findViewById(R.id.id);
-        id.setText("ID:" + commodity.getSellerID());
-        setToolBar();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new SpaceItemDecoration(30, 1));
-        adapter = new PersonalCommodityAdapter(mCommodityList, this);
+        adapter = new ManageCommodityAdapter(mCommodityList, this);
         recyclerView.setAdapter(adapter);
-
         FloatingActionButton scrollTotop = findViewById(R.id.scroll_to_top);
         scrollTotop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,36 +99,6 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
 //                }
 //            }
 //        }).start();
-    }
-
-    private void setToolBar(){
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        final CollapsingToolbarLayout toolbarLayout = findViewById(R.id.toolbar_layout);
-        AppBarLayout appBarLayout = findViewById(R.id.app_bar);
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener(){
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-                //appBarLayout.getTotalScrollRange()为滑动的最多范围maxRange
-                //参数i为滑动的偏移值，为0 至 -maxRange
-                int offset = Math.abs(i);
-                //标题栏渐变
-                toolbar.setBackgroundColor(changeAlpha(offset * 1.0f / appBarLayout.getTotalScrollRange()));
-                //拉到底设置标题
-                if(-i != appBarLayout.getTotalScrollRange()){
-                    toolbarLayout.setTitle("");
-                } else{
-                    toolbarLayout.setTitle(sNickname + "的商品");
-                }
-            }
-        });
-
-    }
-
-    //根据百分比改变颜色透明度
-    public int changeAlpha(float fraction){
-        int alpha = (int)(255 * fraction);
-        return Color.argb(alpha, 10, 142, 233);
     }
 
 
