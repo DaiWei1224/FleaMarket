@@ -10,17 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
     private int mSpace;
+    private int mType;
 
-    public SpaceItemDecoration(int mSpace){
+    public SpaceItemDecoration(int mSpace, int type){
         this.mSpace = mSpace;
+        this.mType = type;
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state){
-        // 适用于两列的间隔设置
-        outRect.bottom = mSpace * 2;
-        outRect.left = mSpace;
-        outRect.right = mSpace;
+        if (mType == 0) { // 瀑布流间隔type = 0
+            // 适用于两列的间隔设置
+            outRect.bottom = mSpace * 2;
+            outRect.left = mSpace;
+            outRect.right = mSpace;
 //        if(parent.getChildAdapterPosition(view) % 2 == 0){
 //            outRect.left = mSpace;
 //            outRect.right = mSpace / 2;
@@ -28,8 +31,17 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 //            outRect.left = mSpace / 2;
 //            outRect.right = mSpace;
 //        }
-        if(parent.getChildAdapterPosition(view) < 2){
-            outRect.top = mSpace * 2;
+            if(parent.getChildAdapterPosition(view) < 2){
+                outRect.top = mSpace * 2;
+            }
+        } else { // 线性间隔type = 1
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = mSpace;
+            }
+            outRect.left = mSpace;
+            outRect.right = mSpace;
+            outRect.bottom = mSpace;
         }
+
     }
 }

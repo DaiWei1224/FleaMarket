@@ -35,10 +35,10 @@
             android:layout_height="match_parent"
             android:padding="10dp">
 
-            <com.example.fleamarket.ui.SquareImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/avatar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:id="@+id/avatar"
                 android:src="@mipmap/ic_launcher"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"

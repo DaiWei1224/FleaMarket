@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.fleamarket.MainActivity;
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
+import com.example.fleamarket.net.Commodity;
 import com.example.fleamarket.net.IServerListener;
 import com.example.fleamarket.net.MessageType;
 import com.example.fleamarket.net.NetHelper;
@@ -78,6 +79,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
         view.findViewById(R.id.change_password).setOnClickListener(this);
         view.findViewById(R.id.clear_cache).setOnClickListener(this);
         view.findViewById(R.id.logout).setOnClickListener(this);
+        view.findViewById(R.id.head).setOnClickListener(this);
         return view;
     }
 
@@ -122,7 +124,18 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
             case R.id.logout:
                 showLogoutDialog();
                 break;
+            case R.id.head: {
+                Commodity commodity = new Commodity();
+                commodity.setSellerID(User.getId());
+                commodity.setSellerName(User.getNickname());
+                Intent intent = new Intent(getActivity(), PersonalHomepageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("commodity", commodity);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } break;
                 default:
+                    break;
         }
     }
 

@@ -1,6 +1,5 @@
-package com.example.fleamarket.home.recyclerview;
+package com.example.fleamarket.mine;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.fleamarket.R;
 import com.example.fleamarket.home.CommodityActivity;
-import com.example.fleamarket.home.HomeFragment;
 import com.example.fleamarket.net.Commodity;
 import com.example.fleamarket.utils.PictureUtils;
 import com.github.nukc.LoadMoreWrapper.LoadMoreAdapter;
@@ -22,10 +20,9 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.ViewHolder> {
+public class PersonalCommodityAdapter extends RecyclerView.Adapter<PersonalCommodityAdapter.ViewHolder> {
     private List<Commodity> mCommodityList;
-    private RecyclerView mRecyclerView;
-    private Activity mActivity;
+    private PersonalHomepageActivity mActivity;
     public LoadMoreWrapper mLoadMore;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -46,9 +43,8 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
         }
     }
 
-    public CommodityAdapter(List<Commodity> commodityList, RecyclerView recyclerView, Activity activity) {
+    public PersonalCommodityAdapter(List<Commodity> commodityList, PersonalHomepageActivity activity) {
         this.mCommodityList = commodityList;
-        this.mRecyclerView = recyclerView;
         mActivity = activity;
     }
 
@@ -66,19 +62,19 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.View
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-                HomeFragment.addCommodities();
+                mActivity.addCommodities();
             }
         })
 //        .setFooterView(R.layout.load_more)
-        .setNoMoreView(R.layout.no_more)
-        .setShowNoMoreEnabled(true)
-        .into(recyclerView);
+                .setNoMoreView(R.layout.no_more)
+                .setShowNoMoreEnabled(true)
+                .into(recyclerView);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.home_commodity, parent, false);
+                .inflate(R.layout.commodity_horizontal, parent, false);
         final ViewHolder holder = new ViewHolder(view);
         holder.mCommodityView.setOnClickListener(new View.OnClickListener() {
             @Override

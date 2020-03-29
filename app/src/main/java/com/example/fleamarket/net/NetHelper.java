@@ -195,12 +195,15 @@ public class NetHelper {
     }
 
     // 请求服务器下发商品
-    public static void getCommodity(IServerListener listener, int index){
+    public static void getCommodity(IServerListener listener, int index, String id){
         try {
             Socket socket = createConnection();
             ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
             NetMessage message = new NetMessage();
             message.setType(MessageType.GET_COMMODITY);
+            if (id != null) {
+                message.setId(id);
+            }
             message.setCommodityNum(index);
             oos.writeObject(message);
             // 处理服务器的返回信息

@@ -1,5 +1,6 @@
 package com.example.fleamarket.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
+import com.example.fleamarket.mine.PersonalHomepageActivity;
 import com.example.fleamarket.net.Commodity;
 import com.example.fleamarket.utils.PictureUtils;
 
@@ -30,6 +32,16 @@ public class CommodityActivity extends AppCompatActivity {
         ImageView avatar = findViewById(R.id.avatar);
         PictureUtils.displayImage(avatar, getExternalCacheDir().getAbsolutePath() +
                 "/avatar/avatar_" + commodity.getSellerID() + ".jpg");
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CommodityActivity.this, PersonalHomepageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("commodity", commodity);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         TextView sellerName = findViewById(R.id.nick_name);
         sellerName.setText(commodity.getSellerName());
         TextView area = findViewById(R.id.area);
@@ -48,16 +60,24 @@ public class CommodityActivity extends AppCompatActivity {
                     "/commodity/" + commodity.getCommodityID() + ".jpg");
         }
         Button contactSeller = findViewById(R.id.chat_button);
-        if (User.getId().equals(commodity.getSellerID())) {
-            // 隐藏联系卖家按钮
-            contactSeller.setVisibility(View.GONE);
-        } else {
+        if ( !User.isLogin()) {
             contactSeller.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getBaseContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "请先登录", Toast.LENGTH_SHORT).show();
                 }
             });
+        } else {
+            if (User.getId().equals(commodity.getSellerID())) {
+                contactSeller.setVisibility(View.GONE);
+            } else {
+                contactSeller.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getBaseContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
 
     }
