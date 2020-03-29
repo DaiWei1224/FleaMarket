@@ -99,29 +99,7 @@
 
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp" >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/personal_data"
-            android:background="@android:color/white"
-            android:text="个人资料"
-            android:textColor="@android:color/black"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:padding="10dp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/enter"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="5dp" />
-
-    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

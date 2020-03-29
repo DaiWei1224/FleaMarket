@@ -58,6 +58,12 @@ public class CommodityActivity extends AppCompatActivity {
             ImageView commodityPhoto = findViewById(R.id.commodity_photo);
             PictureUtils.displayImage(commodityPhoto, getExternalCacheDir().getAbsolutePath() +
                     "/commodity/" + commodity.getCommodityID() + ".jpg");
+            commodityPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getBaseContext(), "点击商品图片查看大图", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         Button contactSeller = findViewById(R.id.chat_button);
         if ( !User.isLogin()) {

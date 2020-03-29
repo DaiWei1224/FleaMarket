@@ -75,7 +75,6 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
         change_nickname.setOnClickListener(this);
         check_nickname.setOnClickListener(this);
         view.findViewById(R.id.manage_commidy).setOnClickListener(this);
-        view.findViewById(R.id.personal_data).setOnClickListener(this);
         view.findViewById(R.id.change_password).setOnClickListener(this);
         view.findViewById(R.id.clear_cache).setOnClickListener(this);
         view.findViewById(R.id.logout).setOnClickListener(this);
@@ -110,9 +109,6 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                 }
             } break;
             case R.id.manage_commidy:
-                Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.personal_data:
                 Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.change_password:
