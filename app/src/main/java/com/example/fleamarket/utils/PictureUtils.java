@@ -164,7 +164,7 @@ public class PictureUtils {
         return null;
     }
 
-    public static void saveImageFromByte(Activity activity, byte[] data, String path) {
+    public static void saveImageFromByte(byte[] data, String path) {
         try {
 //            File image = new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
 //            File image = new File(activity.getExternalCacheDir().getAbsolutePath() +

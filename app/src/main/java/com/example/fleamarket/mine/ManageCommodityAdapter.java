@@ -28,11 +28,11 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodityAdapter.ViewHolder> implements IServerListener {
-    private List<Commodity> mCommodityList;
+    private static List<Commodity> mCommodityList;
     private ManageCommodityActivity mActivity;
     public LoadMoreWrapper mLoadMore;
-    private ManageCommodityAdapter mAdapter = this;
-    private int mPosition;
+    private static ManageCommodityAdapter mAdapter;
+    private static int mPosition;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -57,6 +57,7 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
     public ManageCommodityAdapter(List<Commodity> commodityList, ManageCommodityActivity activity) {
         this.mCommodityList = commodityList;
         mActivity = activity;
+        mAdapter = this;
     }
 
     @Override
@@ -102,7 +103,14 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
         holder.mEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int position = holder.getAdapterPosition();
+                Commodity commodity = mCommodityList.get(position);
+                Intent intent = new Intent(mActivity, EditCommodityActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("commodity", commodity);
+                intent.putExtras(bundle);
+                mActivity.startActivity(intent);
+                mPosition = position;
             }
         });
         holder.mDelete.setOnClickListener(new View.OnClickListener() {
@@ -158,14 +166,24 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
         }).create().show();
     }
 
+    public static void notifyItemChanged(Commodity commodity) {
+        mCommodityList.set(mPosition, commodity);
+        mAdapter.notifyItemChanged(mPosition);
+    }
+
     @Override
-    public void onSuccess(NetMessage info) {
+    public void onSuccess(final NetMessage info) {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mCommodityList.remove(mPosition);
-                notifyItemRemoved(mPosition);
-                Toast.makeText(mActivity, "删除成功", Toast.LENGTH_SHORT).show();
+//                if (info.getType() == MessageType.EDIT_COMMODITY) {
+//                    notifyItemChanged(mPosition);
+//                    Toast.makeText(mActivity, "修改成功", Toast.LENGTH_SHORT).show();
+//                } else if (info.getType() == MessageType.DELETE_COMMODITY) {
+                    mCommodityList.remove(mPosition);
+                    notifyItemRemoved(mPosition);
+                    Toast.makeText(mActivity, "删除成功", Toast.LENGTH_SHORT).show();
+//                }
             }
         });
     }

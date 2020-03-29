@@ -169,12 +169,12 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
                 mCommodityList.add(commodity);
                 // 将商品照片存到本地
                 if (commodity.isHavePhoto()) {
-                    PictureUtils.saveImageFromByte(this, commodity.getCommodityPhoto().getData(),
+                    PictureUtils.saveImageFromByte(commodity.getCommodityPhoto().getData(),
                             getExternalCacheDir().getAbsolutePath() +
                                     "/commodity/" + commodity.getCommodityID() + ".jpg");
                 }
                 // 保存对应用户头像到本地
-                PictureUtils.saveImageFromByte(this, commodity.getAvatar().getData(),
+                PictureUtils.saveImageFromByte(commodity.getAvatar().getData(),
                         getExternalCacheDir().getAbsolutePath() +
                                 "/avatar/avatar_" + commodity.getSellerID() + ".jpg");
             }
@@ -187,7 +187,6 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
                 public void run() {
                     adapter.notifyItemInserted(commodityIndex);
                     commodityIndex += 20;
-//                    adapter.notifyDataSetChanged();
                 }
             });
         }

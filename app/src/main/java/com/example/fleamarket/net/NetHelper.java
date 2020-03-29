@@ -222,7 +222,32 @@ public class NetHelper {
         }
     }
 
-    // 请求删除商品
+    // 编辑商品
+    public static void editCommodity(IServerListener listener, Commodity commodity){
+        try {
+            Socket socket = createConnection();
+            ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
+            NetMessage message = new NetMessage();
+            message.setType(MessageType.EDIT_COMMODITY);
+            message.setCommodity(commodity);
+            oos.writeObject(message);
+            // 处理服务器的返回信息
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            NetMessage returnMessage = (NetMessage) ois.readObject();
+            MessageType type = returnMessage.getType();
+            if(type == MessageType.EDIT_COMMODITY) {
+                listener.onSuccess(returnMessage);
+            } else{
+                listener.onFailure("编辑商品失败");
+            }
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure(CONNECT_SERVER_FAILED);
+        }
+    }
+
+    // 删除商品
     public static void deleteCommodity(IServerListener listener, String commodityID){
         try {
             Socket socket = createConnection();
@@ -235,7 +260,7 @@ public class NetHelper {
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             NetMessage returnMessage = (NetMessage) ois.readObject();
             MessageType type = returnMessage.getType();
-            if(type == MessageType.SUCCESS) {
+            if(type == MessageType.DELETE_COMMODITY) {
                 listener.onSuccess(returnMessage);
             } else{
                 listener.onFailure("删除商品失败");

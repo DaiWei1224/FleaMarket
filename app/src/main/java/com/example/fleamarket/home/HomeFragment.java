@@ -146,12 +146,12 @@ public class HomeFragment extends Fragment implements IServerListener {
                 mCommodityList.add(commodity);
                 // 将商品照片存到本地
                 if (commodity.isHavePhoto()) {
-                    PictureUtils.saveImageFromByte(getActivity(), commodity.getCommodityPhoto().getData(),
+                    PictureUtils.saveImageFromByte(commodity.getCommodityPhoto().getData(),
                             getActivity().getExternalCacheDir().getAbsolutePath() +
                                     "/commodity/" + commodity.getCommodityID() + ".jpg");
                 }
                 // 保存对应用户头像到本地
-                PictureUtils.saveImageFromByte(getActivity(), commodity.getAvatar().getData(),
+                PictureUtils.saveImageFromByte(commodity.getAvatar().getData(),
                         getActivity().getExternalCacheDir().getAbsolutePath() +
                                 "/avatar/avatar_" + commodity.getSellerID() + ".jpg");
             }
