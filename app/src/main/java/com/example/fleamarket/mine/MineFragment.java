@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,6 +59,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
     private Uri imageUri;
     private Activity currentActivity;
     private Fragment currentFragment;
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -189,6 +191,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                             NetHelper.saveAvatar((IServerListener)currentFragment, currentActivity);
                         }
                     }).start();
+                    showWaitingDialog("正在保存头像");
                 }
                 break;
             default:
@@ -277,6 +280,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                                 NetHelper.changeNickname(listener, nickname);
                             }
                         }).start();
+                        showWaitingDialog("正在保存昵称");
                         showNickname();
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -384,6 +388,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                                     }
                                 }).start();
                                 alertDialog.dismiss();
+                                showWaitingDialog("正在保存密码");
                             }
                         }
                         tips.setVisibility(View.VISIBLE);
@@ -394,8 +399,17 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
         alertDialog.show();
     }
 
+    private void showWaitingDialog(String message) {
+        progressDialog = new ProgressDialog(currentActivity);
+        progressDialog.setMessage(message);
+        progressDialog.setIndeterminate(true); // 是否形成一个加载动画，true表示不明确加载进度形成转圈动画，false表示明确加载进度
+        progressDialog.setCancelable(false); // 点击返回键或者dialog四周是否关闭dialog，true表示可以关闭，false表示不可关闭
+        progressDialog.show();
+    }
+
     @Override
     public void onSuccess(final NetMessage info) {
+        progressDialog.dismiss();
         if (info.getType() == MessageType.CHANGE_NICKNAME) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -430,6 +444,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
     @Override
     public void onFailure(String info) {
         Looper.prepare();
+        progressDialog.dismiss();
         Toast.makeText(getContext(), info, Toast.LENGTH_SHORT).show();
         Looper.loop();
     }

@@ -3,6 +3,7 @@ package com.example.fleamarket.home;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -53,6 +54,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
     boolean havePhoto = false;
     ImageView camera;
     ImageView commodityPhoto;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +159,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                                 NetHelper.requestPostCommodity((IServerListener)currentActivity, commodity);
                             }
                         }).start();
+                        showWaitingDialog("正在发布");
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
@@ -322,18 +325,31 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
         }
     }
 
+    private void showWaitingDialog(String message) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(message);
+        progressDialog.setIndeterminate(true); // 是否形成一个加载动画，true表示不明确加载进度形成转圈动画，false表示明确加载进度
+        progressDialog.setCancelable(false); // 点击返回键或者dialog四周是否关闭dialog，true表示可以关闭，false表示不可关闭
+        progressDialog.show();
+    }
+
     @Override
     public void onSuccess(NetMessage info) {
-        Looper.prepare();
-        Toast.makeText(this, "商品发布成功", Toast.LENGTH_SHORT).show();
-        currentActivity.finish();
-        Looper.loop();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                Toast.makeText(getBaseContext(), "商品发布成功", Toast.LENGTH_SHORT).show();
+                currentActivity.finish();
+            }
+        });
     }
 
     @Override
     public void onFailure(String info) {
         Looper.prepare();
-        Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
+        Toast.makeText(getBaseContext(), info, Toast.LENGTH_SHORT).show();
         Looper.loop();
     }
 }

@@ -3,6 +3,7 @@ package com.example.fleamarket.mine;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -52,6 +53,7 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
     ImageView camera;
     ImageView commodityPhoto;
     Commodity commodity;
+    static ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,6 +170,7 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
                                 NetHelper.editCommodity((IServerListener)currentActivity, commodity);
                             }
                         }).start();
+                        showWaitingDialog("正在保存");
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
@@ -335,6 +338,14 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
         }
     }
 
+    private void showWaitingDialog(String message) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(message);
+        progressDialog.setIndeterminate(true); // 是否形成一个加载动画，true表示不明确加载进度形成转圈动画，false表示明确加载进度
+        progressDialog.setCancelable(false); // 点击返回键或者dialog四周是否关闭dialog，true表示可以关闭，false表示不可关闭
+        progressDialog.show();
+    }
+
     @Override
     public void onSuccess(NetMessage info) {
         runOnUiThread(new Runnable() {
@@ -343,6 +354,7 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
                 Toast.makeText(getBaseContext(), "修改成功", Toast.LENGTH_SHORT).show();
                 ManageCommodityAdapter.notifyItemChanged(commodity);
                 currentActivity.finish();
+                progressDialog.dismiss();
             }
         });
     }
@@ -350,7 +362,8 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
     @Override
     public void onFailure(String info) {
         Looper.prepare();
-        Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
+        Toast.makeText(getBaseContext(), info, Toast.LENGTH_SHORT).show();
         Looper.loop();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.fleamarket.login;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +33,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class LoginFragment extends Fragment implements View.OnClickListener, IServerListener {
     EditText idText;
     EditText pwText;
+    ProgressDialog progressDialog;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_login, container, false);
@@ -95,6 +97,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
                                 NetHelper.requestLogin(LoginFragment.this, id, pw);
                             }
                         }).start();
+                        showWaitingDialog("正在登陆");
                     }else{
                         Toast.makeText(getContext(), "账号或密码错误", Toast.LENGTH_SHORT).show();
                     }
@@ -105,9 +108,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
         }
     }
 
+    private void showWaitingDialog(String message) {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(message);
+        progressDialog.setIndeterminate(true); // 是否形成一个加载动画，true表示不明确加载进度形成转圈动画，false表示明确加载进度
+        progressDialog.setCancelable(false); // 点击返回键或者dialog四周是否关闭dialog，true表示可以关闭，false表示不可关闭
+        progressDialog.show();
+    }
+
     @Override
     public void onSuccess(NetMessage info) {
         Looper.prepare();
+        progressDialog.dismiss();
         final MainActivity mainActivity = (MainActivity)getActivity();
         // 隐藏软键盘
         MyUtil.hideKeyboard(mainActivity);
@@ -159,6 +171,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
     @Override
     public void onFailure(String info) {
         Looper.prepare();
+        progressDialog.dismiss();
         Toast.makeText(getContext(), info, Toast.LENGTH_SHORT).show();
         Looper.loop();
     }

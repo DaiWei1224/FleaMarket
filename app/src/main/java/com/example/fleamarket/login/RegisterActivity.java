@@ -1,5 +1,6 @@
 package com.example.fleamarket.login;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.SpannableString;
@@ -24,6 +25,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText pwText;
     EditText pwConfirmText;
     Button btnRegister;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +108,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 NetHelper.requestRegister(RegisterActivity.this, invitationCode, pw);
                             }
                         }).start();
+                        showWaitingDialog("正在注册");
                     }
                 }
             } break;
@@ -113,11 +116,20 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private void showWaitingDialog(String message) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(message);
+        progressDialog.setIndeterminate(true); // 是否形成一个加载动画，true表示不明确加载进度形成转圈动画，false表示明确加载进度
+        progressDialog.setCancelable(false); // 点击返回键或者dialog四周是否关闭dialog，true表示可以关闭，false表示不可关闭
+        progressDialog.show();
+    }
+
     @Override
     public void onSuccess(final NetMessage info) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                progressDialog.dismiss();
                 String s = "注册成功！\n您的账号为" + info.getId();
                 SpannableString ss = new SpannableString(s);
                 //将获取的账号设置为蓝色
@@ -135,6 +147,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onFailure(String info) {
         Looper.prepare();
+        progressDialog.dismiss();
         Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
         Looper.loop();
     }

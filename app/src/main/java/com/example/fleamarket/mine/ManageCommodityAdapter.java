@@ -1,6 +1,7 @@
 package com.example.fleamarket.mine;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
     public LoadMoreWrapper mLoadMore;
     private static ManageCommodityAdapter mAdapter;
     private static int mPosition;
+    ProgressDialog progressDialog;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -157,6 +159,7 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
                                 NetHelper.deleteCommodity(mAdapter, commodityID);
                             }
                         }).start();
+                        showWaitingDialog("正在删除");
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -171,19 +174,23 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
         mAdapter.notifyItemChanged(mPosition);
     }
 
+    private void showWaitingDialog(String message) {
+        progressDialog = new ProgressDialog(mActivity);
+        progressDialog.setMessage(message);
+        progressDialog.setIndeterminate(true); // 是否形成一个加载动画，true表示不明确加载进度形成转圈动画，false表示明确加载进度
+        progressDialog.setCancelable(false); // 点击返回键或者dialog四周是否关闭dialog，true表示可以关闭，false表示不可关闭
+        progressDialog.show();
+    }
+
     @Override
     public void onSuccess(final NetMessage info) {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                if (info.getType() == MessageType.EDIT_COMMODITY) {
-//                    notifyItemChanged(mPosition);
-//                    Toast.makeText(mActivity, "修改成功", Toast.LENGTH_SHORT).show();
-//                } else if (info.getType() == MessageType.DELETE_COMMODITY) {
-                    mCommodityList.remove(mPosition);
-                    notifyItemRemoved(mPosition);
-                    Toast.makeText(mActivity, "删除成功", Toast.LENGTH_SHORT).show();
-//                }
+                progressDialog.dismiss();
+                mCommodityList.remove(mPosition);
+                notifyItemRemoved(mPosition);
+                Toast.makeText(mActivity, "删除成功", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -191,6 +198,7 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
     @Override
     public void onFailure(String info) {
         Looper.prepare();
+        progressDialog.dismiss();
         Toast.makeText(mActivity, info, Toast.LENGTH_SHORT).show();
         Looper.loop();
     }
