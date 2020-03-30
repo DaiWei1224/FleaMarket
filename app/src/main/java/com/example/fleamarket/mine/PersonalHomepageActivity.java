@@ -48,12 +48,6 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
         avatar = findViewById(R.id.avatar);
         PictureUtils.displayImage(avatar, getExternalCacheDir().getAbsolutePath() +
                 "/avatar/avatar_" + commodity.getSellerID() + ".jpg");
-        avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "点击头像查看大图", Toast.LENGTH_SHORT).show();
-            }
-        });
         TextView nickname = findViewById(R.id.nick_name);
         nickname.setText(sNickname);
         TextView id = findViewById(R.id.id);

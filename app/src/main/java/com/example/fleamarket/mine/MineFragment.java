@@ -36,6 +36,8 @@ import com.example.fleamarket.utils.PictureUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,6 +62,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
     private Activity currentActivity;
     private Fragment currentFragment;
     private ProgressDialog progressDialog;
+    private TextView cacheSize;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -81,7 +84,14 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
         view.findViewById(R.id.clear_cache).setOnClickListener(this);
         view.findViewById(R.id.logout).setOnClickListener(this);
         view.findViewById(R.id.head).setOnClickListener(this);
+        cacheSize = view.findViewById(R.id.cache_size);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        displayCacheSize();
     }
 
     @Override
@@ -122,9 +132,9 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
             case R.id.change_password:
                 showChangePasswordDialog(this);
                 break;
-            case R.id.clear_cache:
-                Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
-                break;
+            case R.id.clear_cache: {
+                showClearCacheDialog();
+            } break;
             case R.id.logout:
                 showLogoutDialog();
                 break;
@@ -323,6 +333,24 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
         }).create().show();
     }
 
+    private void showClearCacheDialog() {
+        new AlertDialog.Builder(getContext())
+                .setMessage("确定清理缓存吗？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        clearCache();
+                        displayCacheSize();
+                        Toast.makeText(currentActivity, "缓存已清除", Toast.LENGTH_SHORT).show();
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
+
     private void showNickname() {
         edit_nickname.setVisibility(View.INVISIBLE);
         check_nickname.setVisibility(View.INVISIBLE);
@@ -405,6 +433,82 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
         progressDialog.setIndeterminate(true); // 是否形成一个加载动画，true表示不明确加载进度形成转圈动画，false表示明确加载进度
         progressDialog.setCancelable(false); // 点击返回键或者dialog四周是否关闭dialog，true表示可以关闭，false表示不可关闭
         progressDialog.show();
+    }
+
+    public void displayCacheSize() {
+        cacheSize.setText(formatFileSize(getDirSize(new File(currentActivity.getExternalCacheDir().getAbsolutePath() + "/commodity"))));
+    }
+
+    private void clearCache() {
+        clearCacheFolder(new File(currentActivity.getExternalCacheDir().getAbsolutePath()+"/commodity"), new Date().getTime());
+    }
+
+    /**
+     * 获取文件大小(字节为单位)
+     * @param dir
+     * @return
+     */
+    private long getDirSize(File dir) {
+        if (dir == null) {
+            return 0;
+        }
+        if (!dir.isDirectory()) {
+            return 0;
+        }
+        long dirSize = 0;
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            if (file.isFile()) {
+                dirSize += file.length();
+            } else if (file.isDirectory()) {
+                dirSize += file.length();
+                dirSize += getDirSize(file);
+            }
+        }
+        return dirSize;
+    }
+
+    /**
+     * 格式化文件长度
+     * @param fileSize
+     * @return
+     */
+    private String formatFileSize(long fileSize){
+        DecimalFormat df = new DecimalFormat("#0.00");//表示小数点前至少一位,0也会显示,后保留两位
+        String fileSizeString = "";
+        if (fileSize < 1024) {
+            fileSizeString = df.format((double) fileSize) + " B";
+        } else if (fileSize < 1048576) {
+            fileSizeString = df.format((double) fileSize / 1024) + " KB";
+        } else if (fileSize < 1073741824) {
+            fileSizeString = df.format((double) fileSize / 1048576) + " MB";
+        } else {
+            fileSizeString = df.format((double) fileSize / 1073741824) + " GB";
+        }
+        return fileSizeString;
+    }
+
+    /**
+     * 清除缓存目录
+     * @param dir 目录
+     * @param curTime 当前系统时间
+     */
+    private void clearCacheFolder(File dir, long curTime){
+        if (dir!= null && dir.isDirectory()) {
+            try {
+                for (File child:dir.listFiles()) {
+                    if (child.isDirectory()) {
+                        clearCacheFolder(child, curTime);
+                    }
+                    if (child.lastModified() < curTime) {
+                        if (child.delete()) {
+                        }
+                    }
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

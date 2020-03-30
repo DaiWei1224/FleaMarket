@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.page_mine:
                 if(User.isLogin()){
+                    fMine.displayCacheSize();
                     loadFragment(fMine);
                     title.setText("个人中心");
                 }else{

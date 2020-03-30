@@ -140,12 +140,13 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:padding="10dp" />
 
-        <ImageView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/enter"
+            android:id="@+id/cache_size"
             android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="5dp" />
+            android:text="0.00 B"
+            android:layout_marginRight="15dp" />
 
     </FrameLayout>
 
