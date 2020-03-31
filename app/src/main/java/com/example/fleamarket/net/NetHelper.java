@@ -15,8 +15,8 @@ import java.net.Socket;
 public class NetHelper {
     public static String server_ip = "192.168.0.103";
     public static int server_port = 1224;
-    private static final int CONNECT_TIMEOUT = 5000; // 连接请求超时时间
-    private static final int READ_TIMEOUT = 5000; // 读操作超时时间
+    private static final int CONNECT_TIMEOUT = 10000; // 连接请求超时时间
+    private static final int READ_TIMEOUT = 10000; // 读操作超时时间
     private static final String CONNECT_SERVER_FAILED = "连接服务器失败";
 
     private static Socket createConnection() {
@@ -150,7 +150,7 @@ public class NetHelper {
 //                    new File(activity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg")));
             netImage.setData(PictureUtils.loadImageFromFile(
                     new File(activity.getExternalCacheDir().getAbsolutePath() +
-                            "/avatar/avatar_" + User.getId() + ".jpg")));
+                            "/temporary/avatar.jpg")));
             message.setAvatar(netImage);
             oos.writeObject(message);
             // 处理服务器的返回信息

@@ -156,13 +156,12 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
     public void updateUserInfo(){
         nickname.setText(User.getNickname());
         id.setText("ID:" + User.getId());
-        // 加载图片
-//        File outputImage = new File(currentActivity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
-        File outputImage = new File(currentActivity.getExternalCacheDir().getAbsolutePath() +
+        // 加载头像
+        File avatarFile = new File(currentActivity.getExternalCacheDir().getAbsolutePath() +
                 "/avatar/avatar_" + User.getId() + ".jpg");
-        imageUri = Uri.fromFile(outputImage);
-        if (outputImage.exists()) {
-            PictureUtils.updatePictureView(avatar, outputImage, currentActivity);
+        if (avatarFile.exists()) {
+            PictureUtils.displayImage(avatar, currentActivity.getExternalCacheDir().getAbsolutePath() +
+                    "/avatar/avatar_" + User.getId() + ".jpg");
         } else {
             avatar.setImageResource(R.mipmap.ic_launcher);
         }
@@ -193,7 +192,6 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                 break;
             case CROP_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
-                    PictureUtils.displayImage(avatar, imageUri, currentActivity);
                     // 将头像存储到服务器
                     new Thread(new Runnable() {
                         @Override
@@ -233,7 +231,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                                 // 创建File对象，用于存储拍照后的图片
 //                                File outputImage = new File(currentActivity.getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
                                 File outputImage = new File(currentActivity.getExternalCacheDir().getAbsolutePath() +
-                                        "/avatar/avatar_" + User.getId() + ".jpg");
+                                        "/temporary/avatar.jpg");
                                 try {
                                     if (outputImage.exists()){
                                         outputImage.delete();
@@ -436,11 +434,14 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
     }
 
     public void displayCacheSize() {
-        cacheSize.setText(formatFileSize(getDirSize(new File(currentActivity.getExternalCacheDir().getAbsolutePath() + "/commodity"))));
+        long commodityCacheSize = getDirSize(new File(currentActivity.getExternalCacheDir().getAbsolutePath() + "/commodity"));
+        long temporaryCacheSize = getDirSize(new File(currentActivity.getExternalCacheDir().getAbsolutePath() + "/temporary"));
+        cacheSize.setText(formatFileSize(commodityCacheSize + temporaryCacheSize));
     }
 
     private void clearCache() {
         clearCacheFolder(new File(currentActivity.getExternalCacheDir().getAbsolutePath()+"/commodity"), new Date().getTime());
+        clearCacheFolder(new File(currentActivity.getExternalCacheDir().getAbsolutePath()+"/temporary"), new Date().getTime());
     }
 
     /**
@@ -538,9 +539,18 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
             editor.apply();
             Looper.loop();
         } else if (info.getType() == MessageType.SAVE_AVATAR) {
-            Looper.prepare();
-            Toast.makeText(getContext(), "头像设置成功", Toast.LENGTH_SHORT).show();
-            Looper.loop();
+            // 将服务器传回的头像文件保存到本地
+            PictureUtils.saveImageFromByte(info.getAvatar().getData(),
+                    getActivity().getExternalCacheDir().getAbsolutePath() +
+                            "/avatar/avatar_" + User.getId() + ".jpg");
+            currentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    PictureUtils.displayImage(avatar, currentActivity.getExternalCacheDir().getAbsolutePath() +
+                            "/avatar/avatar_" + User.getId() + ".jpg");
+                    Toast.makeText(getContext(), "头像设置成功", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
     }

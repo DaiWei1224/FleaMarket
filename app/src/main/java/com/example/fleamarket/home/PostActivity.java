@@ -150,7 +150,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                         if (havePhoto) {
                             NetImage netImage = new NetImage();
                             netImage.setData(PictureUtils.loadImageFromFile(
-                                    new File(getExternalCacheDir().getAbsolutePath() + "post_image.jpg")));
+                                    new File(getExternalCacheDir().getAbsolutePath() + "/temporary/post_image.jpg")));
                             commodity.setCommodityPhoto(netImage);
                         }
                         new Thread(new Runnable() {
@@ -190,7 +190,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                         switch (i){
                             case 0: { // 使用相机拍照
                                 // 创建File对象，用于存储拍照后的图片
-                                File outputImage = new File(getExternalCacheDir().getAbsolutePath() + "post_image.jpg");
+                                File outputImage = new File(getExternalCacheDir().getAbsolutePath() + "/temporary/post_image.jpg");
                                 try {
                                     if (outputImage.exists()){
                                         outputImage.delete();
@@ -244,9 +244,9 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                     Point size = new Point();
                     this.getWindowManager().getDefaultDisplay().getSize(size);
                     Bitmap bitmap = PictureUtils.getScaledBitmap(
-                            getExternalCacheDir().getAbsolutePath() + "post_image.jpg" , size.x, size.y);
+                            getExternalCacheDir().getAbsolutePath() + "/temporary/post_image.jpg" , size.x, size.y);
                     try {
-                        File file = new File(getExternalCacheDir().getAbsolutePath() + "post_image.jpg");
+                        File file = new File(getExternalCacheDir().getAbsolutePath() + "/temporary/post_image.jpg");
                         if (file.exists()) {
                             file.delete();
                         }
@@ -259,7 +259,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    PictureUtils.updatePictureView(commodityPhoto, new File(getExternalCacheDir().getAbsolutePath() + "post_image.jpg"), this);
+                    PictureUtils.updatePictureView(commodityPhoto, new File(getExternalCacheDir().getAbsolutePath() + "/temporary/post_image.jpg"), this);
                     camera.setVisibility(View.GONE);
                     commodityPhoto.setVisibility(View.VISIBLE);
                     havePhoto = true;
@@ -271,7 +271,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                     // 将照片保存到cache
                     File file = null;
                     try {
-                        file = new File(getExternalCacheDir().getAbsolutePath() + "post_image.jpg");
+                        file = new File(getExternalCacheDir().getAbsolutePath() + "/temporary/post_image.jpg");
                         if (file.exists()) {
                             file.delete();
                         }
@@ -290,7 +290,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                     Point size = new Point();
                     this.getWindowManager().getDefaultDisplay().getSize(size);
                     Bitmap bitmap = PictureUtils.getScaledBitmap(
-                            getExternalCacheDir().getAbsolutePath() + "post_image.jpg" , size.x, size.y);
+                            getExternalCacheDir().getAbsolutePath() + "/temporary/post_image.jpg" , size.x, size.y);
                     try {
                         FileOutputStream out = new FileOutputStream(file);
                         // quality为图像压缩率，0-100。0压缩100%，100不压缩

@@ -11,8 +11,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.widget.ImageView;
 
-import com.example.fleamarket.User;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -91,7 +89,7 @@ public class PictureUtils {
         if(from == 2) { // 从相册选取
 //            File outputImage = new File(fragment.getActivity().getExternalCacheDir(), "avatar_" + User.getId() + ".jpg");
             File outputImage = new File(fragment.getActivity().getExternalCacheDir().getAbsolutePath() +
-                    "/avatar/avatar_" + User.getId() + ".jpg");
+                    "/temporary/avatar.jpg");
             try {
                 if (outputImage.exists()){
                     outputImage.delete();

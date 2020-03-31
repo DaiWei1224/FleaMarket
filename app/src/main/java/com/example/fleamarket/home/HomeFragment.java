@@ -134,12 +134,12 @@ public class HomeFragment extends Fragment implements IServerListener {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.notifyItemInserted(commodityIndex);
+                    adapter.notifyItemChanged(commodityIndex);
                 }
             });
         } else {
             List<Commodity> serverCommodity = info.getCommodityList();
-            int commodityNum = serverCommodity.size();
+            final int commodityNum = serverCommodity.size();
             Commodity commodity;
             for (int i = 0; i < commodityNum; i++) {
                 commodity = serverCommodity.get(i);
@@ -155,15 +155,15 @@ public class HomeFragment extends Fragment implements IServerListener {
                         getActivity().getExternalCacheDir().getAbsolutePath() +
                                 "/avatar/avatar_" + commodity.getSellerID() + ".jpg");
             }
-//            if (commodityNum < 20) {
-//                adapter.mLoadMore.setLoadMoreEnabled(false);
-//            }
+            if (commodityNum < 20) {
+                adapter.mLoadMore.setLoadMoreEnabled(false);
+            }
             adapter.mLoadMore.setLoadFailed(false);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     adapter.notifyItemInserted(commodityIndex);
-                    commodityIndex += 20;
+                    commodityIndex += commodityNum;
 //                    adapter.notifyDataSetChanged();
                 }
             });
