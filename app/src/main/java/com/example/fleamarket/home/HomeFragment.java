@@ -60,15 +60,10 @@ public class HomeFragment extends Fragment implements IServerListener {
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton scrollToTop = layout.findViewById(R.id.scroll_to_top);
-        scrollToTop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recyclerView.smoothScrollToPosition(0); // 平滑滚动
-//                recyclerView.scrollToPosition(0); // 非平滑滚动
-            }
-        });
+        // 平滑滚动，非平滑滚动为recyclerView.scrollToPosition(0);
+        scrollToTop.setOnClickListener(v -> recyclerView.smoothScrollToPosition(0));
         FloatingActionButton postButton = layout.findViewById(R.id.post_button);
-        postButton.setOnClickListener((v) -> {
+        postButton.setOnClickListener(v -> {
                 if (User.isLogin()) {
                     Intent intent = new Intent(getContext(), PostActivity.class);
                     startActivity(intent);

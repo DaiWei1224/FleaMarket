@@ -32,7 +32,7 @@ public class CommodityActivity extends AppCompatActivity {
         ImageView avatar = findViewById(R.id.avatar);
         PictureUtils.displayImage(avatar, getExternalCacheDir().getAbsolutePath() +
                 "/avatar/avatar_" + commodity.getSellerID() + ".jpg");
-        avatar.setOnClickListener((v) -> {
+        avatar.setOnClickListener(v -> {
                 Intent intent = new Intent(CommodityActivity.this, PersonalHomepageActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("commodity", commodity);
@@ -58,12 +58,12 @@ public class CommodityActivity extends AppCompatActivity {
         }
         Button contactSeller = findViewById(R.id.chat_button);
         if ( !User.isLogin()) {
-            contactSeller.setOnClickListener((v) -> Toast.makeText(getBaseContext(), "请先登录", Toast.LENGTH_SHORT).show());
+            contactSeller.setOnClickListener(v -> Toast.makeText(getBaseContext(), "请先登录", Toast.LENGTH_SHORT).show());
         } else {
             if (User.getId().equals(commodity.getSellerID())) {
                 contactSeller.setVisibility(View.GONE);
             } else {
-                contactSeller.setOnClickListener((v) -> Toast.makeText(getBaseContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show());
+                contactSeller.setOnClickListener(v -> Toast.makeText(getBaseContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show());
             }
         }
 

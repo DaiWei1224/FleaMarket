@@ -60,7 +60,7 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton scrollTotop = findViewById(R.id.scroll_to_top);
-        scrollTotop.setOnClickListener((v) -> recyclerView.smoothScrollToPosition(0));
+        scrollTotop.setOnClickListener(v -> recyclerView.smoothScrollToPosition(0));
 
         refresh = findViewById(R.id.refresh);
         refresh.setColorSchemeResources(R.color.colorAccent);

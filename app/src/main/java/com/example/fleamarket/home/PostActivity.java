@@ -81,7 +81,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
         camera = findViewById(R.id.camera);
         commodityPhoto = findViewById(R.id.commodity_photo);
         // 发布按键
-        findViewById(R.id.post_button).setOnClickListener((v) -> {
+        findViewById(R.id.post_button).setOnClickListener(v -> {
                 if (commodityName.getText().toString().length() == 0) {
                     Toast.makeText(getBaseContext(), "商品名称不能为空", Toast.LENGTH_SHORT).show();
                 } else if(price.getText().toString().length() == 0) {
@@ -110,8 +110,8 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                     }
                 }
             });
-        camera.setOnClickListener((v) ->  showPhotoOptionDialog(0));
-        commodityPhoto.setOnClickListener((v) -> showPhotoOptionDialog(1));
+        camera.setOnClickListener(v ->  showPhotoOptionDialog(0));
+        commodityPhoto.setOnClickListener(v -> showPhotoOptionDialog(1));
 
     }
 

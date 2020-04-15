@@ -343,7 +343,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                 .setPositiveButton("确认修改", null)
                 .setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create();
         // 使用getButton方法设计“确认”按钮的逻辑可以防止点击一次对话框就关闭
-        alertDialog.setOnShowListener((dialog) -> {
+        alertDialog.setOnShowListener(dialog -> {
                 alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

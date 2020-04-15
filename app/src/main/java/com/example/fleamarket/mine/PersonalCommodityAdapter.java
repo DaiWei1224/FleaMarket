@@ -65,7 +65,7 @@ public class PersonalCommodityAdapter extends RecyclerView.Adapter<PersonalCommo
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.commodity_horizontal, parent, false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.mCommodityView.setOnClickListener((v) -> {
+        holder.mCommodityView.setOnClickListener(v -> {
                 int position = holder.getAdapterPosition();
                 Commodity commodity = mCommodityList.get(position);
                 Intent intent = new Intent(mActivity, CommodityActivity.class);

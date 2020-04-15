@@ -78,7 +78,7 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.commodity_manage, parent, false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.mCommodityView.setOnClickListener((v) -> {
+        holder.mCommodityView.setOnClickListener(v -> {
                 int position = holder.getAdapterPosition();
                 Commodity commodity = mCommodityList.get(position);
                 Intent intent = new Intent(mActivity, CommodityActivity.class);
@@ -87,7 +87,7 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
                 intent.putExtras(bundle);
                 mActivity.startActivity(intent);
             });
-        holder.mEdit.setOnClickListener((v) -> {
+        holder.mEdit.setOnClickListener(v -> {
                 int position = holder.getAdapterPosition();
                 Commodity commodity = mCommodityList.get(position);
                 Intent intent = new Intent(mActivity, EditCommodityActivity.class);
@@ -97,7 +97,7 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
                 mActivity.startActivity(intent);
                 mPosition = position;
             });
-        holder.mDelete.setOnClickListener((v) -> {
+        holder.mDelete.setOnClickListener(v -> {
                 int position = holder.getAdapterPosition();
                 Commodity commodity = mCommodityList.get(position);
                 showDeleteDialog(commodity.getCommodityID());
