@@ -2,7 +2,6 @@ package com.example.fleamarket.mine;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
@@ -20,7 +19,6 @@ import com.example.fleamarket.net.IServerListener;
 import com.example.fleamarket.net.NetHelper;
 import com.example.fleamarket.net.NetMessage;
 import com.example.fleamarket.utils.PictureUtils;
-import com.github.nukc.LoadMoreWrapper.LoadMoreAdapter;
 import com.github.nukc.LoadMoreWrapper.LoadMoreWrapper;
 
 import java.io.File;
@@ -66,19 +64,9 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         mLoadMore = LoadMoreWrapper.with(this);
-        mLoadMore.setListener(new LoadMoreAdapter.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(LoadMoreAdapter.Enabled enabled) {
-                // you can enabled.setLoadMoreEnabled(false) when do not need load more
-                // you can enabled.setLoadFailed(true) when load failed
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-                mActivity.addCommodities();
-            }
-        })
+        // you can enabled.setLoadMoreEnabled(false) when do not need load more
+        // you can enabled.setLoadFailed(true) when load failed
+        mLoadMore.setListener((enabled) -> mActivity.addCommodities())
 //        .setFooterView(R.layout.load_more)
                 .setNoMoreView(R.layout.no_more)
                 .setShowNoMoreEnabled(true)
@@ -90,9 +78,7 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.commodity_manage, parent, false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.mCommodityView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.mCommodityView.setOnClickListener((v) -> {
                 int position = holder.getAdapterPosition();
                 Commodity commodity = mCommodityList.get(position);
                 Intent intent = new Intent(mActivity, CommodityActivity.class);
@@ -100,11 +86,8 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
                 bundle.putSerializable("commodity", commodity);
                 intent.putExtras(bundle);
                 mActivity.startActivity(intent);
-            }
-        });
-        holder.mEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            });
+        holder.mEdit.setOnClickListener((v) -> {
                 int position = holder.getAdapterPosition();
                 Commodity commodity = mCommodityList.get(position);
                 Intent intent = new Intent(mActivity, EditCommodityActivity.class);
@@ -113,17 +96,13 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
                 intent.putExtras(bundle);
                 mActivity.startActivity(intent);
                 mPosition = position;
-            }
-        });
-        holder.mDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            });
+        holder.mDelete.setOnClickListener((v) -> {
                 int position = holder.getAdapterPosition();
                 Commodity commodity = mCommodityList.get(position);
                 showDeleteDialog(commodity.getCommodityID());
                 mPosition = position;
-            }
-        });
+            });
         return holder;
     }
 
@@ -150,23 +129,10 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
     private void showDeleteDialog(final String commodityID) {
         new AlertDialog.Builder(mActivity)
                 .setMessage("确认删除商品？")
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                NetHelper.deleteCommodity(mAdapter, commodityID);
-                            }
-                        }).start();
+                .setPositiveButton("确认", (dialog, which) -> {
+                        new Thread(() -> NetHelper.deleteCommodity(mAdapter, commodityID)).start();
                         showWaitingDialog("正在删除");
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-        }).create().show();
+                    }).setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create().show();
     }
 
     public static void notifyItemChanged(Commodity commodity) {
@@ -184,15 +150,12 @@ public class ManageCommodityAdapter extends RecyclerView.Adapter<ManageCommodity
 
     @Override
     public void onSuccess(final NetMessage info) {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        mActivity.runOnUiThread(() -> {
                 progressDialog.dismiss();
                 mCommodityList.remove(mPosition);
                 notifyItemRemoved(mPosition);
                 Toast.makeText(mActivity, "删除成功", Toast.LENGTH_SHORT).show();
-            }
-        });
+            });
     }
 
     @Override

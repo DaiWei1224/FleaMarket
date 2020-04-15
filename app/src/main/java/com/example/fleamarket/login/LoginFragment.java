@@ -91,12 +91,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
                     }
                     if(valid){
 //                    Toast.makeText(getContext(), "正在登陆……", Toast.LENGTH_SHORT).show();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                NetHelper.requestLogin(LoginFragment.this, id, pw);
-                            }
-                        }).start();
+                        new Thread(() -> NetHelper.requestLogin(LoginFragment.this, id, pw)).start();
                         showWaitingDialog("正在登陆");
                     }else{
                         Toast.makeText(getContext(), "账号或密码错误", Toast.LENGTH_SHORT).show();

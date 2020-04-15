@@ -2,7 +2,6 @@ package com.example.fleamarket.mine;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -50,21 +49,10 @@ public class ManageCommodityActivity extends AppCompatActivity implements IServe
         adapter = new ManageCommodityAdapter(mCommodityList, this);
         recyclerView.setAdapter(adapter);
         FloatingActionButton scrollTotop = findViewById(R.id.scroll_to_top);
-        scrollTotop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recyclerView.smoothScrollToPosition(0);
-            }
-        });
-
+        scrollTotop.setOnClickListener((v) -> recyclerView.smoothScrollToPosition(0));
         refresh = findViewById(R.id.refresh);
         refresh.setColorSchemeResources(R.color.colorAccent);
-        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshCommodities();
-            }
-        });
+        refresh.setOnRefreshListener(() -> refreshCommodities());
     }
 
     // 下拉刷新
@@ -78,27 +66,12 @@ public class ManageCommodityActivity extends AppCompatActivity implements IServe
 
     // 加载更多商品
     public void addCommodities(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                NetHelper.getCommodity((IServerListener)currentActivity, commodityIndex, commodity.getSellerID());
-            }
-        }).start();
+        new Thread(() -> NetHelper.getCommodity((IServerListener)currentActivity, commodityIndex, commodity.getSellerID())).start();
     }
 
     private void refreshCommodities() {
         resetCommodities();
         refresh.setRefreshing(false);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
     }
 
 
@@ -107,12 +80,7 @@ public class ManageCommodityActivity extends AppCompatActivity implements IServe
         if (info.getCommodityNum() == 0) {
             adapter.mLoadMore.setLoadFailed(false);
             adapter.mLoadMore.setLoadMoreEnabled(false);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.notifyItemChanged(commodityIndex);
-                }
-            });
+            runOnUiThread(() -> adapter.notifyItemChanged(commodityIndex));
         } else {
             List<Commodity> serverCommodity = info.getCommodityList();
             final int commodityNum = serverCommodity.size();
@@ -135,25 +103,19 @@ public class ManageCommodityActivity extends AppCompatActivity implements IServe
                 adapter.mLoadMore.setLoadMoreEnabled(false);
             }
             adapter.mLoadMore.setLoadFailed(false);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            runOnUiThread(() -> {
                     adapter.notifyItemInserted(commodityIndex);
                     commodityIndex += commodityNum;
 //                    adapter.notifyDataSetChanged();
-                }
-            });
+                });
         }
     }
 
     @Override
     public void onFailure(final String info) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        runOnUiThread(() -> {
                 Toast.makeText(getBaseContext(), info, Toast.LENGTH_SHORT).show();
                 adapter.mLoadMore.setLoadFailed(true);
-            }
-        });
+            });
     }
 }

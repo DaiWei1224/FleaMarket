@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -81,9 +80,7 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
         camera = findViewById(R.id.camera);
         commodityPhoto = findViewById(R.id.commodity_photo);
         // 发布按键
-        findViewById(R.id.post_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.post_button).setOnClickListener((v) -> {
                 if (commodityName.getText().toString().length() == 0) {
                     Toast.makeText(getBaseContext(), "商品名称不能为空", Toast.LENGTH_SHORT).show();
                 } else if(price.getText().toString().length() == 0) {
@@ -111,20 +108,9 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
                         Toast.makeText(getBaseContext(), "价格无效", Toast.LENGTH_SHORT).show();
                     }
                 }
-            }
-        });
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPhotoOptionDialog(0);
-            }
-        });
-        commodityPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPhotoOptionDialog(1);
-            }
-        });
+            });
+        camera.setOnClickListener((v) -> showPhotoOptionDialog(0));
+        commodityPhoto.setOnClickListener((v) -> showPhotoOptionDialog(1));
         // 初始化
         commodityName.setText(commodity.getCommodityName());
         price.setText(commodity.getPrice());
@@ -141,9 +127,7 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
     private void showPostConfirmDialog() {
         new AlertDialog.Builder(this)
                 .setMessage("确认保存修改？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton("确定", (dialog, which) -> {
                         commodity.setCommodityName(commodityName.getText().toString());
                         commodity.setCommodityDetail(commodityDetail.getText().toString());
                         commodity.setPrice(price.getText().toString());
@@ -164,20 +148,9 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
                             }
                             commodity.setCommodityPhoto(netImage);
                         }
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                NetHelper.editCommodity((IServerListener)currentActivity, commodity);
-                            }
-                        }).start();
+                        new Thread(() -> NetHelper.editCommodity((IServerListener)currentActivity, commodity)).start();
                         showWaitingDialog("正在保存");
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).create().show();
+                    }).setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create().show();
     }
 
     private void showPhotoOptionDialog(int type) {
@@ -195,9 +168,7 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
             items[2] = "删除图片";
         }
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
+                .setItems(items, (dialog, i) -> {
                         switch (i){
                             case 0: { // 使用相机拍照
                                 // 创建File对象，用于存储拍照后的图片
@@ -240,8 +211,7 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
                             }
                             default:
                         }
-                    }
-                });
+                    });
         builder.create().show();
     }
 
@@ -348,15 +318,12 @@ public class EditCommodityActivity extends AppCompatActivity implements IServerL
 
     @Override
     public void onSuccess(NetMessage info) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        runOnUiThread(() -> {
                 Toast.makeText(getBaseContext(), "修改成功", Toast.LENGTH_SHORT).show();
                 ManageCommodityAdapter.notifyItemChanged(commodity);
                 currentActivity.finish();
                 progressDialog.dismiss();
-            }
-        });
+            });
     }
 
     @Override

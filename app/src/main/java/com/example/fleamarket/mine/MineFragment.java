@@ -223,9 +223,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
     private void showAvatarOptionDialog() {
         final String[] items = {"拍照", "从相册选取", "查看大图", "取消"};
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(currentActivity)
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
+                .setItems(items, (dialog, i) -> {
                         switch (i){
                             case 0: { // 使用相机拍照
                                 // 创建File对象，用于存储拍照后的图片
@@ -271,41 +269,27 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                             }
                             default:
                         }
-                    }
-                });
+                    });
         builder.create().show();
     }
 
     private void checkNicknameDialog(final IServerListener listener, final String nickname) {
         new AlertDialog.Builder(getContext())
                 .setMessage("确认修改昵称？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                NetHelper.changeNickname(listener, nickname);
-                            }
-                        }).start();
+                .setPositiveButton("确定", (dialog, which) -> {
+                        new Thread(() -> NetHelper.changeNickname(listener, nickname)).start();
                         showWaitingDialog("正在保存昵称");
                         showNickname();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    }).setNegativeButton("取消", (dialog, which) -> {
                         dialog.dismiss();
                         MyUtil.showKeyboard(getActivity(), edit_nickname);
-                    }
-        }).create().show();
+                    }).create().show();
     }
 
     private void showLogoutDialog() {
         new AlertDialog.Builder(getContext())
                 .setMessage("确定退出当前账号？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton("确定", (dialog, which) -> {
                         User.setLogin(false);
                         MainActivity mainActivity = (MainActivity)getActivity();
                         // 删除本地的SharedPreferences
@@ -322,31 +306,17 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                         mainActivity.title.setText("登录");
                         // 清除消息页面……
 
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-        }).create().show();
+                    }).setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create().show();
     }
 
     private void showClearCacheDialog() {
         new AlertDialog.Builder(getContext())
                 .setMessage("确定清理缓存吗？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton("确定", (dialog, which) -> {
                         clearCache();
                         displayCacheSize();
                         Toast.makeText(currentActivity, "缓存已清除", Toast.LENGTH_SHORT).show();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).create().show();
+                    }).setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create().show();
     }
 
     private void showNickname() {
@@ -371,16 +341,9 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
         final TextView tips = view.findViewById(R.id.tips);
         final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).setView(view).setTitle("修改密码")
                 .setPositiveButton("确认修改", null)
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create();
+                .setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create();
         // 使用getButton方法设计“确认”按钮的逻辑可以防止点击一次对话框就关闭
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
+        alertDialog.setOnShowListener((dialog) -> {
                 alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -407,12 +370,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                                 }
                             }
                             if (valid) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        NetHelper.changePassword(listener, confirmPassword);
-                                    }
-                                }).start();
+                                new Thread(() -> NetHelper.changePassword(listener, confirmPassword)).start();
                                 alertDialog.dismiss();
                                 showWaitingDialog("正在保存密码");
                             }
@@ -420,8 +378,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                         tips.setVisibility(View.VISIBLE);
                     }
                 });
-            }
-        });
+            });
         alertDialog.show();
     }
 
@@ -516,9 +473,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
     public void onSuccess(final NetMessage info) {
         progressDialog.dismiss();
         if (info.getType() == MessageType.CHANGE_NICKNAME) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            getActivity().runOnUiThread(() -> {
                     Toast.makeText(getContext(), "昵称修改成功", Toast.LENGTH_SHORT).show();
                     User.setNickname(info.getNickname());
                     nickname.setText(User.getNickname());
@@ -527,8 +482,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putString("nickname", User.getNickname());
                     editor.apply();
-                }
-            });
+                });
         } else if (info.getType() == MessageType.CHANGE_PASSWORD) {
             Looper.prepare();
             Toast.makeText(getContext(), "密码修改成功", Toast.LENGTH_SHORT).show();
@@ -543,14 +497,11 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
             PictureUtils.saveImageFromByte(info.getAvatar().getData(),
                     getActivity().getExternalCacheDir().getAbsolutePath() +
                             "/avatar/avatar_" + User.getId() + ".jpg");
-            currentActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            currentActivity.runOnUiThread(() -> {
                     PictureUtils.displayImage(avatar, currentActivity.getExternalCacheDir().getAbsolutePath() +
                             "/avatar/avatar_" + User.getId() + ".jpg");
                     Toast.makeText(getContext(), "头像设置成功", Toast.LENGTH_SHORT).show();
-                }
-            });
+                });
         }
 
     }

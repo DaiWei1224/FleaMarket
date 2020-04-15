@@ -12,7 +12,6 @@ import com.example.fleamarket.R;
 import com.example.fleamarket.home.CommodityActivity;
 import com.example.fleamarket.net.Commodity;
 import com.example.fleamarket.utils.PictureUtils;
-import com.github.nukc.LoadMoreWrapper.LoadMoreAdapter;
 import com.github.nukc.LoadMoreWrapper.LoadMoreWrapper;
 
 import java.io.File;
@@ -52,19 +51,9 @@ public class PersonalCommodityAdapter extends RecyclerView.Adapter<PersonalCommo
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         mLoadMore = LoadMoreWrapper.with(this);
-        mLoadMore.setListener(new LoadMoreAdapter.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(LoadMoreAdapter.Enabled enabled) {
-                // you can enabled.setLoadMoreEnabled(false) when do not need load more
-                // you can enabled.setLoadFailed(true) when load failed
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-                mActivity.addCommodities();
-            }
-        })
+        // you can enabled.setLoadMoreEnabled(false) when do not need load more
+        // you can enabled.setLoadFailed(true) when load failed
+        mLoadMore.setListener((enabled) -> mActivity.addCommodities())
 //        .setFooterView(R.layout.load_more)
                 .setNoMoreView(R.layout.no_more)
                 .setShowNoMoreEnabled(true)
@@ -76,9 +65,7 @@ public class PersonalCommodityAdapter extends RecyclerView.Adapter<PersonalCommo
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.commodity_horizontal, parent, false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.mCommodityView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.mCommodityView.setOnClickListener((v) -> {
                 int position = holder.getAdapterPosition();
                 Commodity commodity = mCommodityList.get(position);
                 Intent intent = new Intent(mActivity, CommodityActivity.class);
@@ -86,8 +73,7 @@ public class PersonalCommodityAdapter extends RecyclerView.Adapter<PersonalCommo
                 bundle.putSerializable("commodity", commodity);
                 intent.putExtras(bundle);
                 mActivity.startActivity(intent);
-            }
-        });
+            });
 
         return holder;
     }

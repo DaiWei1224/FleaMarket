@@ -68,26 +68,18 @@ public class HomeFragment extends Fragment implements IServerListener {
             }
         });
         FloatingActionButton postButton = layout.findViewById(R.id.post_button);
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        postButton.setOnClickListener((v) -> {
                 if (User.isLogin()) {
                     Intent intent = new Intent(getContext(), PostActivity.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+            });
 
         refresh = layout.findViewById(R.id.refresh);
         refresh.setColorSchemeResources(R.color.colorAccent);
-        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshCommodities();
-            }
-        });
+        refresh.setOnRefreshListener(() -> refreshCommodities());
 
         return layout;
     }
@@ -103,27 +95,12 @@ public class HomeFragment extends Fragment implements IServerListener {
 
     // 加载更多商品
     public void addCommodities(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                NetHelper.getCommodity(currentFragment, commodityIndex, null);
-            }
-        }).start();
+        new Thread(() -> NetHelper.getCommodity(currentFragment, commodityIndex, null)).start();
     }
 
     private void refreshCommodities() {
         resetCommodities();
         refresh.setRefreshing(false);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
     }
 
     @Override
@@ -131,12 +108,7 @@ public class HomeFragment extends Fragment implements IServerListener {
         if (info.getCommodityNum() == 0) {
             adapter.mLoadMore.setLoadFailed(false);
             adapter.mLoadMore.setLoadMoreEnabled(false);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.notifyItemChanged(commodityIndex);
-                }
-            });
+            getActivity().runOnUiThread(() -> adapter.notifyItemChanged(commodityIndex));
         } else {
             List<Commodity> serverCommodity = info.getCommodityList();
             final int commodityNum = serverCommodity.size();
@@ -159,25 +131,19 @@ public class HomeFragment extends Fragment implements IServerListener {
                 adapter.mLoadMore.setLoadMoreEnabled(false);
             }
             adapter.mLoadMore.setLoadFailed(false);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            getActivity().runOnUiThread(() -> {
                     adapter.notifyItemInserted(commodityIndex);
                     commodityIndex += commodityNum;
 //                    adapter.notifyDataSetChanged();
-                }
-            });
+                });
         }
     }
 
     @Override
     public void onFailure(final String info) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        getActivity().runOnUiThread(() -> {
                 Toast.makeText(getContext(), info, Toast.LENGTH_SHORT).show();
                 adapter.mLoadMore.setLoadFailed(true);
-            }
-        });
+            });
     }
 }

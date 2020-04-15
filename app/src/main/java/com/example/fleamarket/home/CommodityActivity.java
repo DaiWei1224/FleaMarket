@@ -32,16 +32,13 @@ public class CommodityActivity extends AppCompatActivity {
         ImageView avatar = findViewById(R.id.avatar);
         PictureUtils.displayImage(avatar, getExternalCacheDir().getAbsolutePath() +
                 "/avatar/avatar_" + commodity.getSellerID() + ".jpg");
-        avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        avatar.setOnClickListener((v) -> {
                 Intent intent = new Intent(CommodityActivity.this, PersonalHomepageActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("commodity", commodity);
                 intent.putExtras(bundle);
                 startActivity(intent);
-            }
-        });
+            });
         TextView sellerName = findViewById(R.id.nick_name);
         sellerName.setText(commodity.getSellerName());
         TextView area = findViewById(R.id.area);
@@ -61,22 +58,12 @@ public class CommodityActivity extends AppCompatActivity {
         }
         Button contactSeller = findViewById(R.id.chat_button);
         if ( !User.isLogin()) {
-            contactSeller.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getBaseContext(), "请先登录", Toast.LENGTH_SHORT).show();
-                }
-            });
+            contactSeller.setOnClickListener((v) -> Toast.makeText(getBaseContext(), "请先登录", Toast.LENGTH_SHORT).show());
         } else {
             if (User.getId().equals(commodity.getSellerID())) {
                 contactSeller.setVisibility(View.GONE);
             } else {
-                contactSeller.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getBaseContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                contactSeller.setOnClickListener((v) -> Toast.makeText(getBaseContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show());
             }
         }
 

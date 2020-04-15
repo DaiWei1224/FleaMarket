@@ -3,7 +3,6 @@ package com.example.fleamarket;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -247,9 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         server_port.setText(NetHelper.server_port + "");
         server_port.setHint(NetHelper.server_port + "");
         new AlertDialog.Builder(this).setView(view).setTitle("服务器设置")
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton("确认", (dialog, which) -> {
                         SharedPreferences sp = getSharedPreferences("ServerSettings", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putString("ip", server_ip.getText().toString());
@@ -257,13 +254,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         editor.apply();
                         NetHelper.server_ip = sp.getString("ip", "192.168.0.103");
                         NetHelper.server_port = sp.getInt("port", 1224);
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create().show();
+                    }).setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create().show();
     }
 
     @Override

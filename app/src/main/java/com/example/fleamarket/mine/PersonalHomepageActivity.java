@@ -3,7 +3,6 @@ package com.example.fleamarket.mine;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,21 +60,11 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton scrollTotop = findViewById(R.id.scroll_to_top);
-        scrollTotop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recyclerView.smoothScrollToPosition(0);
-            }
-        });
+        scrollTotop.setOnClickListener((v) -> recyclerView.smoothScrollToPosition(0));
 
         refresh = findViewById(R.id.refresh);
         refresh.setColorSchemeResources(R.color.colorAccent);
-        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshCommodities();
-            }
-        });
+        refresh.setOnRefreshListener(() -> refreshCommodities());
     }
 
     // 下拉刷新
@@ -89,27 +78,12 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
 
     // 加载更多商品
     public void addCommodities(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                NetHelper.getCommodity((IServerListener)currentActivity, commodityIndex, commodity.getSellerID());
-            }
-        }).start();
+        new Thread(() -> NetHelper.getCommodity((IServerListener)currentActivity, commodityIndex, commodity.getSellerID())).start();
     }
 
     private void refreshCommodities() {
         resetCommodities();
         refresh.setRefreshing(false);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
     }
 
     private void setToolBar(){
@@ -117,23 +91,19 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
         setSupportActionBar(toolbar);
         final CollapsingToolbarLayout toolbarLayout = findViewById(R.id.toolbar_layout);
         AppBarLayout appBarLayout = findViewById(R.id.app_bar);
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener(){
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+        appBarLayout.addOnOffsetChangedListener((barLayout, i) -> {
                 //appBarLayout.getTotalScrollRange()为滑动的最多范围maxRange
                 //参数i为滑动的偏移值，为0 至 -maxRange
                 int offset = Math.abs(i);
                 //标题栏渐变
-                toolbar.setBackgroundColor(changeAlpha(offset * 1.0f / appBarLayout.getTotalScrollRange()));
+                toolbar.setBackgroundColor(changeAlpha(offset * 1.0f / barLayout.getTotalScrollRange()));
                 //拉到底设置标题
-                if(-i != appBarLayout.getTotalScrollRange()){
+                if(-i != barLayout.getTotalScrollRange()){
                     toolbarLayout.setTitle("");
                 } else{
                     toolbarLayout.setTitle(sNickname + "的商品");
                 }
-            }
-        });
-
+            });
     }
 
     //根据百分比改变颜色透明度
@@ -148,12 +118,7 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
         if (info.getCommodityNum() == 0) {
             adapter.mLoadMore.setLoadFailed(false);
             adapter.mLoadMore.setLoadMoreEnabled(false);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.notifyItemChanged(commodityIndex);
-                }
-            });
+            runOnUiThread(() -> adapter.notifyItemChanged(commodityIndex));
         } else {
             List<Commodity> serverCommodity = info.getCommodityList();
             final int commodityNum = serverCommodity.size();
@@ -176,24 +141,18 @@ public class PersonalHomepageActivity extends AppCompatActivity implements IServ
                 adapter.mLoadMore.setLoadMoreEnabled(false);
             }
             adapter.mLoadMore.setLoadFailed(false);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            runOnUiThread(() -> {
                     adapter.notifyItemInserted(commodityIndex);
                     commodityIndex += commodityNum;
-                }
-            });
+                });
         }
     }
 
     @Override
     public void onFailure(final String info) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        runOnUiThread(() -> {
                 Toast.makeText(getBaseContext(), info, Toast.LENGTH_SHORT).show();
                 adapter.mLoadMore.setLoadFailed(true);
-            }
-        });
+            });
     }
 }

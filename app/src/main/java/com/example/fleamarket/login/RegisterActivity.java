@@ -102,12 +102,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     }
                     if(valid){
 //                    Toast.makeText(getContext(), "正在注册……", Toast.LENGTH_SHORT).show();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                NetHelper.requestRegister(RegisterActivity.this, invitationCode, pw);
-                            }
-                        }).start();
+                        new Thread(() -> NetHelper.requestRegister(RegisterActivity.this, invitationCode, pw)).start();
                         showWaitingDialog("正在注册");
                     }
                 }
@@ -126,9 +121,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onSuccess(final NetMessage info) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        runOnUiThread(() -> {
                 progressDialog.dismiss();
                 String s = "注册成功！\n您的账号为" + info.getId();
                 SpannableString ss = new SpannableString(s);
@@ -140,8 +133,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 // 因此注册按钮，显示注册成功信息
                 btnRegister.setVisibility(View.GONE);
                 successInfo.setVisibility(View.VISIBLE);
-            }
-        });
+            });
     }
 
     @Override

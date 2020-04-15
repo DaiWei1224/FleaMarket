@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -82,9 +81,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
         camera = findViewById(R.id.camera);
         commodityPhoto = findViewById(R.id.commodity_photo);
         // 发布按键
-        findViewById(R.id.post_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.post_button).setOnClickListener((v) -> {
                 if (commodityName.getText().toString().length() == 0) {
                     Toast.makeText(getBaseContext(), "商品名称不能为空", Toast.LENGTH_SHORT).show();
                 } else if(price.getText().toString().length() == 0) {
@@ -112,29 +109,16 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                         Toast.makeText(getBaseContext(), "价格无效", Toast.LENGTH_SHORT).show();
                     }
                 }
-            }
-        });
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPhotoOptionDialog(0);
-            }
-        });
-        commodityPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPhotoOptionDialog(1);
-            }
-        });
+            });
+        camera.setOnClickListener((v) ->  showPhotoOptionDialog(0));
+        commodityPhoto.setOnClickListener((v) -> showPhotoOptionDialog(1));
 
     }
 
     private void showPostConfirmDialog() {
         new AlertDialog.Builder(this)
                 .setMessage("确认发布商品？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton("确定", (dialog, which) -> {
                         final Commodity commodity = new Commodity();
                         Date postTime = new Date();
                         commodity.setCommodityID(User.getId() + "_" + new SimpleDateFormat("yyyyMMddHHmmss").format(postTime));
@@ -160,13 +144,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                             }
                         }).start();
                         showWaitingDialog("正在发布");
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).create().show();
+                    }).setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create().show();
     }
 
     private void showPhotoOptionDialog(int type) {
@@ -184,9 +162,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
             items[2] = "删除图片";
         }
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
+                .setItems(items, (dialog, i) -> {
                         switch (i){
                             case 0: { // 使用相机拍照
                                 // 创建File对象，用于存储拍照后的图片
@@ -229,8 +205,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                             }
                             default:
                         }
-                    }
-                });
+                    });
         builder.create().show();
     }
 
@@ -335,14 +310,11 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
 
     @Override
     public void onSuccess(NetMessage info) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        runOnUiThread(() -> {
                 progressDialog.dismiss();
                 Toast.makeText(getBaseContext(), "商品发布成功", Toast.LENGTH_SHORT).show();
                 currentActivity.finish();
-            }
-        });
+            });
     }
 
     @Override
