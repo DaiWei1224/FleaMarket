@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#108EE9</color>
     <color name="colorAccent">#108EE9</color>
     <color name="lightGray">#EEEEEE</color>
+    <color name="lightGray2">#DDDDDD</color>
     <color name="green">@android:color/holo_green_light</color>
     <color name="pink">#FF4060</color>
     <color name="orange">#ff8800</color>

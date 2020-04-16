@@ -10,7 +10,7 @@
         android:layout_height="45dp"
         android:id="@+id/toolbar"
         android:background="@color/colorPrimary" >
-        app:navigationIcon="@drawable/button_back" >
+<!--        app:navigationIcon="@drawable/button_back" >-->
 
         <TextView
             android:layout_width="wrap_content"

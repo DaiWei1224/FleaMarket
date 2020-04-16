@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
+import com.example.fleamarket.message.chat.ChatWindowActivity;
 import com.example.fleamarket.mine.PersonalHomepageActivity;
 import com.example.fleamarket.net.Commodity;
 import com.example.fleamarket.utils.PictureUtils;
@@ -63,7 +64,13 @@ public class CommodityActivity extends AppCompatActivity {
             if (User.getId().equals(commodity.getSellerID())) {
                 contactSeller.setVisibility(View.GONE);
             } else {
-                contactSeller.setOnClickListener(v -> Toast.makeText(getBaseContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show());
+                contactSeller.setOnClickListener(v -> {
+                    Intent intent = new Intent(CommodityActivity.this, ChatWindowActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("commodity", commodity);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                });
             }
         }
 
