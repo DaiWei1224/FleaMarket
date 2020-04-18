@@ -34,13 +34,17 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
             if(parent.getChildAdapterPosition(view) < 2){
                 outRect.top = mSpace * 2;
             }
-        } else { // 线性间隔type = 1
+        } else if (mType == 1) { // 线性间隔type = 1
             if (parent.getChildAdapterPosition(view) == 0) {
                 outRect.top = mSpace;
             }
             outRect.left = mSpace;
             outRect.right = mSpace;
             outRect.bottom = mSpace;
+        } else if (mType == 2) { // 用于消息页面
+            if (parent.getChildAdapterPosition(view) != 0) {
+                outRect.top = mSpace;
+            }
         }
 
     }

@@ -30,11 +30,11 @@ public class ChatWindowActivity extends AppCompatActivity {
 
         List<ChatMessage> dataList = new ArrayList<>();
         for(int i = 0; i < 10; i++) {
-            ChatMessage chatMessage = new ChatMessage("床前明月光疑似地上霜举头望明月低头思故乡", true, User.getId());
+            ChatMessage chatMessage = new ChatMessage("床前明月光疑似地上霜举头望明月低头思故乡", User.getId(), true);
             dataList.add(chatMessage);
-            chatMessage = new ChatMessage("床前明月光", false, commodity.getSellerID());
+            chatMessage = new ChatMessage("床前明月光", commodity.getSellerID(), false);
             dataList.add(chatMessage);
-            chatMessage = new ChatMessage("床前明月光疑似地上霜举头望明月低头思故乡\n床前明月光疑似地上霜举头望明月低头思故乡", false, commodity.getSellerID());
+            chatMessage = new ChatMessage("床前明月光疑似地上霜举头望明月低头思故乡\n床前明月光疑似地上霜举头望明月低头思故乡", commodity.getSellerID(), false);
             dataList.add(chatMessage);
         }
 
