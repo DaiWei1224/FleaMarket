@@ -309,6 +309,8 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                         MsgFragment msgFragment = (MsgFragment)mainActivity.getFragmentByName("MsgFragment");
                         msgFragment.getAdapter().getData().clear();
                         msgFragment.getAdapter().notifyDataSetChanged();
+                        // 关闭chatSocket
+                        NetHelper.closeChatSocket();
                     }).setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create().show();
     }
 
