@@ -79,4 +79,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public int getItemCount() {
         return mMessageList.size();
     }
+
+    public List<ChatMessage> getData() {
+        return mMessageList;
+    }
 }

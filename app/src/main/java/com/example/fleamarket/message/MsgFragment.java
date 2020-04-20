@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MsgFragment extends Fragment {
+    private MessageAdapter adapter;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View layout = inflater.inflate(R.layout.fragment_msg, container, false);
@@ -35,9 +36,14 @@ public class MsgFragment extends Fragment {
                 "18:05", "23333", "Jsss");
         messages.add(chatMessage);
 
-        MessageAdapter adapter = new MessageAdapter(messages, this);
+        adapter = new MessageAdapter(messages, this);
         recyclerView.setAdapter(adapter);
 
         return layout;
     }
+
+    public MessageAdapter getAdapter() {
+        return adapter;
+    }
+
 }

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.fleamarket.MainActivity;
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
+import com.example.fleamarket.message.MsgFragment;
 import com.example.fleamarket.net.Commodity;
 import com.example.fleamarket.net.IServerListener;
 import com.example.fleamarket.net.MessageType;
@@ -304,8 +305,10 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                         ft.show(mainActivity.getFragmentByName("LoginFragment"));
                         ft.commit();
                         mainActivity.title.setText("登录");
-                        // 清除消息页面……
-
+                        // 清除消息页面
+                        MsgFragment msgFragment = (MsgFragment)mainActivity.getFragmentByName("MsgFragment");
+                        msgFragment.getAdapter().getData().clear();
+                        msgFragment.getAdapter().notifyDataSetChanged();
                     }).setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create().show();
     }
 
