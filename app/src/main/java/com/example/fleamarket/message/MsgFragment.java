@@ -28,14 +28,12 @@ public class MsgFragment extends Fragment {
         recyclerView.addItemDecoration(new SpaceItemDecoration(2, 2));
 
         List<ChatMessage> messages = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            ChatMessage chatMessage = new ChatMessage("床前这明月光 疑似那地上霜 举头我望明月 低头他思故乡",
-                    "昨天", "66666", "FANTASY");
-            messages.add(chatMessage);
-            chatMessage = new ChatMessage("春眠不觉晓处处闻啼鸟",
-                    "18:05", "23333", "Jsss");
-            messages.add(chatMessage);
-        }
+        ChatMessage chatMessage = new ChatMessage("床前这明月光 疑似那地上霜 举头我望明月 低头他思故乡",
+                "昨天", "66666", "FANTASY");
+        messages.add(chatMessage);
+        chatMessage = new ChatMessage("春眠不觉晓处处闻啼鸟",
+                "18:05", "23333", "Jsss");
+        messages.add(chatMessage);
 
         MessageAdapter adapter = new MessageAdapter(messages, this);
         recyclerView.setAdapter(adapter);

@@ -2,12 +2,22 @@ package com.example.fleamarket.net;
 
 import java.io.Serializable;
 
-public class ChatMessage implements Serializable {
+public class Chat implements Serializable {
     private String senderID;
     private String senderName;
     private String receiverID;
     private String sendTime;
     private String content;
+
+    public Chat() {}
+
+    public Chat(String senderID, String senderName, String receiverID, String sendTime, String content) {
+        this.senderID = senderID;
+        this.senderName = senderName;
+        this.receiverID = receiverID;
+        this.sendTime = sendTime;
+        this.content = content;
+    }
 
     public String getSenderID() {
         return senderID;

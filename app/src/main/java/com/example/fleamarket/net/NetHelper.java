@@ -1,6 +1,7 @@
 package com.example.fleamarket.net;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.example.fleamarket.User;
 import com.example.fleamarket.utils.PictureUtils;
@@ -16,9 +17,56 @@ public class NetHelper {
     public static String server_ip = "192.168.0.103";
     public static int server_port = 1224;
     public static int chat_port = 1225;
+    private static Socket chatSocket;
     private static final int CONNECT_TIMEOUT = 10000; // 连接请求超时时间
     private static final int READ_TIMEOUT = 10000; // 读操作超时时间
     private static final String CONNECT_SERVER_FAILED = "连接服务器失败";
+
+    public static void createChatSocket() {
+        chatSocket = new Socket();
+        try {
+            chatSocket.connect(new InetSocketAddress(server_ip, chat_port), CONNECT_TIMEOUT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 开启一个线程不断监听服务器发来的消息
+        new Thread(() -> {
+                try {
+                    // 处理服务器发来的消息
+                    while (chatSocket != null) {
+                        ObjectInputStream ois = new ObjectInputStream(chatSocket.getInputStream());
+                        Chat chat = (Chat)ois.readObject();
+                        Log.i("233", "content from Server is: " + chat.getContent());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }).start();
+    }
+
+    public static void sendMessage(Chat chat, IServerListener listener) {
+        if (chatSocket != null) {
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(chatSocket.getOutputStream());
+                oos.writeObject(chat);
+                listener.onSuccess(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                listener.onFailure("消息发送失败");
+            }
+        }
+    }
+
+    public static void closeChatSocket() {
+        try {
+            if (chatSocket != null) {
+                chatSocket.close();
+                chatSocket = null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static Socket createConnection() {
         Socket socket = new Socket();

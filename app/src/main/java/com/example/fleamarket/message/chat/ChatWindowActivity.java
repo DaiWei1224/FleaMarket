@@ -1,20 +1,30 @@
 package com.example.fleamarket.message.chat;
 
 import android.os.Bundle;
+import android.os.Looper;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
+import com.example.fleamarket.net.Chat;
 import com.example.fleamarket.net.Commodity;
+import com.example.fleamarket.net.IServerListener;
+import com.example.fleamarket.net.NetHelper;
+import com.example.fleamarket.net.NetMessage;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class ChatWindowActivity extends AppCompatActivity {
+public class ChatWindowActivity extends AppCompatActivity implements IServerListener {
+    private EditText input;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,5 +51,31 @@ public class ChatWindowActivity extends AppCompatActivity {
         ChatAdapter adapter = new ChatAdapter(this, dataList);
         listView.setAdapter(adapter);
 
+        input = findViewById(R.id.input);
+        findViewById(R.id.send).setOnClickListener((v) -> {
+            if (!input.getText().toString().equals("")) {
+                new Thread(() -> {
+                    Date sendTime = new Date();
+                    String sendTimeString = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(sendTime);
+                    Chat chat = new Chat(User.getId(), User.getNickname(), commodity.getSellerID(), sendTimeString, input.getText().toString());
+                    NetHelper.sendMessage(chat, this);
+                }).start();
+            }
+        });
+
+    }
+
+    @Override
+    public void onSuccess(NetMessage info) {
+        runOnUiThread(() -> {
+            input.setText("");
+        });
+    }
+
+    @Override
+    public void onFailure(String info) {
+        Looper.prepare();
+        Toast.makeText(getBaseContext(), info, Toast.LENGTH_SHORT).show();
+        Looper.loop();
     }
 }
