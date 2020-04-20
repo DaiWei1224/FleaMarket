@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences sp = getSharedPreferences("ServerSettings", Context.MODE_PRIVATE);
         NetHelper.server_ip = sp.getString("ip", "192.168.0.103");
         NetHelper.server_port = sp.getInt("port", 1224);
+        NetHelper.chat_port = sp.getInt("chat_port", 1225);
     }
 
     // 初始化按钮图片资源
@@ -241,19 +242,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.server_setting, null);
         final EditText server_ip = view.findViewById(R.id.ip);
         final EditText server_port = view.findViewById(R.id.port);
+        final EditText chat_port = view.findViewById(R.id.chat_port);
         server_ip.setText(NetHelper.server_ip);
         server_ip.setHint(NetHelper.server_ip);
         server_port.setText(NetHelper.server_port + "");
         server_port.setHint(NetHelper.server_port + "");
+        chat_port.setText(NetHelper.chat_port + "");
+        chat_port.setHint(NetHelper.chat_port + "");
         new AlertDialog.Builder(this).setView(view).setTitle("服务器设置")
                 .setPositiveButton("确认", (dialog, which) -> {
                         SharedPreferences sp = getSharedPreferences("ServerSettings", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putString("ip", server_ip.getText().toString());
                         editor.putInt("port", Integer.parseInt(server_port.getText().toString()));
+                        editor.putInt("chat_port", Integer.parseInt(chat_port.getText().toString()));
                         editor.apply();
                         NetHelper.server_ip = sp.getString("ip", "192.168.0.103");
                         NetHelper.server_port = sp.getInt("port", 1224);
+                        NetHelper.chat_port = sp.getInt("chat_port", 1225);
                     }).setNegativeButton("取消", (dialog, which) -> dialog.dismiss()).create().show();
     }
 

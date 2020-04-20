@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="地址：" />
+            android:text="ip 地址：" />
 
         <EditText
             android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="端口：" />
+            android:text=" 端口 1：" />
 
         <EditText
             android:layout_width="match_parent"
@@ -42,7 +42,28 @@
             android:id="@+id/port"
             android:inputType="number"
             android:maxLines="1"
-            android:maxLength="20" />
+            android:maxLength="6" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text=" 端口 2：" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/chat_port"
+            android:inputType="number"
+            android:maxLines="1"
+            android:maxLength="6" />
 
     </LinearLayout>
 

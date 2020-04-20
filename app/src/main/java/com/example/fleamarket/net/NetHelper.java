@@ -15,6 +15,7 @@ import java.net.Socket;
 public class NetHelper {
     public static String server_ip = "192.168.0.103";
     public static int server_port = 1224;
+    public static int chat_port = 1225;
     private static final int CONNECT_TIMEOUT = 10000; // 连接请求超时时间
     private static final int READ_TIMEOUT = 10000; // 读操作超时时间
     private static final String CONNECT_SERVER_FAILED = "连接服务器失败";
