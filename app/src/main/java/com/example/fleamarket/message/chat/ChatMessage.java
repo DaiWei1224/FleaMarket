@@ -20,6 +20,14 @@ public class ChatMessage {
         this.userName = userName;
     }
 
+    public ChatMessage(String content, String sendTime, String userID, String userName, boolean me) {
+        this.content = content;
+        this.sendTime = sendTime;
+        this.userID = userID;
+        this.userName = userName;
+        this.me = me;
+    }
+
     public String getContent() {
         return content;
     }

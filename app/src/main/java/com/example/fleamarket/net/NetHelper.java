@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.example.fleamarket.User;
+import com.example.fleamarket.message.chat.IChatListener;
 import com.example.fleamarket.utils.PictureUtils;
 
 import java.io.File;
@@ -44,12 +45,12 @@ public class NetHelper {
         }).start();
     }
 
-    public static void sendMessage(Chat chat, IServerListener listener) {
+    public static void sendMessage(Chat chat, IChatListener listener) {
         if (chatSocket != null) {
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(chatSocket.getOutputStream());
                 oos.writeObject(chat);
-                listener.onSuccess(null);
+                listener.onSuccess(chat);
             } catch (Exception e) {
                 e.printStackTrace();
                 listener.onFailure("消息发送失败");

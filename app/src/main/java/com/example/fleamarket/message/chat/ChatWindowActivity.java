@@ -11,9 +11,7 @@ import com.example.fleamarket.R;
 import com.example.fleamarket.User;
 import com.example.fleamarket.net.Chat;
 import com.example.fleamarket.net.Commodity;
-import com.example.fleamarket.net.IServerListener;
 import com.example.fleamarket.net.NetHelper;
-import com.example.fleamarket.net.NetMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,8 +21,10 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class ChatWindowActivity extends AppCompatActivity implements IServerListener {
+public class ChatWindowActivity extends AppCompatActivity implements IChatListener {
     private EditText input;
+    private ChatAdapter adapter;
+    private List<ChatMessage> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class ChatWindowActivity extends AppCompatActivity implements IServerList
         setSupportActionBar(toolbar);
         ListView listView = findViewById(R.id.chat_content);
 
-        List<ChatMessage> dataList = new ArrayList<>();
+        dataList = new ArrayList<>();
         for(int i = 0; i < 10; i++) {
             ChatMessage chatMessage = new ChatMessage("床前明月光疑似地上霜举头望明月低头思故乡", User.getId(), true);
             dataList.add(chatMessage);
@@ -48,7 +48,7 @@ public class ChatWindowActivity extends AppCompatActivity implements IServerList
             dataList.add(chatMessage);
         }
 
-        ChatAdapter adapter = new ChatAdapter(this, dataList);
+        adapter = new ChatAdapter(this, dataList);
         listView.setAdapter(adapter);
 
         input = findViewById(R.id.input);
@@ -66,9 +66,18 @@ public class ChatWindowActivity extends AppCompatActivity implements IServerList
     }
 
     @Override
-    public void onSuccess(NetMessage info) {
+    public void onSuccess(Chat info) {
         runOnUiThread(() -> {
             input.setText("");
+            dataList.add(new ChatMessage(
+                    info.getContent(),
+                    info.getSendTime(),
+                    info.getSenderID(),
+                    info.getSenderName(),
+                    true));
+            adapter.notifyDataSetChanged();
+            // 将聊天记录保存到数据库
+
         });
     }
 
