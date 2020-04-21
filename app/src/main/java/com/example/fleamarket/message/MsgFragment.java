@@ -1,15 +1,21 @@
 package com.example.fleamarket.message;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.fleamarket.R;
+import com.example.fleamarket.User;
+import com.example.fleamarket.database.DatabaseHelper;
 import com.example.fleamarket.home.recyclerview.SpaceItemDecoration;
 import com.example.fleamarket.message.chat.ChatMessage;
 
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -27,23 +33,72 @@ public class MsgFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new SpaceItemDecoration(2, 2));
-
-        List<ChatMessage> messages = new ArrayList<>();
-        ChatMessage chatMessage = new ChatMessage("床前这明月光 疑似那地上霜 举头我望明月 低头他思故乡",
-                "昨天", "66666", "FANTASY");
-        messages.add(chatMessage);
-        chatMessage = new ChatMessage("春眠不觉晓处处闻啼鸟",
-                "18:05", "23333", "Jsss");
-        messages.add(chatMessage);
-
-        adapter = new MessageAdapter(messages, this);
+        adapter = new MessageAdapter(this);
         recyclerView.setAdapter(adapter);
-
+        updateMessageListView();
         return layout;
     }
 
     public MessageAdapter getAdapter() {
         return adapter;
+    }
+
+    public void updateMessageListView() {
+        List<ChatMessage> messageList = adapter.getData();
+        messageList.clear();
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext(), "chat_" + User.getId(), null, 1);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = dbHelper.queryAllTables(db);
+        while (cursor.moveToNext()) {
+            if (!cursor.getString(0).equals("android_metadata")) {
+                Cursor cursor2 = dbHelper.querySql(db, "select * from " + cursor.getString(0) + " order by SendTime DESC");
+                if (cursor2.moveToFirst()) {
+                    ChatMessage chatMessage = new ChatMessage(
+                            cursor2.getString(cursor2.getColumnIndex("Content")),
+                            cursor2.getString(cursor2.getColumnIndex("SendTime")),
+                            cursor2.getString(cursor2.getColumnIndex("OthersID")),
+                            cursor2.getString(cursor2.getColumnIndex("OthersName")));
+                    messageList.add(chatMessage);
+                } else {
+                    dbHelper.deleteTable(db, cursor.getString(0));
+                }
+                cursor2.close();
+            }
+        }
+        cursor.close();
+        sortByTime(messageList);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void sortByTime(List<ChatMessage> messageList) {
+        for (int i = messageList.size() - 1; i >= 0 ; i--) {
+            for (int j = 0; j < i; j ++) {
+                if (compareTime(messageList.get(j).getSendTime(), messageList.get(j + 1).getSendTime()) == -1) {
+                    ChatMessage temp = messageList.get(j);
+                    messageList.set(j, messageList.get(j + 1));
+                    messageList.set(j + 1, temp);
+                }
+            }
+        }
+    }
+
+    private int compareTime(String time1, String time2) {
+        if (dateToStamp(time1) > dateToStamp(time2)) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    // 将时间转换为时间戳
+    private long dateToStamp(String time) {
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+            return date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 }

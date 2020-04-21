@@ -83,28 +83,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    //        // 查询所有表
-//        Cursor cursor = dbHelper.queryAllTables(dbHelper.getWritableDatabase());
-//        while (cursor.moveToNext()) {
-//            if (!cursor.getString(0).equals("android_metadata")) {
-//                Log.i("233", "table: " + cursor.getString(0) + "----------------");
-//                // 查询数据表
-//                Cursor cursor2 = dbHelper.querySql(dbHelper.getWritableDatabase(), "select * from "+cursor.getString(0)+" order by SendTime ASC"); //降序DESC
-//                if (cursor2.moveToFirst()) {
-//                    do {
-//                        Log.i("233", "OthersID = " + cursor2.getString(cursor2.getColumnIndex("OthersID")));
-//                        Log.i("233", "OthersName = " + cursor2.getString(cursor2.getColumnIndex("OthersName")));
-//                        Log.i("233", "Me = " + cursor2.getInt(cursor2.getColumnIndex("Me")));
-//                        Log.i("233", "Content = " + cursor2.getString(cursor2.getColumnIndex("Content")));
-//                        Log.i("233", "SendTime = " + cursor2.getString(cursor2.getColumnIndex("SendTime")));
-//                        Log.i("233", "  ");
-//                    } while (cursor2.moveToNext());
-//                }
-//                cursor2.close();
-//            }
-//        }
-//        cursor.close();
-
     // 查询所有表
     /*
     Cursor cursor = dbHelper.queryAllTables(dbHelper.getWritableDatabase());

@@ -56,7 +56,7 @@ public class ChatWindowActivity extends AppCompatActivity implements IChatListen
             if (!input.getText().toString().equals("")) {
                 new Thread(() -> {
                     Date sendTime = new Date();
-                    String sendTimeString = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(sendTime);
+                    String sendTimeString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(sendTime);
                     Chat chat = new Chat(User.getId(), User.getNickname(), commodity.getSellerID(), sendTimeString, input.getText().toString());
                     NetHelper.sendMessage(chat, this);
                 }).start();

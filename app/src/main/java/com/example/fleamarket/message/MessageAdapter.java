@@ -13,6 +13,7 @@ import com.example.fleamarket.message.chat.ChatWindowActivity;
 import com.example.fleamarket.net.Commodity;
 import com.example.fleamarket.utils.PictureUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
-    private List<ChatMessage> mMessageList;
+    private List<ChatMessage> mMessageList = new ArrayList<>();
     private MsgFragment mFragment;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -40,8 +41,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
     }
 
-    public MessageAdapter(List<ChatMessage> messages, MsgFragment fragment) {
-        mMessageList = messages;
+    public MessageAdapter(MsgFragment fragment) {
         mFragment = fragment;
     }
 

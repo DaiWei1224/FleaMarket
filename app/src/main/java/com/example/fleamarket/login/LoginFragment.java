@@ -16,6 +16,7 @@ import com.example.fleamarket.MainActivity;
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
 import com.example.fleamarket.database.DatabaseHelper;
+import com.example.fleamarket.message.MsgFragment;
 import com.example.fleamarket.mine.MineFragment;
 import com.example.fleamarket.net.Chat;
 import com.example.fleamarket.net.IServerListener;
@@ -118,12 +119,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
     @Override
     public void onSuccess(NetMessage info) {
         Looper.prepare();
+        final MainActivity mainActivity = (MainActivity)getActivity();
+        MsgFragment msgFragment = (MsgFragment)mainActivity.getFragmentByName("MsgFragment");
         if (info.getType() == MessageType.GET_UNREAD_MESSAGE) {
             ArrayList<Chat> messageList = (ArrayList<Chat>)info.getMessageList();
             DatabaseHelper.insertData(getContext(), messageList);
+            msgFragment.updateMessageListView();
         } else {
             progressDialog.dismiss();
-            final MainActivity mainActivity = (MainActivity)getActivity();
             // 隐藏软键盘
             MyUtil.hideKeyboard(mainActivity);
             User.setLogin(true);
@@ -173,7 +176,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
             editor.putString("password", User.getPassword());
             editor.putString("nickname", User.getNickname());
             editor.apply();
-
             // 创建本地聊天记录数据库，存在则不会创建
             new DatabaseHelper(getContext(), "chat_" + User.getId(), null, 1).getWritableDatabase();
             // 开启线程监听聊天端口发来的消息
@@ -183,6 +185,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
                 // 从服务器拉取未读消息
                 NetHelper.getUnreadMessage(LoginFragment.this);
             }).start();
+            msgFragment.updateMessageListView();
         }
         Looper.loop();
     }
