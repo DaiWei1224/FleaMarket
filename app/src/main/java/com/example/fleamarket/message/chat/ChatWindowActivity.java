@@ -82,6 +82,13 @@ public class ChatWindowActivity extends AppCompatActivity implements IChatListen
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
+        dbHelper.close();
+    }
+
+    @Override
     public void onSuccess(Chat info) {
         runOnUiThread(() -> {
             input.setText("");

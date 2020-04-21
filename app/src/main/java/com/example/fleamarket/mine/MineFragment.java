@@ -222,7 +222,7 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
     }
 
     private void showAvatarOptionDialog() {
-        final String[] items = {"拍照", "从相册选取", "查看大图", "取消"};
+        final String[] items = {"拍照", "从相册选取", /*"查看大图",*/ "取消"};
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(currentActivity)
                 .setItems(items, (dialog, i) -> {
                         switch (i){
@@ -261,11 +261,12 @@ public class MineFragment extends Fragment implements View.OnClickListener, ISer
                                 }
                             }
                             break;
-                            case 2: { // 查看大图
-                                Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
-                            }
-                            break;
-                            case 3: { // 取消
+//                            case 2: { // 查看大图
+//                                Toast.makeText(getContext(), "该功能尚未完成", Toast.LENGTH_SHORT).show();
+//                            }
+//                            break;
+//                            case 3: { // 取消
+                            case 2: { // 取消
                                 dialog.dismiss();
                             }
                             default:
