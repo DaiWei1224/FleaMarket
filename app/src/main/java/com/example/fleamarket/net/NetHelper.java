@@ -45,6 +45,21 @@ public class NetHelper {
         }).start();
     }
 
+    // 发送一条带有用户id的消息给服务器，用于服务器保存此socket对象
+    public static void sendKey() {
+        if (chatSocket != null) {
+            try {
+                Chat chat = new Chat();
+                chat.setSenderID(User.getId());
+                chat.setSendTime("Key");
+                ObjectOutputStream oos = new ObjectOutputStream(chatSocket.getOutputStream());
+                oos.writeObject(chat);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void sendMessage(Chat chat, IChatListener listener) {
         if (chatSocket != null) {
             try {
@@ -321,4 +336,28 @@ public class NetHelper {
             listener.onFailure(CONNECT_SERVER_FAILED);
         }
     }
+
+    // 拉取未读消息
+    public static void getUnreadMessage(IServerListener listener){
+        try {
+            Socket socket = createConnection();
+            ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
+            NetMessage message = new NetMessage();
+            message.setType(MessageType.GET_UNREAD_MESSAGE);
+            message.setId(User.getId());
+            oos.writeObject(message);
+            // 处理服务器的返回信息
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            NetMessage returnMessage = (NetMessage) ois.readObject();
+            MessageType type = returnMessage.getType();
+            if(type == MessageType.GET_UNREAD_MESSAGE) {
+                listener.onSuccess(returnMessage);
+            }
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+//            listener.onFailure(CONNECT_SERVER_FAILED);
+        }
+    }
+
 }

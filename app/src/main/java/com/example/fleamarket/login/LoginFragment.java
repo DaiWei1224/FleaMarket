@@ -15,14 +15,18 @@ import android.widget.Toast;
 import com.example.fleamarket.MainActivity;
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
+import com.example.fleamarket.database.DatabaseHelper;
 import com.example.fleamarket.mine.MineFragment;
+import com.example.fleamarket.net.Chat;
 import com.example.fleamarket.net.IServerListener;
+import com.example.fleamarket.net.MessageType;
 import com.example.fleamarket.net.NetHelper;
 import com.example.fleamarket.net.NetMessage;
 import com.example.fleamarket.utils.MyUtil;
 import com.example.fleamarket.utils.PictureUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -114,57 +118,72 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
     @Override
     public void onSuccess(NetMessage info) {
         Looper.prepare();
-        progressDialog.dismiss();
-        final MainActivity mainActivity = (MainActivity)getActivity();
-        // 隐藏软键盘
-        MyUtil.hideKeyboard(mainActivity);
-        User.setLogin(true);
-        User.setId(info.getId());
-        User.setPassword(info.getPw());
-        User.setNickname(info.getNickname());
-        // 创建临时文件夹
-        File file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/temporary");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        // 创建存储用户头像的文件夹
-        file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/avatar");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        // 创建存储商品图片的文件夹
-        file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/commodity");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        // 将头像保存到本地
-        if (info.getAvatar() != null) {
-            PictureUtils.saveImageFromByte(info.getAvatar().getData(),
-                    getActivity().getExternalCacheDir().getAbsolutePath() +
-                            "/avatar/avatar_" + User.getId() + ".jpg");
-        }
-        // 从“登录”页面切换到“我的”页面
-        FragmentManager fm = mainActivity.getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.hide(this);
-        MineFragment mineFragment = (MineFragment)mainActivity.getFragmentByName("MineFragment");
-        mineFragment.updateUserInfo();
-        ft.show(mineFragment);
-        ft.commit();
-        mainActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mainActivity.title.setText("个人中心");
+        if (info.getType() == MessageType.GET_UNREAD_MESSAGE) {
+            ArrayList<Chat> messageList = (ArrayList<Chat>)info.getMessageList();
+            DatabaseHelper.insertData(getContext(), messageList);
+        } else {
+            progressDialog.dismiss();
+            final MainActivity mainActivity = (MainActivity)getActivity();
+            // 隐藏软键盘
+            MyUtil.hideKeyboard(mainActivity);
+            User.setLogin(true);
+            User.setId(info.getId());
+            User.setPassword(info.getPw());
+            User.setNickname(info.getNickname());
+            // 创建临时文件夹
+            File file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/temporary");
+            if (!file.exists()) {
+                file.mkdir();
             }
-        });
-        // 使用SharedPreferences将用户信息存储在本地
-        SharedPreferences sp= mainActivity.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean("login", true);
-        editor.putString("id", User.getId());
-        editor.putString("password", User.getPassword());
-        editor.putString("nickname", User.getNickname());
-        editor.apply();
+            // 创建存储用户头像的文件夹
+            file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/avatar");
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            // 创建存储商品图片的文件夹
+            file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/commodity");
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            // 将头像保存到本地
+            if (info.getAvatar() != null) {
+                PictureUtils.saveImageFromByte(info.getAvatar().getData(),
+                        getActivity().getExternalCacheDir().getAbsolutePath() +
+                                "/avatar/avatar_" + User.getId() + ".jpg");
+            }
+            // 从“登录”页面切换到“我的”页面
+            FragmentManager fm = mainActivity.getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.hide(this);
+            MineFragment mineFragment = (MineFragment)mainActivity.getFragmentByName("MineFragment");
+            mineFragment.updateUserInfo();
+            ft.show(mineFragment);
+            ft.commit();
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mainActivity.title.setText("个人中心");
+                }
+            });
+            // 使用SharedPreferences将用户信息存储在本地
+            SharedPreferences sp= mainActivity.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean("login", true);
+            editor.putString("id", User.getId());
+            editor.putString("password", User.getPassword());
+            editor.putString("nickname", User.getNickname());
+            editor.apply();
+
+            // 创建本地聊天记录数据库，存在则不会创建
+            new DatabaseHelper(getContext(), "chat_" + User.getId(), null, 1).getWritableDatabase();
+            // 开启线程监听聊天端口发来的消息
+            new Thread(() -> {
+                NetHelper.createChatSocket();
+                NetHelper.sendKey();
+                // 从服务器拉取未读消息
+                NetHelper.getUnreadMessage(LoginFragment.this);
+            }).start();
+        }
         Looper.loop();
     }
 

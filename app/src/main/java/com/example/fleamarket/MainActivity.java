@@ -168,7 +168,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         User.setPassword(sp.getString("password", null));
         User.setNickname(sp.getString("nickname", null));
         if (User.isLogin()) {
-            new Thread(() -> NetHelper.createChatSocket()).start();
+            new Thread(() -> {
+                NetHelper.createChatSocket();
+                NetHelper.sendKey();
+                NetHelper.getUnreadMessage(fLogin);
+            }).start();
         }
     }
 
