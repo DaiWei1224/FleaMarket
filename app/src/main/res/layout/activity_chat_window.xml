@@ -32,8 +32,8 @@
         android:background="@color/lightGray"
         android:divider="@android:color/white"
         android:overScrollMode="never"
-        android:transcriptMode="alwaysScroll"
-        android:stackFromBottom="true" />
+        android:transcriptMode="alwaysScroll" />
+<!--        android:stackFromBottom="true" />-->
 
     <LinearLayout
         android:layout_width="match_parent"

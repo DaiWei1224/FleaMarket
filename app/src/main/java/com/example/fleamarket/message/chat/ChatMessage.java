@@ -20,12 +20,16 @@ public class ChatMessage {
         this.userName = userName;
     }
 
-    public ChatMessage(String content, String sendTime, String userID, String userName, boolean me) {
+    public ChatMessage(String content, String sendTime, String userID, String userName, int me) {
         this.content = content;
         this.sendTime = sendTime;
         this.userID = userID;
         this.userName = userName;
-        this.me = me;
+        if (me == 1) {
+            this.me = true;
+        } else {
+            this.me = false;
+        }
     }
 
     public String getContent() {

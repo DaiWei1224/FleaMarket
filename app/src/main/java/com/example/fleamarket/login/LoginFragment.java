@@ -26,7 +26,6 @@ import com.example.fleamarket.net.NetMessage;
 import com.example.fleamarket.utils.MyUtil;
 import com.example.fleamarket.utils.PictureUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -133,21 +132,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
             User.setId(info.getId());
             User.setPassword(info.getPw());
             User.setNickname(info.getNickname());
-            // 创建临时文件夹
-            File file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/temporary");
-            if (!file.exists()) {
-                file.mkdir();
-            }
-            // 创建存储用户头像的文件夹
-            file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/avatar");
-            if (!file.exists()) {
-                file.mkdir();
-            }
-            // 创建存储商品图片的文件夹
-            file = new File(getActivity().getExternalCacheDir().getAbsolutePath() + "/commodity");
-            if (!file.exists()) {
-                file.mkdir();
-            }
             // 将头像保存到本地
             if (info.getAvatar() != null) {
                 PictureUtils.saveImageFromByte(info.getAvatar().getData(),

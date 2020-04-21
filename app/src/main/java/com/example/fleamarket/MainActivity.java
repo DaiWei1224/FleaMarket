@@ -22,6 +22,8 @@ import com.example.fleamarket.message.MsgFragment;
 import com.example.fleamarket.mine.MineFragment;
 import com.example.fleamarket.net.NetHelper;
 
+import java.io.File;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -173,6 +175,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 NetHelper.sendKey();
                 NetHelper.getUnreadMessage(fLogin);
             }).start();
+        }
+        // 创建临时文件夹
+        File file = new File(getExternalCacheDir().getAbsolutePath() + "/temporary");
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        // 创建存储用户头像的文件夹
+        file = new File(getExternalCacheDir().getAbsolutePath() + "/avatar");
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        // 创建存储商品图片的文件夹
+        file = new File(getExternalCacheDir().getAbsolutePath() + "/commodity");
+        if (!file.exists()) {
+            file.mkdir();
         }
     }
 

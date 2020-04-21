@@ -70,7 +70,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             dbHelper.createTable(db, tableName); // 创建该表如果不存在
             db.insert(tableName, null, values);
             values.clear();
-            Log.i("233", "未读消息" + (i+1) + "：" + chat.getContent() + " 发送自："+chat.getSenderName()+" 时间："+chat.getSendTime());
         }
     }
 
@@ -82,31 +81,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select name from sqlite_master where type='table' order by name", null);
         return cursor;
     }
-
-    // 查询所有表
-    /*
-    Cursor cursor = dbHelper.queryAllTables(dbHelper.getWritableDatabase());
-            while (cursor.moveToNext()) {
-                if (!cursor.getString(0).equals("android_metadata")) {
-                    Log.i(TAG, "table: " + cursor.getString(0));
-                }
-            }
-            cursor.close();
-     */
-
-    // 查询数据表
-    /*
-    Cursor cursor = dbHelper.querySql(dbHelper.getWritableDatabase(), "select * from chatto_66666 order by SendTime ASC"); //降序DESC
-            if (cursor.moveToFirst()) {
-                do {
-                    Log.i(TAG, "OthersID = " + cursor.getString(cursor.getColumnIndex("OthersID")));
-                    Log.i(TAG, "OthersName = " + cursor.getString(cursor.getColumnIndex("OthersName")));
-                    Log.i(TAG, "Me = " + cursor.getInt(cursor.getColumnIndex("Me")));
-                    Log.i(TAG, "Content = " + cursor.getString(cursor.getColumnIndex("Content")));
-                    Log.i(TAG, "SendTime = " + cursor.getString(cursor.getColumnIndex("SendTime")));
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-     */
 
 }

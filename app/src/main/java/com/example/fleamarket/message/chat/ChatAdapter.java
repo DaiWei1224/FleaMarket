@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.fleamarket.R;
+import com.example.fleamarket.User;
 import com.example.fleamarket.utils.PictureUtils;
 
 import java.util.List;
@@ -85,8 +86,13 @@ public class ChatAdapter extends BaseAdapter {
             rootView = convertView;
             viewHolder = (ViewHolder)rootView.getTag();
         }
-        PictureUtils.displayImage(viewHolder.avatar, context.getExternalCacheDir().getAbsolutePath() +
-                "/avatar/avatar_" + chatMessage.getUserID() + ".jpg");
+        if (chatMessage.isMe()) {
+            PictureUtils.displayImage(viewHolder.avatar, context.getExternalCacheDir().getAbsolutePath() +
+                    "/avatar/avatar_" + User.getId() + ".jpg");
+        } else {
+            PictureUtils.displayImage(viewHolder.avatar, context.getExternalCacheDir().getAbsolutePath() +
+                    "/avatar/avatar_" + chatMessage.getUserID() + ".jpg");
+        }
         viewHolder.content.setText(chatMessage.getContent());
         return rootView;
     }
