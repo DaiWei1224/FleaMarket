@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.fleamarket.MyApplication;
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
 import com.example.fleamarket.database.DatabaseHelper;
@@ -36,6 +37,7 @@ public class MsgFragment extends Fragment {
         adapter = new MessageAdapter(this);
         recyclerView.setAdapter(adapter);
         updateMessageListView();
+        MyApplication.setMsgFragment(this);
         return layout;
     }
 

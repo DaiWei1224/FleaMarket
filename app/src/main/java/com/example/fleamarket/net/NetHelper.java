@@ -1,9 +1,14 @@
 package com.example.fleamarket.net;
 
 import android.app.Activity;
-import android.util.Log;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 
+import com.example.fleamarket.MyApplication;
 import com.example.fleamarket.User;
+import com.example.fleamarket.database.DatabaseHelper;
+import com.example.fleamarket.message.chat.ChatMessage;
+import com.example.fleamarket.message.chat.ChatWindowActivity;
 import com.example.fleamarket.message.chat.IChatListener;
 import com.example.fleamarket.utils.PictureUtils;
 
@@ -23,7 +28,7 @@ public class NetHelper {
     private static final int READ_TIMEOUT = 10000; // 读操作超时时间
     private static final String CONNECT_SERVER_FAILED = "连接服务器失败";
 
-    public static void createChatSocket() {
+    public static void createChatSocket(Activity activity) {
         chatSocket = new Socket();
         try {
             chatSocket.connect(new InetSocketAddress(server_ip, chat_port), CONNECT_TIMEOUT);
@@ -37,8 +42,36 @@ public class NetHelper {
                     while (chatSocket != null) {
                         ObjectInputStream ois = new ObjectInputStream(chatSocket.getInputStream());
                         Chat chat = (Chat)ois.readObject();
-                        Log.i("233", "content from Server is: " + chat.getContent());
-                    }
+                        // 判断是否需要更新聊天界面
+                        if (MyApplication.getChatting().equals(chat.getSenderID())) {
+                            activity.runOnUiThread(() -> {
+                                ChatWindowActivity.adapter.getData().add(new ChatMessage(
+                                        chat.getContent(),
+                                        chat.getSendTime(),
+                                        chat.getSenderID(),
+                                        chat.getSenderName(),
+                                        0));
+                                ChatWindowActivity.adapter.notifyDataSetChanged();
+                            });
+                        }
+                        // 将收到的消息保存到本地
+                        DatabaseHelper dbHelper = new DatabaseHelper(MyApplication.getContext(), "chat_" + User.getId(), null, 1);
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        dbHelper.createTable(db, "chatto_" + chat.getSenderID());
+                        ContentValues values = new ContentValues();
+                        values.put("OthersID", chat.getSenderID());
+                        values.put("OthersName", chat.getSenderName());
+                        values.put("Me", 0);
+                        values.put("Content", chat.getContent());
+                        values.put("SendTime", chat.getSendTime());
+                        db.insert("chatto_" + chat.getSenderID(), null, values);
+                        db.close();
+                        dbHelper.close();
+                        // 更新消息列表
+                        if (MyApplication.getMsgFragment() != null) {
+                            activity.runOnUiThread(() -> MyApplication.getMsgFragment().updateMessageListView());
+                        }
+                }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

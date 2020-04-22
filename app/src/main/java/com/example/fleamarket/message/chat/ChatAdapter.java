@@ -30,6 +30,10 @@ public class ChatAdapter extends BaseAdapter {
         CircleImageView avatar;
     }
 
+    public List<ChatMessage> getData() {
+        return dataList;
+    }
+
     @Override
     public int getCount() {
         return dataList.size();

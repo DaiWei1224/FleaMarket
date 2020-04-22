@@ -164,7 +164,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ISe
             new DatabaseHelper(getContext(), "chat_" + User.getId(), null, 1).getWritableDatabase();
             // 开启线程监听聊天端口发来的消息
             new Thread(() -> {
-                NetHelper.createChatSocket();
+                NetHelper.createChatSocket(mainActivity);
                 NetHelper.sendKey();
                 // 从服务器拉取未读消息
                 NetHelper.getUnreadMessage(LoginFragment.this);

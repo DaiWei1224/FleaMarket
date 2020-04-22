@@ -169,13 +169,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         User.setId(sp.getString("id", null));
         User.setPassword(sp.getString("password", null));
         User.setNickname(sp.getString("nickname", null));
-        if (User.isLogin()) {
-            new Thread(() -> {
-                NetHelper.createChatSocket();
-                NetHelper.sendKey();
-                NetHelper.getUnreadMessage(fLogin);
-            }).start();
-        }
         // 创建临时文件夹
         File file = new File(getExternalCacheDir().getAbsolutePath() + "/temporary");
         if (!file.exists()) {
@@ -198,6 +191,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         NetHelper.server_ip = sp.getString("ip", "192.168.0.103");
         NetHelper.server_port = sp.getInt("port", 1224);
         NetHelper.chat_port = sp.getInt("chat_port", 1225);
+        if (User.isLogin()) {
+            new Thread(() -> {
+                NetHelper.createChatSocket(this);
+                NetHelper.sendKey();
+                NetHelper.getUnreadMessage(fLogin);
+            }).start();
+        }
     }
 
     // 初始化按钮图片资源

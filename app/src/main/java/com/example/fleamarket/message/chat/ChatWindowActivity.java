@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fleamarket.MyApplication;
 import com.example.fleamarket.R;
 import com.example.fleamarket.User;
 import com.example.fleamarket.database.DatabaseHelper;
@@ -27,7 +28,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class ChatWindowActivity extends AppCompatActivity implements IChatListener {
     private EditText input;
-    private ChatAdapter adapter;
+    public static ChatAdapter adapter;
     private List<ChatMessage> dataList;
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
@@ -40,6 +41,7 @@ public class ChatWindowActivity extends AppCompatActivity implements IChatListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_window);
         final Commodity commodity = (Commodity)getIntent().getExtras().getSerializable("commodity");
+        MyApplication.setChatting(commodity.getSellerID());
         title = findViewById(R.id.title);
         title.setText(commodity.getSellerName());
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -84,6 +86,7 @@ public class ChatWindowActivity extends AppCompatActivity implements IChatListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MyApplication.setChatting("no chat");
         db.close();
         dbHelper.close();
     }
@@ -107,6 +110,10 @@ public class ChatWindowActivity extends AppCompatActivity implements IChatListen
             values.put("SendTime", info.getSendTime());
             db.insert(tableName, null, values);
             values.clear();
+            // 更新消息列表
+            if (MyApplication.getMsgFragment() != null) {
+                MyApplication.getMsgFragment().updateMessageListView();
+            }
         });
     }
 
