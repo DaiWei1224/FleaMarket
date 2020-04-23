@@ -7,7 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.fleamarket.MyApplication;
 import com.example.fleamarket.R;
+import com.example.fleamarket.User;
+import com.example.fleamarket.database.DatabaseHelper;
 import com.example.fleamarket.message.chat.ChatMessage;
 import com.example.fleamarket.message.chat.ChatWindowActivity;
 import com.example.fleamarket.net.Commodity;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -62,6 +66,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 intent.putExtras(bundle);
                 mFragment.startActivity(intent);
             });
+        holder.mMessageView.setOnLongClickListener((v) -> {
+            int position = holder.getAdapterPosition();
+            showChatOptionDialog(position, mMessageList.get(position).getUserID(), mMessageList.get(position).getUserName());
+            return true;
+        });
         return holder;
     }
 
@@ -83,4 +92,26 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public List<ChatMessage> getData() {
         return mMessageList;
     }
+
+    private void showChatOptionDialog(int position, String userID, String userName) {
+        String[] items = {"删除与 " + userName + " 的聊天"};
+        new AlertDialog.Builder(mFragment.getContext()).setItems(items, (i, dialog) ->
+                    deleteChatDialog(position, userID, userName)
+        ).create().show();
+    }
+
+    private void deleteChatDialog(int position, String userID, String userName) {
+        new AlertDialog.Builder(mFragment.getContext())
+                .setMessage("删除聊天会同时删除本地聊天记录，确认删除吗？")
+                .setPositiveButton("确认", (dialog, which) -> {
+                    mMessageList.remove(position);
+                    this.notifyItemRemoved(position);
+                    // 删除对应的聊天记录数据表
+                    DatabaseHelper dbHelper = new DatabaseHelper(MyApplication.getContext(), "chat_" + User.getId(), null, 1);
+                    dbHelper.deleteTable(dbHelper.getWritableDatabase(), "chatto_" + userID);
+                    dbHelper.close();
+                }).setNegativeButton("取消", (dialog, which) ->
+            dialog.dismiss() ).create().show();
+    }
+
 }

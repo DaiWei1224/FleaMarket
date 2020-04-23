@@ -135,7 +135,9 @@ public class PictureUtils {
     public static void displayImage(ImageView view, String imagePath) {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-            view.setImageBitmap(bitmap);
+            if (bitmap != null) {
+                view.setImageBitmap(bitmap);
+            }
         }
     }
 

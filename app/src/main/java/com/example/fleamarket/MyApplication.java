@@ -11,14 +11,18 @@ public class MyApplication extends Application {
     private static MsgFragment mMsgFragment = null;
     private static String chatting = "no chat";
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        context = getApplicationContext();
-    }
+//    @Override
+//    public void onCreate() {
+//        super.onCreate();
+//        context = getApplicationContext();
+//    }
 
     public static Context getContext(){
         return context;
+    }
+
+    public static void setContext(Context context) {
+        MyApplication.context = context;
     }
 
     public static MsgFragment getMsgFragment() {
