@@ -129,7 +129,7 @@ public class PostActivity extends AppCompatActivity implements IServerListener {
                         commodity.setSellerName(User.getNickname());
                         commodity.setArea(area);
                         commodity.setPostTime(postTime);
-                        commodity.setPostTimeString(new SimpleDateFormat("yyyy.MM.dd HH:mm").format(postTime));
+                        commodity.setPostTimeString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(postTime));
                         commodity.setHavePhoto(havePhoto);
                         if (havePhoto) {
                             NetImage netImage = new NetImage();

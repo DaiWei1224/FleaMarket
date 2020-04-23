@@ -13,6 +13,7 @@ import com.example.fleamarket.User;
 import com.example.fleamarket.message.chat.ChatWindowActivity;
 import com.example.fleamarket.mine.PersonalHomepageActivity;
 import com.example.fleamarket.net.Commodity;
+import com.example.fleamarket.utils.MyUtil;
 import com.example.fleamarket.utils.PictureUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,7 +50,7 @@ public class CommodityActivity extends AppCompatActivity {
         TextView commodityName = findViewById(R.id.title);
         commodityName.setText(commodity.getCommodityName());
         TextView postTime = findViewById(R.id.post_time);
-        postTime.setText("发布于" + commodity.getPostTimeString());
+        postTime.setText("发布于" + MyUtil.handleDate(commodity.getPostTimeString()));
         TextView detail = findViewById(R.id.commodity_detail);
         detail.setText(commodity.getCommodityDetail());
         if (commodity.isHavePhoto()) {

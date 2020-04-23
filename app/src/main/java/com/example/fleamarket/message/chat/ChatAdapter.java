@@ -13,6 +13,7 @@ import com.example.fleamarket.R;
 import com.example.fleamarket.User;
 import com.example.fleamarket.mine.PersonalHomepageActivity;
 import com.example.fleamarket.net.Commodity;
+import com.example.fleamarket.utils.MyUtil;
 import com.example.fleamarket.utils.PictureUtils;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class ChatAdapter extends BaseAdapter {
 
     //ViewHolder内部类，它的实例用于缓存View控件
     private static class ViewHolder{
+        TextView sendTime;
         TextView content;
         CircleImageView avatar;
     }
@@ -87,6 +89,7 @@ public class ChatAdapter extends BaseAdapter {
                 rootView = inflater.inflate(R.layout.chat_other, parent, false);
             }
             viewHolder = new ViewHolder();
+            viewHolder.sendTime = rootView.findViewById(R.id.send_time);
             viewHolder.content =  rootView.findViewById(R.id.content);
             viewHolder.avatar = rootView.findViewById(R.id.avatar);
             rootView.setTag(viewHolder);
@@ -104,6 +107,7 @@ public class ChatAdapter extends BaseAdapter {
             viewHolder.avatar.setOnClickListener(new AvatarClickListener(false, chatMessage));
         }
         viewHolder.content.setText(chatMessage.getContent());
+        viewHolder.sendTime.setText(MyUtil.handleDate(chatMessage.getSendTime()));
         return rootView;
     }
 

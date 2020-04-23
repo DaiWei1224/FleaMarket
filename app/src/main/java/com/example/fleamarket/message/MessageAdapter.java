@@ -14,6 +14,7 @@ import com.example.fleamarket.database.DatabaseHelper;
 import com.example.fleamarket.message.chat.ChatMessage;
 import com.example.fleamarket.message.chat.ChatWindowActivity;
 import com.example.fleamarket.net.Commodity;
+import com.example.fleamarket.utils.MyUtil;
 import com.example.fleamarket.utils.PictureUtils;
 
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 "/avatar/avatar_" + chatMessage.getUserID() + ".jpg");
         holder.mName.setText(chatMessage.getUserName());
         holder.mContent.setText(chatMessage.getContent());
-        holder.mTime.setText(chatMessage.getSendTime());
+        holder.mTime.setText(MyUtil.handleDate(chatMessage.getSendTime()));
     }
 
     @Override
