@@ -62,6 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/id"
+            android:textSize="16dp"
             android:layout_toRightOf="@+id/avatar"
             android:layout_below="@id/nick_name"
             android:layout_marginTop="5dp" />
@@ -150,39 +151,30 @@
 
     </FrameLayout>
 
-<!--    <Button-->
+<!--    <FrameLayout-->
 <!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="45dp"-->
-<!--        android:id="@+id/logout"-->
-<!--        android:text="退出登录"-->
-<!--        android:textColor="@android:color/white"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textAppearance="?android:attr/textAppearanceMedium"-->
-<!--        android:background="@android:color/holo_red_light"-->
-<!--        android:layout_marginTop="15dp"/>-->
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp" >
+<!--        android:layout_height="wrap_content"-->
+<!--         >-->
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/logout"
+            android:gravity="center_horizontal"
             android:background="@android:color/white"
             android:text="退出登录"
             android:textColor="@android:color/black"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:layout_marginTop="15dp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/enter"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="5dp" />
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/enter"-->
+<!--            android:layout_gravity="center_vertical|right"-->
+<!--            android:layout_marginRight="5dp" />-->
 
-    </FrameLayout>
+<!--    </FrameLayout>-->
 
 </LinearLayout>

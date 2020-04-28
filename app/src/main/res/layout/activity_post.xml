@@ -35,37 +35,86 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/commodity_name"
-                android:hint="商品名称"
-                android:maxLength="20"
-                android:maxLines="1" />
+                android:orientation="horizontal" >
 
-            <EditText
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="商品名称"
+                    android:textColor="@android:color/black"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginRight="10dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/commodity_name"
+                    android:textColor="@color/lightBlack"
+                    android:background="@null"
+                    android:maxLength="20"
+                    android:maxLines="1" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/price"
-                android:hint="商品价格"
-                android:layout_weight="1"
-                android:inputType="numberDecimal"
-                android:maxLength="5"
-                android:maxLines="1" />
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="商品价格"
+                    android:textColor="@android:color/black"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginRight="10dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/price"
+                    android:background="@null"
+                    android:textColor="@color/lightBlack"
+                    android:layout_weight="1"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:maxLines="1" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/darker_gray" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/commodity_detail"
-                android:background="@drawable/textview_background"
+                android:background="@null"
                 android:gravity="top"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginTop="10dp"
-                android:padding="5dp"
                 android:minLines="5"
-                android:hint="商品详情"
+                android:hint="请在此输入商品详情"
+                android:textColor="@color/lightBlack"
                 android:maxLength="1000" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
