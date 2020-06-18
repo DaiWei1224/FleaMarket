@@ -130,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         11, 16, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 TextView successInfo = findViewById(R.id.register_success);
                 successInfo.setText(ss);
-                // 因此注册按钮，显示注册成功信息
+                // 隐藏注册按钮，显示注册成功信息
                 btnRegister.setVisibility(View.GONE);
                 successInfo.setVisibility(View.VISIBLE);
             });
